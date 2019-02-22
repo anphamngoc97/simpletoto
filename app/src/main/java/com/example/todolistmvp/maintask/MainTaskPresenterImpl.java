@@ -1,6 +1,7 @@
 package com.example.todolistmvp.maintask;
 
 import com.example.todolistmvp.room.model.Task;
+import com.example.todolistmvp.util.Showlog;
 
 import java.util.List;
 
@@ -32,6 +33,6 @@ public class MainTaskPresenterImpl implements MainTaskContract.Presenter,
 
     @Override
     public void onFailture(Throwable throwable) {
-
+        Showlog.d("maintask presenter fail: " + throwable.getMessage());
     }
 }

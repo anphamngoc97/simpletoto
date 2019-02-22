@@ -1,20 +1,19 @@
 package com.example.todolistmvp.room.model;
 
 import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Entity
-public class Task {
+public class Task implements Serializable {
 
     @NonNull
     @PrimaryKey(autoGenerate = true)
     public int id;
-    public int idList;
 
     public String title;
     public String tag;
@@ -25,8 +24,7 @@ public class Task {
     public boolean isComplete;
     public boolean isAlarm;
 
-    public Task(int idList, String title, String tag, String dateAlarm, String subTask, String createDate, String typeList, boolean isComplete, boolean isAlarm) {
-        this.idList = idList;
+    public Task(String title, String tag, String dateAlarm, String subTask, String createDate, String typeList, boolean isComplete, boolean isAlarm) {
         this.title = title;
         this.tag = tag;
         this.dateAlarm = dateAlarm;
@@ -38,8 +36,6 @@ public class Task {
     }
 
     public static class Builder{
-
-        private int idList;
         private String title;
         private String tag;
         private String dateAlarm;
@@ -86,13 +82,12 @@ public class Task {
             return this;
         }
 
-        public Task createTask(int _idList, String _title) {
+        public Task createTask(String _title) {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/mm/yyyy");
             Date date = new Date();
             createDate = simpleDateFormat.format(date);
-            this.idList = _idList;
             this.title=_title;
-            return new Task(idList, title, tag, dateAlarm, subTask, createDate, typeList, isComplete, isAlarm);
+            return new Task(title, tag, dateAlarm, subTask, createDate, typeList, isComplete, isAlarm);
         }
     }
 

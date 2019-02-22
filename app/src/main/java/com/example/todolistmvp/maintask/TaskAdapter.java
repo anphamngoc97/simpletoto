@@ -1,6 +1,7 @@
 package com.example.todolistmvp.maintask;
 
 import android.support.annotation.NonNull;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,10 +20,17 @@ public class TaskAdapter extends  RecyclerView.Adapter<TaskAdapter.Holder> {
 
     List<Task> tasks;
     MainTaskContract.Presenter presenter;
+    RecyclerView recyclerView;
 
-    public TaskAdapter(List<Task> tasks, MainTaskContract.Presenter presenter) {
+    public TaskAdapter(List<Task> tasks, MainTaskContract.Presenter presenter,
+                       RecyclerView recyclerView) {
         this.tasks = tasks;
         this.presenter = presenter;
+        this.recyclerView = recyclerView;
+
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(recyclerView.getContext());
+        recyclerView.setLayoutManager(layoutManager);
+
     }
 
     @NonNull
