@@ -2,7 +2,6 @@ package com.example.todolistmvp.edittask;
 
 import com.example.todolistmvp.room.ResponsitoryTask;
 import com.example.todolistmvp.room.model.Task;
-import com.example.todolistmvp.util.Iterator;
 
 import io.reactivex.Completable;
 import io.reactivex.CompletableObserver;
@@ -11,7 +10,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.schedulers.Schedulers;
 
-public class EditTaskIteratorImpl implements EditTaskContract.Iterator<Task> {
+public class EditTaskIteratorImpl implements EditTaskContract.Iterator {
     ResponsitoryTask responsitoryTask;
 
     public EditTaskIteratorImpl(ResponsitoryTask responsitoryTask) {

@@ -23,6 +23,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             app:layout_constraintHorizontal_weight="2"
+            android:visibility="invisible"
 
             android:src="@drawable/ic_back"
             android:background="@null"
@@ -47,11 +48,11 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toRightOf="@id/btnBack"
-            app:layout_constraintRight_toRightOf="@id/imgRemove"
+            app:layout_constraintRight_toRightOf="@id/btnRemove"
             />
 
         <ImageButton
-            android:id="@+id/imgRemove"
+            android:id="@+id/btnRemove"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             app:layout_constraintHorizontal_weight="2"

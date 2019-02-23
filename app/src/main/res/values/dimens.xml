@@ -3,4 +3,5 @@
     <dimen name="textSizeTitle">20sp</dimen>
     <dimen name="textSizeButton">25sp</dimen>
     <dimen name="textSizeItem">20sp</dimen>
+    <dimen name="marginItem">10dp</dimen>
 </resources>

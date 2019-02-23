@@ -58,8 +58,16 @@ public class TaskAdapter extends  RecyclerView.Adapter<TaskAdapter.Holder> {
         public Holder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this,itemView);
+
+            onClick();
         }
 
+        private void onClick(){
+            itemView.setOnClickListener(v->{
+                int position = getAdapterPosition();
+                presenter.onClickItem(position);
+            });
+        }
 
         public void bindTitle(){
             int position = getAdapterPosition();

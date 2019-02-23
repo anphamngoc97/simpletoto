@@ -5,6 +5,7 @@ import android.app.Application;
 
 import com.example.todolistmvp.MainActivity;
 import com.example.todolistmvp.addtask.AddTaskActivity;
+import com.example.todolistmvp.edittask.EditTaskActivity;
 import com.example.todolistmvp.maintask.MainTaskActivity;
 
 import javax.inject.Singleton;
@@ -18,4 +19,5 @@ public interface RoomComponent {
     void inject(MainActivity mainActivity);
     void inject(MainTaskActivity mainTaskActivity);
     void inject(AddTaskActivity addTaskActivity);
+    void inject(EditTaskActivity editTaskActivity);
 }

@@ -18,9 +18,11 @@ public class ReceiverAlarm extends BroadcastReceiver {
 
         final int TIME_VIBRATE = 6;
 
-        final String title = intent.getStringExtra(Constant.KEY_BROADCAST_TASK_TITLE);
+        final String title = intent
+                .getStringExtra(Constant.ChildConstantString.KEY_BROADCAST_TASK_TITLE.getValue());
 
-        final int INDEX = intent.getIntExtra(Constant.KEY_BROADCAST_TASK_ID,0);
+        final int INDEX = intent
+                .getIntExtra(Constant.ChildConstantString.KEY_BROADCAST_TASK_ID.getValue(),0);
 
         NotificationManager notificationManager = (NotificationManager) context
                 .getSystemService(Context.NOTIFICATION_SERVICE);

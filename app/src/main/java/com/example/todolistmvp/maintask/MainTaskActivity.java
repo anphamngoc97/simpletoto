@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 
 import com.example.todolistmvp.R;
 import com.example.todolistmvp.addtask.AddTaskActivity;
+import com.example.todolistmvp.edittask.EditTaskActivity;
 import com.example.todolistmvp.room.ResponsitoryTask;
 import com.example.todolistmvp.room.model.Task;
 import com.example.todolistmvp.roomdagger.AppModule;
@@ -33,13 +34,13 @@ public class MainTaskActivity extends AppCompatActivity implements MainTaskContr
     @BindView(R.id.floatBtnAdd)
     FloatingActionButton floatBtnAdd;
 
-    List<Task> tasks = new ArrayList<>();
-    TaskAdapter taskAdapter;
+    List<Task> mTasks = new ArrayList<>();
+    TaskAdapter mTaskAdapter;
 
     @Inject
-    ResponsitoryTask responsitoryTask;
+    ResponsitoryTask mResponsitoryTask;
 
-    MainTaskContract.Presenter presenter;
+    MainTaskContract.Presenter mPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,38 +58,80 @@ public class MainTaskActivity extends AppCompatActivity implements MainTaskContr
         RoomComponent component = DaggerRoomComponent.builder().appModule(new AppModule(getApplication()))
                 .build();
         component.inject(this);
-        presenter = new MainTaskPresenterImpl(this,new MainTaskIteratorImpl(responsitoryTask));
+        mPresenter = new MainTaskPresenterImpl(this,new MainTaskIteratorImpl(mResponsitoryTask));
 
-        taskAdapter = new TaskAdapter(tasks,presenter,recycleTask);
-        recycleTask.setAdapter(taskAdapter);
+        mTaskAdapter = new TaskAdapter(mTasks, mPresenter,recycleTask);
+        recycleTask.setAdapter(mTaskAdapter);
 
     }
     private void loadData(){
-        presenter.loadData();
+        mPresenter.loadData();
     }
     private void onClick(){
         floatBtnAdd.setOnClickListener(v->{
             startActivityForResult(new Intent(this,AddTaskActivity.class),
-                    Constant.REQUEST_CODE_ADD_TASK);
+                    Constant.ChildConstantNumber.REQUEST_CODE_ADD_TASK.getValue());
         });
     }
 
     @Override
     public void refreshData(List<Task> tasks) {
-        this.tasks.clear();
-        this.tasks.addAll(tasks);
-        taskAdapter.notifyDataSetChanged();
+        this.mTasks.clear();
+        this.mTasks.addAll(tasks);
+        mTaskAdapter.notifyDataSetChanged();
         Showlog.d("load complete: " + tasks.size());
+    }
+
+    @Override
+    public void navigateEditTask(int position) {
+        Intent intent = new Intent(this, EditTaskActivity.class);
+        intent.putExtra(Constant.ChildConstantString.KEY_SEND_EXTRA_EDIT_TASK_OBJECT.getValue(),
+                mTasks.get(position));
+        intent.putExtra(Constant.ChildConstantString.KEY_SEND_EXTRA_EDIT_TASK_POSITION.getValue(),
+                position);
+
+        //todo navigate send task for result
+        startActivityForResult(intent,Constant.ChildConstantNumber.REQUEST_CODE_EDIT_TASK.getValue());
+
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode==Constant.REQUEST_CODE_ADD_TASK && resultCode == Activity.RESULT_OK){
-            Task task = (Task) data.getSerializableExtra(Constant.KEY_REQUEST_ADD_TASK);
-            if(task!=null){
-                this.tasks.add(task);
-                taskAdapter.notifyDataSetChanged();
+        if(resultCode == Activity.RESULT_OK){
+
+            if(requestCode==Constant.ChildConstantNumber.REQUEST_CODE_ADD_TASK.getValue()) {
+                Task task = (Task) data
+                        .getSerializableExtra(Constant.ChildConstantString.KEY_EXTRA_ADD_TASK.getValue());
+                if (task != null) {
+                    this.mTasks.add(task);
+                    mTaskAdapter.notifyDataSetChanged();
+                }
+            }
+            if(requestCode == Constant.ChildConstantNumber.REQUEST_CODE_EDIT_TASK.getValue()){
+
+                boolean isRemove = data.
+                        getBooleanExtra(Constant.ChildConstantString.KEY_EXTRA_IS_REMOVE.getValue(),
+                                true);
+
+                int position = data
+                        .getIntExtra(Constant.ChildConstantString
+                                .KEY_SEND_EXTRA_EDIT_TASK_POSITION.getValue(),
+                                0);
+
+
+                //todo update and remove list
+                if(isRemove){
+                    mTasks.remove(position);
+                    mTaskAdapter.notifyItemRemoved(position);
+
+                }else{
+                    Showlog.d("after change: " + mTasks.get(position).title);
+                    Task task = (Task) data.getSerializableExtra(
+                            Constant.ChildConstantString.KEY_SEND_EXTRA_EDIT_TASK_OBJECT.getValue());
+                    mTasks.set(position,task);
+                    mTaskAdapter.notifyItemChanged(position);
+                }
             }
         }
     }

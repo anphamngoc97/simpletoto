@@ -7,22 +7,25 @@ import com.example.todolistmvp.room.model.Task;
 
 public interface EditTaskContract {
     interface View extends BaseView{
+        void onRemoveSuccess();
+
+        void onUpdateSuccess();
 
     }
-    interface Presenter<sT> extends BasePresenter<View>{
-        void updateData(sT object);
+    interface Presenter extends BasePresenter<View>{
+        void updateData(Task object);
 
-        void removeData(sT object);
+        void removeData(Task object);
     }
-    interface Iterator<sT> extends BaseIterator{
+    interface Iterator extends BaseIterator{
         interface OnFinishListener extends BaseIterator.OnFinishListener{
             void onRemoveSuccess();
 
             void onUpdateSuccess();
 
         }
-        void updateData(sT object, OnFinishListener onFinishListener);
+        void updateData(Task object, OnFinishListener onFinishListener);
 
-        void removeData(sT object, OnFinishListener onFinishListener);
+        void removeData(Task object, OnFinishListener onFinishListener);
     }
 }

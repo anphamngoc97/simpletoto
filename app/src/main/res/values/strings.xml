@@ -3,4 +3,11 @@
     <string name="title">Simple Todo</string>
     <string name="time">Time</string>
     <string name="date">Date</string>
+    <string name="btnNameAdd">Add</string>
+    <string name="btnNameUpdate">Update</string>
+
+    <string name="titleComfirmRDialog">Are you sure?</string>
+    <string name="contentConfirmRemoveDialog">Delete this task</string>
+    <string name="confirmYes">Yes</string>
+    <string name="confirmNo">No</string>
 </resources>

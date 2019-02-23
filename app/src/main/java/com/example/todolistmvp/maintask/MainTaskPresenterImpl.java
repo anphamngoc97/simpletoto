@@ -27,12 +27,17 @@ public class MainTaskPresenterImpl implements MainTaskContract.Presenter,
     }
 
     @Override
+    public void onClickItem(int position) {
+        view.navigateEditTask(position);
+    }
+
+    @Override
     public void onGetSuccess(List<Task> res) {
         view.refreshData(res);
     }
 
     @Override
     public void onFailture(Throwable throwable) {
-        Showlog.d("maintask presenter fail: " + throwable.getMessage());
+        Showlog.d("maintask mPresenter fail: " + throwable.getMessage());
     }
 }

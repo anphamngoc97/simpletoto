@@ -17,22 +17,20 @@ public class AlarmUtil {
 
     public static void addAlarm(Context context, Task task) {
 
-        if(!task.isAlarm) return;
+        if(!task.isAlarm){
+            cancelAlarm(context,task);
+            return;
+        }
 
-        StringTokenizer st = new StringTokenizer(task.dateAlarm, " ");
-        String date, time;
-        int TIME_VIBRATE;
 
-        if (st.hasMoreTokens()) date = st.nextToken();
-        if (st.hasMoreTokens()) time = st.nextToken();
         final int INDEX = task.id;
 
 
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
         Intent intent = new Intent(context, ReceiverAlarm.class);
-        intent.putExtra(Constant.KEY_BROADCAST_TASK_TITLE,task.title);
-        intent.putExtra(Constant.KEY_BROADCAST_TASK_ID,task.id);
+        intent.putExtra(Constant.ChildConstantString.KEY_BROADCAST_TASK_TITLE.getValue(),task.title);
+        intent.putExtra(Constant.ChildConstantString.KEY_BROADCAST_TASK_ID.getValue(),task.id);
 
         PendingIntent pendingIntent = PendingIntent
                 .getBroadcast(context, INDEX, intent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -66,4 +64,26 @@ public class AlarmUtil {
 //    }
     }
 
+    public static void cancelAlarm(Context context, Task task){
+
+        StringTokenizer st = new StringTokenizer(task.dateAlarm, " ");
+        String date, time;
+        int TIME_VIBRATE;
+
+        if (st.hasMoreTokens()) date = st.nextToken();
+        if (st.hasMoreTokens()) time = st.nextToken();
+        final int INDEX = task.id;
+
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+
+        Intent intent = new Intent(context, ReceiverAlarm.class);
+        intent.putExtra(Constant.ChildConstantString.KEY_BROADCAST_TASK_TITLE.getValue(),task.title);
+        intent.putExtra(Constant.ChildConstantString.KEY_BROADCAST_TASK_ID.getValue(),task.id);
+
+        PendingIntent pendingIntent = PendingIntent
+                .getBroadcast(context, INDEX, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+
+        alarmManager.cancel(pendingIntent);
+
+    }
 }

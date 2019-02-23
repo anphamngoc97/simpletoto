@@ -165,7 +165,7 @@ public class AddTaskActivity extends AppCompatActivity implements AddTaskContrac
         Showlog.d("insert complete");
         AlarmUtil.addAlarm(getApplicationContext(),mTask);
         Intent intent = new Intent();
-        intent.putExtra(Constant.KEY_REQUEST_ADD_TASK,mTask);
+        intent.putExtra(Constant.ChildConstantString.KEY_EXTRA_ADD_TASK.getValue(),mTask);
         setResult(Activity.RESULT_OK,intent);
 
         finish();
