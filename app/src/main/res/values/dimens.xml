@@ -3,5 +3,10 @@
     <dimen name="textSizeTitle">20sp</dimen>
     <dimen name="textSizeButton">25sp</dimen>
     <dimen name="textSizeItem">20sp</dimen>
-    <dimen name="marginItem">10dp</dimen>
+    <dimen name="marginItemVertical">5dp</dimen>
+    <dimen name="marginItemHorizontal">5dp</dimen>
+    <dimen name="paddingItem">7dp</dimen>
+
+    <dimen name="smallStroke">-0.8px</dimen>
+    <dimen name="bigStroke">1.2px</dimen>
 </resources>

@@ -54,11 +54,12 @@
         <ImageButton
             android:id="@+id/btnSearch"
             android:src="@drawable/ic_search"
+            android:scaleType="fitCenter"
             android:background="@null"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
             app:layout_constraintHorizontal_weight="2"
-
+            app:layout_constraintHeight_percent="0.5"
 
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -83,6 +84,8 @@
             android:id="@+id/recycleTask"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:paddingTop="@dimen/marginItemVertical"
+
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toRightOf="parent"

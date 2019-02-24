@@ -4,15 +4,22 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
 
-    android:background="@drawable/background_item_task"
-    android:paddingStart="5dp"
-    android:layout_margin="@dimen/marginItem">
+    android:paddingTop="@dimen/paddingItem"
+    android:paddingBottom="@dimen/paddingItem"
+    android:paddingLeft="12dp"
+    android:paddingRight="12dp"
+
+    android:layout_marginLeft="@dimen/marginItemHorizontal"
+    android:layout_marginRight="@dimen/marginItemHorizontal"
+    android:layout_marginBottom="@dimen/marginItemVertical">
 
     <TextView
+        android:background="@drawable/background_item_task"
+
         android:id="@+id/txtvTask"
-        android:text="AAAA"
+        android:text="fff"
         android:textSize="@dimen/textSizeItem"
-        android:textStyle="bold"
+        android:padding="10dp"
 
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

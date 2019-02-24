@@ -76,7 +76,8 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.Holder> im
         private void onClick() {
             itemView.setOnClickListener(v -> {
                 int position = getAdapterPosition();
-                mPresenter.onClickItem(mappingId.get(position));
+                mPresenter.onClickItem(mappingId.get(mTasksSearch.get(position).id));
+                
             });
         }
 
