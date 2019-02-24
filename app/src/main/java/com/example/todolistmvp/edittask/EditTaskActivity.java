@@ -43,7 +43,7 @@ public class EditTaskActivity extends AppCompatActivity implements EditTaskContr
 
     @BindView(R.id.btnBack)
     ImageButton btnBack;
-    @BindView(R.id.btnRemove)
+    @BindView(R.id.btnSearch)
     ImageButton btnRemove;
     @BindView(R.id.inputLayoutTitle)
     TextInputLayout layoutTitle;
@@ -74,7 +74,7 @@ public class EditTaskActivity extends AppCompatActivity implements EditTaskContr
 
     String mDate ="";
     String mTime ="";
-    int mYear=0,mMonth=0,mDay=0,mMinute=0,mHour=0;
+    int mYear=-1,mMonth=-1,mDay=-1,mMinute=-1,mHour=-1;
 
 
     @Override
@@ -94,6 +94,16 @@ public class EditTaskActivity extends AppCompatActivity implements EditTaskContr
                 .getSerializableExtra(Constant.ChildConstantString.KEY_SEND_EXTRA_EDIT_TASK_OBJECT.getValue());
         mPosition = intent
                 .getIntExtra(Constant.ChildConstantString.KEY_SEND_EXTRA_EDIT_TASK_POSITION.getValue(),0);
+        Calendar calendar = ComonFuntion.getDateFromString(mTask.dateAlarm);
+        if(calendar!=null){
+            mYear = calendar.get(Calendar.YEAR);
+            mMonth = calendar.get(Calendar.MONTH);
+            mDay = calendar.get(Calendar.DATE);
+            mHour = calendar.get(Calendar.HOUR);
+            mMinute = calendar.get(Calendar.MINUTE);
+        }
+        Showlog.d("receive time: " + mYear+"_"+mMonth);
+
 
     }
     private void init() {
@@ -162,24 +172,19 @@ public class EditTaskActivity extends AppCompatActivity implements EditTaskContr
             }else{
 
                 String timeString =null;
-                if( switchReminder.isChecked() && mYear*mMonth*mDay*mDay*mMinute!=0) {
+                if (!switchReminder.isChecked() || (switchReminder.isChecked() && mYear * mMonth * mDay * mDay * mMinute >=0)) {
                     SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Constant.DATE_FORMAT);
                     Calendar calendar = Calendar.getInstance();
                     calendar.set(mYear, mMonth, mDay, mHour, mMinute);
                     timeString = simpleDateFormat.format(calendar.getTime());
 
+                    mTask.isAlarm = switchReminder.isChecked();
+                    mTask.dateAlarm = timeString;
+                    mTask.title = title;
+                    presenter.updateData(mTask);
                 }else{
                     Snackbar.make(parentLayout,"Timehavenotset",Snackbar.LENGTH_SHORT).show();
                 }
-
-                //todo update task
-//                mTask = new Task.Builder().setIsAlarm(switchReminder.isChecked())
-//                        .setDateAlarm(timeString)
-//                        .createTask(title);
-                mTask.isAlarm = switchReminder.isChecked();
-                mTask.dateAlarm = timeString;
-                mTask.title = title;
-                presenter.updateData(mTask);
 
             }
         });
@@ -206,7 +211,7 @@ public class EditTaskActivity extends AppCompatActivity implements EditTaskContr
                 (view, year, month, dayOfMonth) ->
                 {
                     Showlog.d(year + "_" + month + "_" + dayOfMonth);
-                    mDate = dayOfMonth + "/" + month + "/" + year;
+                    mDate = dayOfMonth + "/" + (month+1) + "/" + year;
                     btnDate.setText(mDate);
                     mYear = year;
                     mMonth = month;

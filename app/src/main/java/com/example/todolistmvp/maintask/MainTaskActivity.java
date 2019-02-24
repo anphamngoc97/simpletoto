@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.widget.ImageButton;
 
 import com.example.todolistmvp.R;
 import com.example.todolistmvp.addtask.AddTaskActivity;
@@ -16,6 +17,7 @@ import com.example.todolistmvp.room.model.Task;
 import com.example.todolistmvp.roomdagger.AppModule;
 import com.example.todolistmvp.roomdagger.DaggerRoomComponent;
 import com.example.todolistmvp.roomdagger.RoomComponent;
+import com.example.todolistmvp.search.SearchActivity;
 import com.example.todolistmvp.util.Constant;
 import com.example.todolistmvp.util.Showlog;
 
@@ -33,6 +35,8 @@ public class MainTaskActivity extends AppCompatActivity implements MainTaskContr
     RecyclerView recycleTask;
     @BindView(R.id.floatBtnAdd)
     FloatingActionButton floatBtnAdd;
+    @BindView(R.id.btnSearch)
+    ImageButton btnSearch;
 
     List<Task> mTasks = new ArrayList<>();
     TaskAdapter mTaskAdapter;
@@ -71,6 +75,12 @@ public class MainTaskActivity extends AppCompatActivity implements MainTaskContr
         floatBtnAdd.setOnClickListener(v->{
             startActivityForResult(new Intent(this,AddTaskActivity.class),
                     Constant.ChildConstantNumber.REQUEST_CODE_ADD_TASK.getValue());
+
+            overridePendingTransition(R.anim.anim_float_button,R.anim.anim_out);
+        });
+        btnSearch.setOnClickListener(v->{
+            startActivityForResult(new Intent(this,SearchActivity.class),
+                    Constant.ChildConstantNumber.REQUEST_CODE_SEARCH.getValue());
         });
     }
 
@@ -84,13 +94,14 @@ public class MainTaskActivity extends AppCompatActivity implements MainTaskContr
 
     @Override
     public void navigateEditTask(int position) {
+
         Intent intent = new Intent(this, EditTaskActivity.class);
         intent.putExtra(Constant.ChildConstantString.KEY_SEND_EXTRA_EDIT_TASK_OBJECT.getValue(),
                 mTasks.get(position));
         intent.putExtra(Constant.ChildConstantString.KEY_SEND_EXTRA_EDIT_TASK_POSITION.getValue(),
                 position);
 
-        //todo navigate send task for result
+
         startActivityForResult(intent,Constant.ChildConstantNumber.REQUEST_CODE_EDIT_TASK.getValue());
 
     }
@@ -120,7 +131,6 @@ public class MainTaskActivity extends AppCompatActivity implements MainTaskContr
                                 0);
 
 
-                //todo update and remove list
                 if(isRemove){
                     mTasks.remove(position);
                     mTaskAdapter.notifyItemRemoved(position);
@@ -132,6 +142,9 @@ public class MainTaskActivity extends AppCompatActivity implements MainTaskContr
                     mTasks.set(position,task);
                     mTaskAdapter.notifyItemChanged(position);
                 }
+            }
+            if(requestCode==Constant.ChildConstantNumber.REQUEST_CODE_SEARCH.getValue()){
+                mPresenter.loadData();
             }
         }
     }

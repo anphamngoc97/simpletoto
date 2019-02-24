@@ -8,7 +8,8 @@ public class Constant {
 
     public enum ChildConstantNumber{
         REQUEST_CODE_EDIT_TASK,
-        REQUEST_CODE_ADD_TASK;
+        REQUEST_CODE_ADD_TASK,
+        REQUEST_CODE_SEARCH;
 
         public int getValue(){
             return this.ordinal();

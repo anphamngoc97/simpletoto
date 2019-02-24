@@ -17,6 +17,8 @@ public class AlarmUtil {
 
     public static void addAlarm(Context context, Task task) {
 
+        if(task.dateAlarm==null || task.dateAlarm.length()==0) return;
+
         if(!task.isAlarm){
             cancelAlarm(context,task);
             return;
@@ -35,7 +37,6 @@ public class AlarmUtil {
         PendingIntent pendingIntent = PendingIntent
                 .getBroadcast(context, INDEX, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        if(!task.isAlarm || task.dateAlarm==null) return;
 
         Calendar calendar = ComonFuntion.getDateFromString(task.dateAlarm);
 
@@ -65,6 +66,8 @@ public class AlarmUtil {
     }
 
     public static void cancelAlarm(Context context, Task task){
+
+        if(task.dateAlarm==null || task.dateAlarm.length()==0) return;
 
         StringTokenizer st = new StringTokenizer(task.dateAlarm, " ");
         String date, time;

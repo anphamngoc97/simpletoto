@@ -1,12 +1,12 @@
 package com.example.todolistmvp.util;
 
 
-import com.example.todolistmvp.BaseIterator;
 import com.example.todolistmvp.addtask.AddTaskContract;
 import com.example.todolistmvp.edittask.EditTaskContract;
 import com.example.todolistmvp.maintask.MainTaskContract;
 import com.example.todolistmvp.room.ResponsitoryTask;
 import com.example.todolistmvp.room.model.Task;
+import com.example.todolistmvp.search.SearchContract;
 
 import java.util.List;
 
@@ -22,8 +22,30 @@ import io.reactivex.schedulers.Schedulers;
 public class Iterator {
     private static CompositeDisposable compositeDisposable = new CompositeDisposable();
 
-    public static void getTaskAllTask(ResponsitoryTask responsitoryTask,
-                                      MainTaskContract.Iterator.OnFinishListener onFinishListener){
+    public static void getAllTask(ResponsitoryTask responsitoryTask,
+                                  MainTaskContract.Iterator.OnFinishListener onFinishListener){
+
+
+        Disposable disposable = responsitoryTask.getAllTask()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Consumer<List<Task>>() {
+                    @Override
+                    public void accept(List<Task> tasks) throws Exception {
+                        onFinishListener.onGetSuccess(tasks);
+
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        onFinishListener.onFailture(throwable );
+                    }
+                });
+
+        compositeDisposable.add(disposable);
+
+    }public static void getAllTaskBySearch(ResponsitoryTask responsitoryTask,
+                                  SearchContract.Iterator.OnFinishListener onFinishListener){
 
 
         Disposable disposable = responsitoryTask.getAllTask()

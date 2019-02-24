@@ -51,11 +51,11 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toRightOf="@id/btnBack"
-                app:layout_constraintRight_toRightOf="@id/btnRemove"
+                app:layout_constraintRight_toRightOf="@id/btnSearch"
                 />
 
             <ImageButton
-                android:id="@+id/btnRemove"
+                android:id="@+id/btnSearch"
                 android:src="@drawable/ic_trash"
                 android:background="@null"
                 android:layout_width="0dp"

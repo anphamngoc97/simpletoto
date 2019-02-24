@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.todolistmvp">
 
-    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:allowBackup="true"
@@ -11,7 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Design.Light.NoActionBar">
-        <activity android:name=".maintask.MainTaskActivity"></activity>
+        <activity android:name=".search.SearchActivity"></activity>
+        <activity android:name=".maintask.MainTaskActivity" />
         <activity android:name=".edittask.EditTaskActivity" />
         <activity android:name=".addtask.AddTaskActivity" />
         <activity android:name=".MainActivity">
@@ -21,7 +22,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <receiver android:name=".alarm.ReceiverAlarm"/>
+
+        <receiver android:name=".alarm.ReceiverAlarm" />
     </application>
 
 </manifest>

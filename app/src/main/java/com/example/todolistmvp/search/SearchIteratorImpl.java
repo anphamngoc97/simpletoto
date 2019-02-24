@@ -1,17 +1,17 @@
-package com.example.todolistmvp.maintask;
+package com.example.todolistmvp.search;
 
 import com.example.todolistmvp.room.ResponsitoryTask;
 import com.example.todolistmvp.util.Iterator;
 
-public class MainTaskIteratorImpl implements MainTaskContract.Iterator {
+public class SearchIteratorImpl implements SearchContract.Iterator{
     ResponsitoryTask responsitoryTask;
 
-    public MainTaskIteratorImpl(ResponsitoryTask responsitoryTask) {
+    public SearchIteratorImpl(ResponsitoryTask responsitoryTask) {
         this.responsitoryTask = responsitoryTask;
     }
 
-    @Override
+
     public void getData(OnFinishListener onFinishListener) {
-        Iterator.getAllTask(responsitoryTask,onFinishListener);
+        Iterator.getAllTaskBySearch(responsitoryTask,onFinishListener);
     }
 }

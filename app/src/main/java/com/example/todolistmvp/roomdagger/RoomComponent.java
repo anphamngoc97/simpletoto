@@ -7,6 +7,7 @@ import com.example.todolistmvp.MainActivity;
 import com.example.todolistmvp.addtask.AddTaskActivity;
 import com.example.todolistmvp.edittask.EditTaskActivity;
 import com.example.todolistmvp.maintask.MainTaskActivity;
+import com.example.todolistmvp.search.SearchActivity;
 
 import javax.inject.Singleton;
 
@@ -20,4 +21,5 @@ public interface RoomComponent {
     void inject(MainTaskActivity mainTaskActivity);
     void inject(AddTaskActivity addTaskActivity);
     void inject(EditTaskActivity editTaskActivity);
+    void inject(SearchActivity searchActivity);
 }

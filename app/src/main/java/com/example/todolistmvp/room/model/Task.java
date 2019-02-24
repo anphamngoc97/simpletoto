@@ -36,11 +36,11 @@ public class Task implements Serializable {
     }
 
     public static class Builder{
-        private String title;
-        private String tag;
-        private String dateAlarm;
+        private String title="";
+        private String tag="";
+        private String dateAlarm="";
         private String subTask;
-        private String createDate;
+        private String createDate="";
         private String typeList = "";
         private boolean isComplete = false;
         private boolean isAlarm = false;

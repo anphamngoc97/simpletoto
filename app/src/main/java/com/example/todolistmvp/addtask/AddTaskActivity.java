@@ -55,7 +55,7 @@ public class AddTaskActivity extends AppCompatActivity implements AddTaskContrac
     @BindView(R.id.btnTime)
     Button btnTime;
     @BindView(R.id.parentLayout)
-            View parentLayout;
+    View parentLayout;
 
     int BACKGROUND_INPUT_INVALID = Color.parseColor("#F53D25");
     int BACKGROUND_INPUT_VALID = Color.parseColor("#5EEE1B");
@@ -66,9 +66,9 @@ public class AddTaskActivity extends AppCompatActivity implements AddTaskContrac
 
     Task mTask;
 
-    String mDate ="";
-    String mTime ="";
-    int mYear=0,mMonth=0,mDay=0,mMinute=0,mHour=0;
+    String mDate = "";
+    String mTime = "";
+    int mYear = -1, mMonth = -1, mDay = -1, mMinute = -1, mHour = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,7 +88,7 @@ public class AddTaskActivity extends AppCompatActivity implements AddTaskContrac
                 .build();
 
         roomComponent.inject(this);
-        presenter = new AddTaskPresenterImpl(this,new AddTaskIteratorImpl(responsitoryTask));
+        presenter = new AddTaskPresenterImpl(this, new AddTaskIteratorImpl(responsitoryTask));
 
     }
 
@@ -124,23 +124,22 @@ public class AddTaskActivity extends AppCompatActivity implements AddTaskContrac
                 layoutTitle.setBoxStrokeColor(BACKGROUND_INPUT_INVALID);
                 editTitle.setError("Input is empty");
 
-            }else{
+            } else {
 
-
-                String timeString =null;
-                if( switchReminder.isChecked() && mYear*mMonth*mDay*mDay*mMinute!=0) {
+                String timeString = null;
+                if (!switchReminder.isChecked() || (switchReminder.isChecked() && mYear * mMonth * mDay * mDay * mMinute >=0)) {
                     SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Constant.DATE_FORMAT);
                     Calendar calendar = Calendar.getInstance();
                     calendar.set(mYear, mMonth, mDay, mHour, mMinute);
                     timeString = simpleDateFormat.format(calendar.getTime());
 
-                }else{
-                    Snackbar.make(parentLayout,"Timehavenotset",Snackbar.LENGTH_SHORT).show();
+                    mTask = new Task.Builder().setIsAlarm(switchReminder.isChecked())
+                            .setDateAlarm(timeString)
+                            .createTask(title);
+                    presenter.insertData(mTask);
+                } else {
+                    Snackbar.make(parentLayout, "Timehavenotset", Snackbar.LENGTH_SHORT).show();
                 }
-                mTask = new Task.Builder().setIsAlarm(switchReminder.isChecked())
-                        .setDateAlarm(timeString)
-                        .createTask(title);
-                presenter.insertData(mTask);
 
             }
         });
@@ -163,10 +162,10 @@ public class AddTaskActivity extends AppCompatActivity implements AddTaskContrac
     @Override
     public void insertComplete() {
         Showlog.d("insert complete");
-        AlarmUtil.addAlarm(getApplicationContext(),mTask);
+        AlarmUtil.addAlarm(getApplicationContext(), mTask);
         Intent intent = new Intent();
-        intent.putExtra(Constant.ChildConstantString.KEY_EXTRA_ADD_TASK.getValue(),mTask);
-        setResult(Activity.RESULT_OK,intent);
+        intent.putExtra(Constant.ChildConstantString.KEY_EXTRA_ADD_TASK.getValue(), mTask);
+        setResult(Activity.RESULT_OK, intent);
 
         finish();
     }
@@ -178,7 +177,7 @@ public class AddTaskActivity extends AppCompatActivity implements AddTaskContrac
                 (view, year, month, dayOfMonth) ->
                 {
                     Showlog.d(year + "_" + month + "_" + dayOfMonth);
-                    mDate = dayOfMonth + "/" + month + "/" + year;
+                    mDate = dayOfMonth + "/" + (month+1) + "/" + year;
                     btnDate.setText(mDate);
                     mYear = year;
                     mMonth = month;

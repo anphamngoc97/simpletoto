@@ -3,7 +3,7 @@
     <item android:left="-5dp" android:right="-5dp" android:top="-5dp">
 
     <shape android:shape="rectangle">
-        <stroke android:width="0.4dp"/>
+        <stroke android:width="0.9dp"/>
     </shape>
 
     </item>

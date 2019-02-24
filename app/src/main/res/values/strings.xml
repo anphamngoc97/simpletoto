@@ -10,4 +10,6 @@
     <string name="contentConfirmRemoveDialog">Delete this task</string>
     <string name="confirmYes">Yes</string>
     <string name="confirmNo">No</string>
+
+    <string name="titleSearch">Search to find particular task</string>
 </resources>
