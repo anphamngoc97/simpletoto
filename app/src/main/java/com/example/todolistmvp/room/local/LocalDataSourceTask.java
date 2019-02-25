@@ -44,6 +44,6 @@ public class LocalDataSourceTask implements DataSourceTask {
 
     @Override
     public void removeTask(Task... tasks) {
-
+        daoTask.removeTask(tasks);
     }
 }

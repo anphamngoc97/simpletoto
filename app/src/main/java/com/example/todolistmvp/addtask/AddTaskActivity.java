@@ -1,7 +1,9 @@
 package com.example.todolistmvp.addtask;
 
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.graphics.Color;
@@ -19,12 +21,13 @@ import android.widget.ImageButton;
 import android.widget.Switch;
 
 import com.example.todolistmvp.R;
-import com.example.todolistmvp.alarm.AlarmUtil;
+import com.example.todolistmvp.alarm.ReceiverAlarm;
 import com.example.todolistmvp.room.ResponsitoryTask;
 import com.example.todolistmvp.room.model.Task;
 import com.example.todolistmvp.roomdagger.AppModule;
 import com.example.todolistmvp.roomdagger.DaggerRoomComponent;
 import com.example.todolistmvp.roomdagger.RoomComponent;
+import com.example.todolistmvp.util.CommonFuntion;
 import com.example.todolistmvp.util.Constant;
 import com.example.todolistmvp.util.Showlog;
 
@@ -162,7 +165,23 @@ public class AddTaskActivity extends AppCompatActivity implements AddTaskContrac
     @Override
     public void insertComplete() {
         Showlog.d("insert complete");
-        AlarmUtil.addAlarm(getApplicationContext(), mTask);
+        //todo test
+        Intent intent1=new Intent(this, ReceiverAlarm.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this,0,intent1,0);
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        Calendar calendar = CommonFuntion.getDateFromString(mTask.dateAlarm);
+
+        Showlog.d("set: " + calendar.get(Calendar.YEAR)+"/"+calendar.get(Calendar.MONTH)
+                +"/"+calendar.get(Calendar.DATE)+"  "+calendar.get(Calendar.HOUR_OF_DAY)+":"+
+                calendar.get(Calendar.MINUTE));
+
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),pendingIntent);
+
+
+        //AlarmUtil.addAlarm(getApplicationContext(), mTask);
+
+
+
         Intent intent = new Intent();
         intent.putExtra(Constant.ChildConstantString.KEY_EXTRA_ADD_TASK.getValue(), mTask);
         setResult(Activity.RESULT_OK, intent);
@@ -196,7 +215,7 @@ public class AddTaskActivity extends AppCompatActivity implements AddTaskContrac
 
         TimePickerDialog timePickerDialog = new TimePickerDialog(this,
                 (view, hourOfDay, minute) -> {
-                    Showlog.d(hourOfDay + "_" + minute);
+                    Showlog.d("time picker:" + hourOfDay + "_" + minute);
                     mTime = hourOfDay + ":" + minute;
                     btnTime.setText(mTime);
 

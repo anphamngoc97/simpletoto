@@ -4,7 +4,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-public class ComonFuntion {
+public class CommonFuntion {
     public static Calendar getDateFromString(String s) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Constant.DATE_FORMAT);
         Calendar date = Calendar.getInstance();
@@ -12,8 +12,10 @@ public class ComonFuntion {
 
             date.setTime(simpleDateFormat.parse(s));
 
-            Showlog.d("h: " + date.get(Calendar.HOUR) + " minu: " + date.get(Calendar.MINUTE) +
-                    " d: " + date.get(Calendar.DATE) + " m: " + date.get(Calendar.MONTH) + " y: " + date.get(Calendar.YEAR));
+            Showlog.d("get date from string  h:" + date.get(Calendar.HOUR_OF_DAY) + " minu:"
+                    + date.get(Calendar.MINUTE) +" d:" + date.get(Calendar.DATE) + " m:" +
+                    date.get(Calendar.MONTH) + " y:" + date.get(Calendar.YEAR));
+
         } catch (ParseException e) {
             e.printStackTrace();
             return null;

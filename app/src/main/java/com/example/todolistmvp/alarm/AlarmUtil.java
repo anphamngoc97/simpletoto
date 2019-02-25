@@ -4,10 +4,12 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 
 import com.example.todolistmvp.room.model.Task;
-import com.example.todolistmvp.util.ComonFuntion;
+import com.example.todolistmvp.util.CommonFuntion;
 import com.example.todolistmvp.util.Constant;
+import com.example.todolistmvp.util.Showlog;
 
 import java.util.Calendar;
 import java.util.StringTokenizer;
@@ -35,16 +37,27 @@ public class AlarmUtil {
         intent.putExtra(Constant.ChildConstantString.KEY_BROADCAST_TASK_ID.getValue(),task.id);
 
         PendingIntent pendingIntent = PendingIntent
-                .getBroadcast(context, INDEX, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                .getBroadcast(context, INDEX, intent,0);
 
 
-        Calendar calendar = ComonFuntion.getDateFromString(task.dateAlarm);
+        Calendar calendar = CommonFuntion.getDateFromString(task.dateAlarm);
 
         if(calendar==null) return;
 
+        Showlog.d("alarm utiltest: " + Calendar.getInstance().get(Calendar.MINUTE));
+        Showlog.d("alarm util: "+calendar.get(Calendar.MINUTE));
 
-        alarmManager
-                .setExact(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),pendingIntent);
+        //todo test
+        calendar.add(Calendar.MINUTE,1);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            alarmManager
+                    .setExact(AlarmManager.RTC, calendar.getTimeInMillis(), pendingIntent);
+        }else{
+            alarmManager
+                    .set(AlarmManager.RTC, calendar.getTimeInMillis(), pendingIntent);
+        }
+
 
  //       alarmManager.setExact(AlarmManager.RTC_WAKEUP, );
 

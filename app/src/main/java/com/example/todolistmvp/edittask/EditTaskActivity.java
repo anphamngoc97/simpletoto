@@ -27,7 +27,7 @@ import com.example.todolistmvp.room.model.Task;
 import com.example.todolistmvp.roomdagger.AppModule;
 import com.example.todolistmvp.roomdagger.DaggerRoomComponent;
 import com.example.todolistmvp.roomdagger.RoomComponent;
-import com.example.todolistmvp.util.ComonFuntion;
+import com.example.todolistmvp.util.CommonFuntion;
 import com.example.todolistmvp.util.Constant;
 import com.example.todolistmvp.util.Showlog;
 
@@ -94,7 +94,7 @@ public class EditTaskActivity extends AppCompatActivity implements EditTaskContr
                 .getSerializableExtra(Constant.ChildConstantString.KEY_SEND_EXTRA_EDIT_TASK_OBJECT.getValue());
         mPosition = intent
                 .getIntExtra(Constant.ChildConstantString.KEY_SEND_EXTRA_EDIT_TASK_POSITION.getValue(),0);
-        Calendar calendar = ComonFuntion.getDateFromString(mTask.dateAlarm);
+        Calendar calendar = CommonFuntion.getDateFromString(mTask.dateAlarm);
         if(calendar!=null){
             mYear = calendar.get(Calendar.YEAR);
             mMonth = calendar.get(Calendar.MONTH);
@@ -102,8 +102,6 @@ public class EditTaskActivity extends AppCompatActivity implements EditTaskContr
             mHour = calendar.get(Calendar.HOUR);
             mMinute = calendar.get(Calendar.MINUTE);
         }
-        Showlog.d("receive time: " + mYear+"_"+mMonth);
-
 
     }
     private void init() {
@@ -119,7 +117,7 @@ public class EditTaskActivity extends AppCompatActivity implements EditTaskContr
     private void updateView(){
         editTitle.setText(mTask.title);
         switchReminder.setChecked(mTask.isAlarm);
-        Calendar calendar = ComonFuntion.getDateFromString(mTask.dateAlarm);
+        Calendar calendar = CommonFuntion.getDateFromString(mTask.dateAlarm);
 
         if(calendar!=null && mTask.isAlarm) {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/mm/yyyy");
@@ -176,6 +174,10 @@ public class EditTaskActivity extends AppCompatActivity implements EditTaskContr
                     SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Constant.DATE_FORMAT);
                     Calendar calendar = Calendar.getInstance();
                     calendar.set(mYear, mMonth, mDay, mHour, mMinute);
+                    //todo test
+                    Showlog.d("edittask: " + calendar.get(Calendar.HOUR)+":"+calendar.get(Calendar.MINUTE));
+
+
                     timeString = simpleDateFormat.format(calendar.getTime());
 
                     mTask.isAlarm = switchReminder.isChecked();

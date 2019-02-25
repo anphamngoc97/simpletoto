@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.example.todolistmvp.R;
 import com.example.todolistmvp.room.model.Task;
-import com.example.todolistmvp.util.ComonFuntion;
+import com.example.todolistmvp.util.CommonFuntion;
 import com.example.todolistmvp.util.Showlog;
 
 import java.util.ArrayList;
@@ -77,7 +77,6 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.Holder> im
             itemView.setOnClickListener(v -> {
                 int position = getAdapterPosition();
                 mPresenter.onClickItem(mappingId.get(mTasksSearch.get(position).id));
-                
             });
         }
 
@@ -111,7 +110,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.Holder> im
             for (int i = 0; i < mTasks.size(); i++) {
                 Showlog.d("finding: "+constraint.toString() + i+"_"+mTasks.size());
 
-                if (ComonFuntion.isMatch(mTasks.get(i).title, constraint.toString())) {
+                if (CommonFuntion.isMatch(mTasks.get(i).title, constraint.toString())) {
                     nlist.add(mTasks.get(i));
                     mappingId.put(mTasks.get(i).id,i);
 

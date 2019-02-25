@@ -1,7 +1,7 @@
 package com.example.todolistmvp.util;
 
 public class Constant {
-    public static final String DATE_FORMAT = "dd/mm/yyyy:hh:mm";
+    public static final String DATE_FORMAT = "dd/MM/yyyy:HH:mm";
     public static final boolean REMOVE = true;
     public static final boolean EDIT = !REMOVE;
 
