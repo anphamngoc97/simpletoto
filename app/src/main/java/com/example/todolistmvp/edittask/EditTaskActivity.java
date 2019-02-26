@@ -1,6 +1,7 @@
 package com.example.todolistmvp.edittask;
 
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -174,8 +175,6 @@ public class EditTaskActivity extends AppCompatActivity implements EditTaskContr
                     SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Constant.DATE_FORMAT);
                     Calendar calendar = Calendar.getInstance();
                     calendar.set(mYear, mMonth, mDay, mHour, mMinute);
-                    //todo test
-                    Showlog.d("edittask: " + calendar.get(Calendar.HOUR)+":"+calendar.get(Calendar.MINUTE));
 
 
                     timeString = simpleDateFormat.format(calendar.getTime());
@@ -259,8 +258,7 @@ public class EditTaskActivity extends AppCompatActivity implements EditTaskContr
     }
     @Override
     public void onRemoveSuccess() {
-        AlarmUtil.cancelAlarm(this,mTask);
-
+        AlarmUtil.cancelAlarm(getApplicationContext(),mTask);
 
         Intent intent = new Intent(this, MainTaskActivity.class);
         intent.putExtra(Constant.ChildConstantString.KEY_EXTRA_IS_REMOVE.getValue(),Constant.REMOVE);
@@ -272,7 +270,8 @@ public class EditTaskActivity extends AppCompatActivity implements EditTaskContr
 
     @Override
     public void onUpdateSuccess() {
-        AlarmUtil.addAlarm(this,mTask);
+        AlarmUtil.cancelAlarm(getApplicationContext(),mTask);
+        AlarmUtil.addAlarm(getApplicationContext(),mTask);
 
         Intent intent = new Intent(this,MainTaskActivity.class);
         intent.putExtra(Constant.ChildConstantString.KEY_EXTRA_IS_REMOVE.getValue(),Constant.EDIT);

@@ -21,6 +21,7 @@ import android.widget.ImageButton;
 import android.widget.Switch;
 
 import com.example.todolistmvp.R;
+import com.example.todolistmvp.alarm.AlarmUtil;
 import com.example.todolistmvp.alarm.ReceiverAlarm;
 import com.example.todolistmvp.room.ResponsitoryTask;
 import com.example.todolistmvp.room.model.Task;
@@ -165,20 +166,20 @@ public class AddTaskActivity extends AppCompatActivity implements AddTaskContrac
     @Override
     public void insertComplete() {
         Showlog.d("insert complete");
-        //todo test
-        Intent intent1=new Intent(this, ReceiverAlarm.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this,0,intent1,0);
-        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        Calendar calendar = CommonFuntion.getDateFromString(mTask.dateAlarm);
+//        //todo test
+//        Intent intent1=new Intent(this, ReceiverAlarm.class);
+//        PendingIntent pendingIntent = PendingIntent.getBroadcast(this,0,intent1,0);
+//        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+//        Calendar calendar = CommonFuntion.getDateFromString(mTask.dateAlarm);
+//
+//        Showlog.d("set: " + calendar.get(Calendar.YEAR)+"/"+calendar.get(Calendar.MONTH)
+//                +"/"+calendar.get(Calendar.DATE)+"  "+calendar.get(Calendar.HOUR_OF_DAY)+":"+
+//                calendar.get(Calendar.MINUTE));
+//
+//        alarmManager.setExact(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),pendingIntent);
 
-        Showlog.d("set: " + calendar.get(Calendar.YEAR)+"/"+calendar.get(Calendar.MONTH)
-                +"/"+calendar.get(Calendar.DATE)+"  "+calendar.get(Calendar.HOUR_OF_DAY)+":"+
-                calendar.get(Calendar.MINUTE));
 
-        alarmManager.setExact(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),pendingIntent);
-
-
-        //AlarmUtil.addAlarm(getApplicationContext(), mTask);
+        AlarmUtil.addAlarm(getApplicationContext(), mTask);
 
 
 

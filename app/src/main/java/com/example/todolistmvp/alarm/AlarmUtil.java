@@ -47,8 +47,6 @@ public class AlarmUtil {
         Showlog.d("alarm utiltest: " + Calendar.getInstance().get(Calendar.MINUTE));
         Showlog.d("alarm util: "+calendar.get(Calendar.MINUTE));
 
-        //todo test
-        calendar.add(Calendar.MINUTE,1);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             alarmManager
@@ -79,6 +77,7 @@ public class AlarmUtil {
     }
 
     public static void cancelAlarm(Context context, Task task){
+        Showlog.d("cancel alarm: "+ task.dateAlarm);
 
         if(task.dateAlarm==null || task.dateAlarm.length()==0) return;
 
@@ -101,5 +100,6 @@ public class AlarmUtil {
 
         alarmManager.cancel(pendingIntent);
 
+        Showlog.d("canceling alarm");
     }
 }
