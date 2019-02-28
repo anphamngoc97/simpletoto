@@ -1,15 +1,21 @@
 <resources>
     <string name="app_name">TodoListMVP</string>
     <string name="title">Simple Todo</string>
+    <string name="title_edit">Edit Task</string>
+    <string name="title_add">Add Task</string>
+
     <string name="time">Time</string>
     <string name="date">Date</string>
-    <string name="btnNameAdd">Add</string>
-    <string name="btnNameUpdate">Update</string>
+    <string name="btn_name_add">Add</string>
+    <string name="btn_name_update">Update</string>
 
-    <string name="titleComfirmRDialog">Are you sure?</string>
-    <string name="contentConfirmRemoveDialog">Delete this task</string>
-    <string name="confirmYes">Yes</string>
-    <string name="confirmNo">No</string>
+    <string name="title_confirm_dialog">Are you sure?</string>
+    <string name="content_confirm_remove_dialog">Delete this task</string>
+    <string name="confirm_yes">Yes</string>
+    <string name="confirm_no">No</string>
 
-    <string name="titleSearch">Search to find particular task</string>
+    <string name="content_search">Search to find particular task</string>
+    <string name="content_main_task">Click + to add task</string>
+
+    <string name="title_notification">You have task today:</string>
 </resources>

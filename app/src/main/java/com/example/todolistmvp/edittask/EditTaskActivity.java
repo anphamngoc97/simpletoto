@@ -1,25 +1,29 @@
 package com.example.todolistmvp.edittask;
 
 import android.app.Activity;
-import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.Service;
 import android.app.TimePickerDialog;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Switch;
+import android.widget.TextView;
 
+import com.example.todolistmvp.BaseActivity;
 import com.example.todolistmvp.R;
 import com.example.todolistmvp.alarm.AlarmUtil;
 import com.example.todolistmvp.maintask.MainTaskActivity;
@@ -40,7 +44,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class EditTaskActivity extends AppCompatActivity implements EditTaskContract.View{
+public class EditTaskActivity extends BaseActivity implements EditTaskContract.View{
 
     @BindView(R.id.btnBack)
     ImageButton btnBack;
@@ -50,10 +54,14 @@ public class EditTaskActivity extends AppCompatActivity implements EditTaskContr
     TextInputLayout layoutTitle;
     @BindView(R.id.editTitle)
     TextInputEditText editTitle;
-    @BindView(R.id.btnAdd)
-    Button btnAdd;
+    @BindView(R.id.btnUpdate)
+    Button btnUpdate;
+    @BindView(R.id.btnUpdateShowKeyBoard)
+    Button btnUpdateShowKeyBoard;
     @BindView(R.id.switchReminder)
     Switch switchReminder;
+    @BindView(R.id.groupSwitch)
+    ViewGroup groupSwitchReminder;
     @BindView(R.id.groupTime)
     ViewGroup groupTime;
     @BindView(R.id.btnDate)
@@ -61,10 +69,10 @@ public class EditTaskActivity extends AppCompatActivity implements EditTaskContr
     @BindView(R.id.btnTime)
     Button btnTime;
     @BindView(R.id.parentLayout)
-    View parentLayout;
+    ViewGroup parentLayout;
 
-    int BACKGROUND_INPUT_INVALID = Color.parseColor("#F53D25");
-    int BACKGROUND_INPUT_VALID = Color.parseColor("#5EEE1B");
+    int BACKGROUND_INPUT_INVALID;
+    int BACKGROUND_INPUT_VALID;
 
     @Inject
     ResponsitoryTask responsitoryTask;
@@ -77,6 +85,7 @@ public class EditTaskActivity extends AppCompatActivity implements EditTaskContr
     String mTime ="";
     int mYear=-1,mMonth=-1,mDay=-1,mMinute=-1,mHour=-1;
 
+    boolean isKeyboardShowing = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +98,7 @@ public class EditTaskActivity extends AppCompatActivity implements EditTaskContr
         setupView();
         updateView();
     }
+
     private void getData(){
         Intent intent = getIntent();
         mTask = (Task) intent
@@ -106,6 +116,8 @@ public class EditTaskActivity extends AppCompatActivity implements EditTaskContr
 
     }
     private void init() {
+        BACKGROUND_INPUT_INVALID = getResources().getColor(R.color.inputInvalid);
+        BACKGROUND_INPUT_VALID = getResources().getColor(R.color.inputValid);
 
         RoomComponent roomComponent = DaggerRoomComponent.builder()
                 .appModule(new AppModule(getApplication()))
@@ -116,12 +128,13 @@ public class EditTaskActivity extends AppCompatActivity implements EditTaskContr
 
     }
     private void updateView(){
+
         editTitle.setText(mTask.title);
         switchReminder.setChecked(mTask.isAlarm);
         Calendar calendar = CommonFuntion.getDateFromString(mTask.dateAlarm);
 
         if(calendar!=null && mTask.isAlarm) {
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/mm/yyyy");
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
             btnDate.setText(simpleDateFormat.format(calendar.getTime()));
 
             simpleDateFormat.applyPattern("hh:mm");
@@ -133,6 +146,13 @@ public class EditTaskActivity extends AppCompatActivity implements EditTaskContr
     private void setupView() {
         layoutTitle.setBoxStrokeColor(BACKGROUND_INPUT_VALID);
 
+        new Handler().post(() -> {
+            editTitle.requestFocus();
+            InputMethodManager inputMethodManager = (InputMethodManager)
+                    getSystemService(Service.INPUT_METHOD_SERVICE);
+
+            inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
+        });
 
         editTitle.addTextChangedListener(new TextWatcher() {
             @Override
@@ -153,15 +173,57 @@ public class EditTaskActivity extends AppCompatActivity implements EditTaskContr
 
             }
         });
+        editTitle.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+
+                if(actionId == EditorInfo.IME_ACTION_DONE){
+                    InputMethodManager inputMethodManager = (InputMethodManager)
+                            getSystemService(Service.INPUT_METHOD_SERVICE);
+
+                    inputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY,0);
+                    return true;
+                }
+
+                return false;
+            }
+        });
 
         btnBack.setOnClickListener(v -> {
-            finish();
+            if(isKeyboardShowing){
+                hideSoftKeyboard();
+            }else {
+                finish();
+            }
         });
         btnRemove.setOnClickListener(v->{
             confirmRemove();
         });
 
-        btnAdd.setOnClickListener(v -> {
+        btnUpdate.setOnClickListener(v -> onClickBtnUpdate());
+        btnUpdateShowKeyBoard.setOnClickListener(v->onClickBtnUpdate());
+
+        switchReminder.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                groupTime.setVisibility(View.VISIBLE);
+            } else {
+                groupTime.setVisibility(View.INVISIBLE);
+            }
+        });
+
+        groupSwitchReminder.setOnClickListener(v->{
+            switchReminder.setChecked(!switchReminder.isChecked());
+        });
+        btnDate.setOnClickListener(v -> {
+            showDatePicker();
+        });
+        btnTime.setOnClickListener(v -> {
+            showTimePicker();
+        });
+    }
+
+    private void onClickBtnUpdate(){
+        {
 
             String title = editTitle.getText().toString().trim();
             if (title.length() == 0) {
@@ -179,32 +241,24 @@ public class EditTaskActivity extends AppCompatActivity implements EditTaskContr
 
                     timeString = simpleDateFormat.format(calendar.getTime());
 
+                    if(!switchReminder.isChecked()){
+                        timeString = null;
+                    }
+
                     mTask.isAlarm = switchReminder.isChecked();
                     mTask.dateAlarm = timeString;
                     mTask.title = title;
                     presenter.updateData(mTask);
+
+                    Showlog.d(switchReminder.isChecked()+ "  " +mDay+"/"+mMonth+"/"+mYear+" " + mHour+":"+mMinute);
+
                 }else{
                     Snackbar.make(parentLayout,"Timehavenotset",Snackbar.LENGTH_SHORT).show();
                 }
 
             }
-        });
-        switchReminder.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                groupTime.setVisibility(View.VISIBLE);
-            } else {
-                groupTime.setVisibility(View.INVISIBLE);
-            }
-        });
-
-        btnDate.setOnClickListener(v -> {
-            showDatePicker();
-        });
-        btnTime.setOnClickListener(v -> {
-            showTimePicker();
-        });
+        }
     }
-
     private void showDatePicker() {
         Calendar calendar = Calendar.getInstance();
 
@@ -246,12 +300,12 @@ public class EditTaskActivity extends AppCompatActivity implements EditTaskContr
     private void confirmRemove(){
 
         AlertDialog.Builder alertDBuilder = new AlertDialog.Builder(this);
-        alertDBuilder.setTitle(getString(R.string.titleComfirmRDialog));
-        alertDBuilder.setMessage(getString(R.string.contentConfirmRemoveDialog));
-        alertDBuilder.setNegativeButton(getString(R.string.confirmNo), (dialog, which) -> {
+        alertDBuilder.setTitle(getString(R.string.title_confirm_dialog));
+        alertDBuilder.setMessage(getString(R.string.content_confirm_remove_dialog));
+        alertDBuilder.setNegativeButton(getString(R.string.confirm_no), (dialog, which) -> {
 
         });
-        alertDBuilder.setPositiveButton(getString(R.string.confirmYes), (dialog, which) -> {
+        alertDBuilder.setPositiveButton(getString(R.string.confirm_yes), (dialog, which) -> {
             presenter.removeData(mTask);
         });
         alertDBuilder.create().show();
@@ -281,5 +335,21 @@ public class EditTaskActivity extends AppCompatActivity implements EditTaskContr
         setResult(Activity.RESULT_OK,intent);
         finish();
 
+    }
+
+    @Override
+    public void onShowKeyBoard(int keyboardHeight) {
+        super.onShowKeyBoard(keyboardHeight);
+        btnUpdateShowKeyBoard.setVisibility(View.VISIBLE);
+        btnUpdate.setVisibility(View.INVISIBLE);
+        isKeyboardShowing = true;
+    }
+
+    @Override
+    public void onHideKeyboard() {
+        super.onHideKeyboard();
+        btnUpdateShowKeyBoard.setVisibility(View.INVISIBLE);
+        btnUpdate.setVisibility(View.VISIBLE);
+        isKeyboardShowing = false;
     }
 }

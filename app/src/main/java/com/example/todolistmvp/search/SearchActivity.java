@@ -46,7 +46,7 @@ public class SearchActivity extends AppCompatActivity implements SearchContract.
     ImageButton btnBack;
     @BindView(R.id.editSearch)
     EditText editSearch;
-    @BindView(R.id.txtvTitleSearch)
+    @BindView(R.id.txtvContentSearch)
     TextView txtvTitleSearch;
 
     List<Task> mTasks = new ArrayList<>();

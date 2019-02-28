@@ -73,8 +73,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
         <TextView
-            android:id="@+id/txtvTitleSearch"
-            android:text="@string/titleSearch"
+            android:id="@+id/txtvContentSearch"
+            android:text="@string/content_search"
             android:textSize="@dimen/textSizeTitle"
             android:gravity="center"
             android:layout_width="match_parent"

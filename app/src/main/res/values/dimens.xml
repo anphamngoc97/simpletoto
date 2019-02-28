@@ -5,8 +5,35 @@
     <dimen name="textSizeItem">20sp</dimen>
     <dimen name="marginItemVertical">5dp</dimen>
     <dimen name="marginItemHorizontal">5dp</dimen>
-    <dimen name="paddingItem">7dp</dimen>
 
-    <dimen name="smallStroke">-0.8px</dimen>
-    <dimen name="bigStroke">1.2px</dimen>
+
+    <dimen name="paddingItemVertical">7dp</dimen>
+    <dimen name="paddingItemHorizontal">15dp</dimen>
+
+    <dimen name="smallStroke">-0.8dp</dimen>
+    <dimen name="bigStroke">1.2dp</dimen>
+
+    <dimen name="borderTitlePositive">1dp</dimen>
+    <dimen name="borderTitleNegative">-2dp</dimen>
+
+    <dimen name="decimal_1dp">0.1dp</dimen>
+    <dimen name="decimal_2dp">0.2dp</dimen>
+    <dimen name="decimal_3dp">0.3dp</dimen>
+    <dimen name="decimal_4dp">0.4dp</dimen>
+    <dimen name="decimal_5dp">0.5dp</dimen>
+    <dimen name="decimal_6dp">0.6dp</dimen>
+    <dimen name="decimal_7dp">0.7dp</dimen>
+    <dimen name="decimal_8dp">0.8dp</dimen>
+    <dimen name="decimal_9dp">0.9dp</dimen>
+
+    <dimen name="_1dp">1dp</dimen>
+    <dimen name="_2dp">2dp</dimen>
+    <dimen name="_3dp">3dp</dimen>
+    <dimen name="_4dp">4dp</dimen>
+    <dimen name="_5dp">5dp</dimen>
+    <dimen name="_6dp">6dp</dimen>
+    <dimen name="_7dp">7dp</dimen>
+    <dimen name="_8dp">8dp</dimen>
+    <dimen name="_9dp">9dp</dimen>
+
 </resources>

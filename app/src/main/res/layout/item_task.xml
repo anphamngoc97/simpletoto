@@ -4,8 +4,8 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
 
-    android:paddingTop="@dimen/paddingItem"
-    android:paddingBottom="@dimen/paddingItem"
+    android:paddingTop="@dimen/paddingItemVertical"
+    android:paddingBottom="@dimen/paddingItemVertical"
     android:paddingLeft="12dp"
     android:paddingRight="12dp"
 

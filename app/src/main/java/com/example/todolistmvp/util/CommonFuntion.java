@@ -12,9 +12,9 @@ public class CommonFuntion {
 
             date.setTime(simpleDateFormat.parse(s));
 
-            Showlog.d("get date from string  h:" + date.get(Calendar.HOUR_OF_DAY) + " minu:"
-                    + date.get(Calendar.MINUTE) +" d:" + date.get(Calendar.DATE) + " m:" +
-                    date.get(Calendar.MONTH) + " y:" + date.get(Calendar.YEAR));
+//            Showlog.d("get date from string  h:" + date.get(Calendar.HOUR_OF_DAY) + " minu:"
+//                    + date.get(Calendar.MINUTE) +" d:" + date.get(Calendar.DATE) + " m:" +
+//                    date.get(Calendar.MONTH) + " y:" + date.get(Calendar.YEAR));
 
         } catch (ParseException e) {
             e.printStackTrace();

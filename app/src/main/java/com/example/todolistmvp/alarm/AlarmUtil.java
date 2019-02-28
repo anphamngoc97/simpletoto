@@ -9,10 +9,8 @@ import android.os.Build;
 import com.example.todolistmvp.room.model.Task;
 import com.example.todolistmvp.util.CommonFuntion;
 import com.example.todolistmvp.util.Constant;
-import com.example.todolistmvp.util.Showlog;
 
 import java.util.Calendar;
-import java.util.StringTokenizer;
 
 public class AlarmUtil {
 
@@ -44,10 +42,6 @@ public class AlarmUtil {
 
         if(calendar==null) return;
 
-        Showlog.d("alarm utiltest: " + Calendar.getInstance().get(Calendar.MINUTE));
-        Showlog.d("alarm util: "+calendar.get(Calendar.MINUTE));
-
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             alarmManager
                     .setExact(AlarmManager.RTC, calendar.getTimeInMillis(), pendingIntent);
@@ -77,16 +71,9 @@ public class AlarmUtil {
     }
 
     public static void cancelAlarm(Context context, Task task){
-        Showlog.d("cancel alarm: "+ task.dateAlarm);
 
         if(task.dateAlarm==null || task.dateAlarm.length()==0) return;
 
-        StringTokenizer st = new StringTokenizer(task.dateAlarm, " ");
-        String date, time;
-        int TIME_VIBRATE;
-
-        if (st.hasMoreTokens()) date = st.nextToken();
-        if (st.hasMoreTokens()) time = st.nextToken();
         final int INDEX = task.id;
 
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
@@ -100,6 +87,5 @@ public class AlarmUtil {
 
         alarmManager.cancel(pendingIntent);
 
-        Showlog.d("canceling alarm");
     }
 }

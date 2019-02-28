@@ -1,34 +1,33 @@
 package com.example.todolistmvp.addtask;
 
 import android.app.Activity;
-import android.app.AlarmManager;
 import android.app.DatePickerDialog;
-import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Switch;
+import android.widget.TextView;
 
+import com.example.todolistmvp.BaseActivity;
 import com.example.todolistmvp.R;
 import com.example.todolistmvp.alarm.AlarmUtil;
-import com.example.todolistmvp.alarm.ReceiverAlarm;
 import com.example.todolistmvp.room.ResponsitoryTask;
 import com.example.todolistmvp.room.model.Task;
 import com.example.todolistmvp.roomdagger.AppModule;
 import com.example.todolistmvp.roomdagger.DaggerRoomComponent;
 import com.example.todolistmvp.roomdagger.RoomComponent;
-import com.example.todolistmvp.util.CommonFuntion;
 import com.example.todolistmvp.util.Constant;
 import com.example.todolistmvp.util.Showlog;
 
@@ -40,7 +39,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class AddTaskActivity extends AppCompatActivity implements AddTaskContract.View {
+public class AddTaskActivity extends BaseActivity implements AddTaskContract.View {
 
     @BindView(R.id.btnBack)
     ImageButton btnBack;
@@ -48,10 +47,14 @@ public class AddTaskActivity extends AppCompatActivity implements AddTaskContrac
     TextInputLayout layoutTitle;
     @BindView(R.id.editTitle)
     TextInputEditText editTitle;
-    @BindView(R.id.btnAdd)
+    @BindView(R.id.btnUpdate)
     Button btnAdd;
+    @BindView(R.id.btnUpdateShowKeyBoard)
+    Button btnAddShowKeyBoard;
     @BindView(R.id.switchReminder)
     Switch switchReminder;
+    @BindView(R.id.groupSwitch)
+    ViewGroup groupSwitchReminder;
     @BindView(R.id.groupTime)
     ViewGroup groupTime;
     @BindView(R.id.btnDate)
@@ -59,10 +62,10 @@ public class AddTaskActivity extends AppCompatActivity implements AddTaskContrac
     @BindView(R.id.btnTime)
     Button btnTime;
     @BindView(R.id.parentLayout)
-    View parentLayout;
+    ViewGroup parentLayout;
 
-    int BACKGROUND_INPUT_INVALID = Color.parseColor("#F53D25");
-    int BACKGROUND_INPUT_VALID = Color.parseColor("#5EEE1B");
+    int BACKGROUND_INPUT_INVALID;
+    int BACKGROUND_INPUT_VALID;
 
     @Inject
     ResponsitoryTask responsitoryTask;
@@ -73,6 +76,8 @@ public class AddTaskActivity extends AppCompatActivity implements AddTaskContrac
     String mDate = "";
     String mTime = "";
     int mYear = -1, mMonth = -1, mDay = -1, mMinute = -1, mHour = -1;
+
+    boolean isKeyboardShowing = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +91,8 @@ public class AddTaskActivity extends AppCompatActivity implements AddTaskContrac
     }
 
     private void init() {
+        BACKGROUND_INPUT_INVALID = getResources().getColor(R.color.inputInvalid);
+        BACKGROUND_INPUT_VALID = getResources().getColor(R.color.inputValid);
 
         RoomComponent roomComponent = DaggerRoomComponent.builder()
                 .appModule(new AppModule(getApplication()))
@@ -98,6 +105,12 @@ public class AddTaskActivity extends AppCompatActivity implements AddTaskContrac
 
     private void setupView() {
         layoutTitle.setBoxStrokeColor(BACKGROUND_INPUT_VALID);
+
+        new Handler().post(() -> {
+            editTitle.requestFocus();
+            showSoftKeyboard();
+        });
+
         editTitle.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -118,10 +131,48 @@ public class AddTaskActivity extends AppCompatActivity implements AddTaskContrac
             }
         });
 
-        btnBack.setOnClickListener(v -> {
-            finish();
+        editTitle.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    hideSoftKeyboard();
+
+                    return true;
+                }
+                return false;
+            }
         });
-        btnAdd.setOnClickListener(v -> {
+        btnBack.setOnClickListener(v -> {
+            if(isKeyboardShowing){
+                hideSoftKeyboard();
+            }else {
+                finish();
+            }
+        });
+        btnAdd.setOnClickListener(v -> onClickBtnAdd());
+        btnAddShowKeyBoard.setOnClickListener(v->onClickBtnAdd());
+
+        switchReminder.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                groupTime.setVisibility(View.VISIBLE);
+            } else {
+                groupTime.setVisibility(View.INVISIBLE);
+            }
+        });
+
+        groupSwitchReminder.setOnClickListener(v -> {
+            switchReminder.setChecked(!switchReminder.isChecked());
+        });
+        btnDate.setOnClickListener(v -> {
+            showDatePicker();
+        });
+        btnTime.setOnClickListener(v -> {
+            showTimePicker();
+        });
+    }
+
+    private void onClickBtnAdd(){
+        {
 
             String title = editTitle.getText().toString().trim();
             if (title.length() == 0) {
@@ -131,56 +182,32 @@ public class AddTaskActivity extends AppCompatActivity implements AddTaskContrac
             } else {
 
                 String timeString = null;
-                if (!switchReminder.isChecked() || (switchReminder.isChecked() && mYear * mMonth * mDay * mDay * mMinute >=0)) {
+                if (!switchReminder.isChecked() || (switchReminder.isChecked() && mYear * mMonth * mDay * mDay * mMinute >= 0)) {
                     SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Constant.DATE_FORMAT);
                     Calendar calendar = Calendar.getInstance();
                     calendar.set(mYear, mMonth, mDay, mHour, mMinute);
                     timeString = simpleDateFormat.format(calendar.getTime());
+
+                    if (!switchReminder.isChecked()) {
+                        timeString = null;
+                    }
 
                     mTask = new Task.Builder().setIsAlarm(switchReminder.isChecked())
                             .setDateAlarm(timeString)
                             .createTask(title);
                     presenter.insertData(mTask);
                 } else {
-                    Snackbar.make(parentLayout, "Timehavenotset", Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(parentLayout, "Timehavetoset", Snackbar.LENGTH_SHORT).show();
                 }
 
             }
-        });
-        switchReminder.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                groupTime.setVisibility(View.VISIBLE);
-            } else {
-                groupTime.setVisibility(View.INVISIBLE);
-            }
-        });
-
-        btnDate.setOnClickListener(v -> {
-            showDatePicker();
-        });
-        btnTime.setOnClickListener(v -> {
-            showTimePicker();
-        });
+        }
     }
-
     @Override
     public void insertComplete() {
         Showlog.d("insert complete");
-//        //todo test
-//        Intent intent1=new Intent(this, ReceiverAlarm.class);
-//        PendingIntent pendingIntent = PendingIntent.getBroadcast(this,0,intent1,0);
-//        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-//        Calendar calendar = CommonFuntion.getDateFromString(mTask.dateAlarm);
-//
-//        Showlog.d("set: " + calendar.get(Calendar.YEAR)+"/"+calendar.get(Calendar.MONTH)
-//                +"/"+calendar.get(Calendar.DATE)+"  "+calendar.get(Calendar.HOUR_OF_DAY)+":"+
-//                calendar.get(Calendar.MINUTE));
-//
-//        alarmManager.setExact(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),pendingIntent);
-
 
         AlarmUtil.addAlarm(getApplicationContext(), mTask);
-
 
 
         Intent intent = new Intent();
@@ -197,7 +224,7 @@ public class AddTaskActivity extends AppCompatActivity implements AddTaskContrac
                 (view, year, month, dayOfMonth) ->
                 {
                     Showlog.d(year + "_" + month + "_" + dayOfMonth);
-                    mDate = dayOfMonth + "/" + (month+1) + "/" + year;
+                    mDate = dayOfMonth + "/" + (month + 1) + "/" + year;
                     btnDate.setText(mDate);
                     mYear = year;
                     mMonth = month;
@@ -228,4 +255,20 @@ public class AddTaskActivity extends AppCompatActivity implements AddTaskContrac
         timePickerDialog.show();
     }
 
+
+    @Override
+    public void onShowKeyBoard(int keyboardHeight) {
+        super.onShowKeyBoard(keyboardHeight);
+        btnAddShowKeyBoard.setVisibility(View.VISIBLE);
+        btnAdd.setVisibility(View.INVISIBLE);
+        isKeyboardShowing = true;
+    }
+
+    @Override
+    public void onHideKeyboard() {
+        super.onHideKeyboard();
+        btnAddShowKeyBoard.setVisibility(View.INVISIBLE);
+        btnAdd.setVisibility(View.VISIBLE);
+        isKeyboardShowing = false;
+    }
 }
