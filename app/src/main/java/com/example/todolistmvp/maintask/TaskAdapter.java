@@ -13,6 +13,7 @@ import com.example.todolistmvp.R;
 import com.example.todolistmvp.adapter.helper.ITouchHelperAdapter;
 import com.example.todolistmvp.adapter.helper.SimplerTouchHelperCallback;
 import com.example.todolistmvp.room.model.Task;
+import com.example.todolistmvp.util.CommonFuntion;
 
 import java.util.Collections;
 import java.util.List;
@@ -80,6 +81,8 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.Holder> implem
     class Holder extends RecyclerView.ViewHolder {
         @BindView(R.id.txtvTask)
         TextView txtvTask;
+        @BindView(R.id.txtvTimeRemain)
+        TextView txtvTimeRemain;
 
         public Holder(@NonNull View itemView) {
             super(itemView);
@@ -98,6 +101,8 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.Holder> implem
         public void bindTitle() {
             int position = getAdapterPosition();
             txtvTask.setText(tasks.get(position).title);
+            String timeRemain = CommonFuntion.getTimeRemaining(tasks.get(position).dateAlarm);
+            txtvTimeRemain.setText(timeRemain);
         }
     }
 }

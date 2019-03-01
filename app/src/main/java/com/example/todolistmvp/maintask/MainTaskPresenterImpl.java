@@ -1,8 +1,10 @@
 package com.example.todolistmvp.maintask;
 
 import com.example.todolistmvp.room.model.Task;
+import com.example.todolistmvp.util.CommonFuntion;
 import com.example.todolistmvp.util.Showlog;
 
+import java.util.Calendar;
 import java.util.List;
 
 public class MainTaskPresenterImpl implements MainTaskContract.Presenter,
@@ -33,6 +35,15 @@ public class MainTaskPresenterImpl implements MainTaskContract.Presenter,
 
     @Override
     public void onGetSuccess(List<Task> res) {
+        //remove past alrm and write to db
+        Calendar calendarCurrent = Calendar.getInstance();
+        for(Task task:res){
+            Calendar calendarAlarm = CommonFuntion.getDateFromString(task.dateAlarm);
+            if(calendarCurrent.equals(calendarAlarm) || calendarCurrent.after(calendarAlarm)){
+                task.isAlarm = false;
+            }
+
+        }
         view.refreshData(res);
     }
 

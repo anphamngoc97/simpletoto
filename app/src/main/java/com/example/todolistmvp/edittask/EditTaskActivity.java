@@ -34,7 +34,6 @@ import com.example.todolistmvp.roomdagger.DaggerRoomComponent;
 import com.example.todolistmvp.roomdagger.RoomComponent;
 import com.example.todolistmvp.util.CommonFuntion;
 import com.example.todolistmvp.util.Constant;
-import com.example.todolistmvp.util.Showlog;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -250,7 +249,6 @@ public class EditTaskActivity extends BaseActivity implements EditTaskContract.V
                     mTask.title = title;
                     presenter.updateData(mTask);
 
-                    Showlog.d(switchReminder.isChecked()+ "  " +mDay+"/"+mMonth+"/"+mYear+" " + mHour+":"+mMinute);
 
                 }else{
                     Snackbar.make(parentLayout,"Timehavenotset",Snackbar.LENGTH_SHORT).show();
@@ -265,7 +263,6 @@ public class EditTaskActivity extends BaseActivity implements EditTaskContract.V
         DatePickerDialog datePickerDialog = new DatePickerDialog(this,
                 (view, year, month, dayOfMonth) ->
                 {
-                    Showlog.d(year + "_" + month + "_" + dayOfMonth);
                     mDate = dayOfMonth + "/" + (month+1) + "/" + year;
                     btnDate.setText(mDate);
                     mYear = year;
@@ -285,7 +282,6 @@ public class EditTaskActivity extends BaseActivity implements EditTaskContract.V
 
         TimePickerDialog timePickerDialog = new TimePickerDialog(this,
                 (view, hourOfDay, minute) -> {
-                    Showlog.d(hourOfDay + "_" + minute);
                     mTime = hourOfDay + ":" + minute;
                     btnTime.setText(mTime);
 

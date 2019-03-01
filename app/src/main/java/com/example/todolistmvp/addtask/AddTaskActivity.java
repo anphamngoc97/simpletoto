@@ -29,7 +29,6 @@ import com.example.todolistmvp.roomdagger.AppModule;
 import com.example.todolistmvp.roomdagger.DaggerRoomComponent;
 import com.example.todolistmvp.roomdagger.RoomComponent;
 import com.example.todolistmvp.util.Constant;
-import com.example.todolistmvp.util.Showlog;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -205,7 +204,6 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
     }
     @Override
     public void insertComplete() {
-        Showlog.d("insert complete");
 
         AlarmUtil.addAlarm(getApplicationContext(), mTask);
 
@@ -223,7 +221,6 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         DatePickerDialog datePickerDialog = new DatePickerDialog(this,
                 (view, year, month, dayOfMonth) ->
                 {
-                    Showlog.d(year + "_" + month + "_" + dayOfMonth);
                     mDate = dayOfMonth + "/" + (month + 1) + "/" + year;
                     btnDate.setText(mDate);
                     mYear = year;
@@ -243,7 +240,6 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
 
         TimePickerDialog timePickerDialog = new TimePickerDialog(this,
                 (view, hourOfDay, minute) -> {
-                    Showlog.d("time picker:" + hourOfDay + "_" + minute);
                     mTime = hourOfDay + ":" + minute;
                     btnTime.setText(mTime);
 

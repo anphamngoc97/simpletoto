@@ -3,6 +3,7 @@ package com.example.todolistmvp.util;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.concurrent.TimeUnit;
 
 public class CommonFuntion {
     public static Calendar getDateFromString(String s) {
@@ -24,6 +25,48 @@ public class CommonFuntion {
 
         }
         return date;
+    }
+
+    public static String getTimeRemaining(String dateAlarm) {
+        Calendar calendarAlarm = getDateFromString(dateAlarm);
+        Calendar current = Calendar.getInstance();
+
+        if (calendarAlarm == null) {
+            return "Remain: Not set";
+        }
+
+        if (current.after(calendarAlarm) ) {
+            return "Remain: Past";
+        }
+        if(current.equals(calendarAlarm)){
+            return "Remain: now";
+        }
+        long remainInMillis = calendarAlarm.getTimeInMillis() - current.getTimeInMillis();
+        Calendar calendarRemain = Calendar.getInstance();
+        calendarRemain.setTimeInMillis(remainInMillis);
+        long day, hour, min, sec;
+        sec = remainInMillis / 1000;
+        day = sec / (24 * 60 * 60);
+        sec %= (24 * 60 * 60);
+        hour = sec / (60 * 60);
+        sec %= (60 * 60);
+        min = sec / 60;
+        sec %= 60;
+
+        //day = TimeUnit.MILLISECONDS.toDays(remainInMillis);
+        //hour = TimeUnit.MILLISECONDS.toHours(remainInMillis) - TimeUnit.DAYS.toHours(day);
+        //min = TimeUnit.MILLISECONDS.toMinutes(remainInMillis) - TimeUnit.HOURS.toMinutes();
+
+        String dayString, hourString, minString;
+        dayString = String.valueOf(day) + " day";
+        hourString = String.valueOf(hour) + " hour";
+        minString = String.valueOf(min) + " minute";
+
+        if (day > 1) dayString += "s";
+        if (hour > 1) hourString += "s";
+        if (min > 1) minString += "s";
+
+        return "Remain: " + dayString + " " + hourString + " " + minString;
     }
 
     //kmp algorithm

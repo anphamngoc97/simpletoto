@@ -28,6 +28,7 @@
         </activity>
 
         <receiver android:name=".alarm.ReceiverAlarm" />
+        <receiver android:name=".alarm.ReceiverDismissNotification"/>
     </application>
 
 </manifest>

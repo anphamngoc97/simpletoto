@@ -4,6 +4,8 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
 
+    android:background="@drawable/background_item_task"
+
     android:paddingTop="@dimen/paddingItemVertical"
     android:paddingBottom="@dimen/paddingItemVertical"
     android:paddingLeft="12dp"
@@ -14,7 +16,6 @@
     android:layout_marginBottom="@dimen/marginItemVertical">
 
     <TextView
-        android:background="@drawable/background_item_task"
 
         android:id="@+id/txtvTask"
         android:text="fff"
@@ -24,6 +25,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/txtvTimeRemain"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
+
+    <TextView
+        android:id="@+id/txtvTimeRemain"
+        android:layout_width="match_parent"
+        android:text="ssssssssssssssss"
+        android:textSize="@dimen/textSizeSmallItem"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/txtvTask"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"/>

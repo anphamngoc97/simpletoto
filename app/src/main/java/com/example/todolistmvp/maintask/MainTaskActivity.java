@@ -157,7 +157,6 @@ public class MainTaskActivity extends AppCompatActivity implements MainTaskContr
                     showMainContent(mTasks.size());
 
                 } else {
-                    Showlog.d("after change: " + mTasks.get(position).title);
                     Task task = (Task) data.getSerializableExtra(
                             Constant.ChildConstantString.KEY_SEND_EXTRA_EDIT_TASK_OBJECT.getValue());
                     mTasks.set(position, task);

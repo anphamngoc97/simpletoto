@@ -21,7 +21,8 @@ public class Constant {
         KEY_SEND_EXTRA_EDIT_TASK_OBJECT,
         KEY_SEND_EXTRA_EDIT_TASK_POSITION,
         KEY_EXTRA_ADD_TASK,
-        KEY_EXTRA_IS_REMOVE;
+        KEY_EXTRA_IS_REMOVE,
+        KEY_BROADCAST_NOTIFICATION_DISMISS;
 
         public String getValue(){
             return this.name();

@@ -108,7 +108,7 @@
         android:id="@+id/floatBtnAdd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="#137BD8"
+        android:background="#1337A5"
         android:src="@drawable/ic_plus"
 
         app:layout_constraintHorizontal_bias="0.9"

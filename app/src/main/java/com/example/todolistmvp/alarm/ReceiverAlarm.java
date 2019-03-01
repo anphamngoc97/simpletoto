@@ -19,9 +19,11 @@ import java.util.Calendar;
 public class ReceiverAlarm extends BroadcastReceiver {
     private  static Notification.Builder notifiBuilder= null;
     private static Notification.BigTextStyle bigTextStyle = new Notification.BigTextStyle();
+    private static final int NOTIFICATION_ID = 0;
 
-    private static final String KEY_BUNDLE_CONTENT = "KEY_BUNDLE_CONTENT";
-    private static final String KEY_BUNDLE_AMOUNT_CONTENT = "KEY_BUNDLE_AMOUNT_CONTENT";
+    public static final String KEY_BUNDLE = "KEY_BUNDLE";
+    public static final String KEY_BUNDLE_CONTENT = "KEY_BUNDLE_CONTENT";
+    public static final String KEY_BUNDLE_AMOUNT_CONTENT = "KEY_BUNDLE_AMOUNT_CONTENT";
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -57,8 +59,6 @@ public class ReceiverAlarm extends BroadcastReceiver {
         int amount = bundle.getInt(KEY_BUNDLE_AMOUNT_CONTENT,0);
 
 
-        Showlog.d("currentcontent: " + curContent);
-
         bigTextStyle.setBigContentTitle("You have "+(amount+1) +" task");
         if(amount==0){
             contentNotify = ">"+titleTask;
@@ -74,7 +74,7 @@ public class ReceiverAlarm extends BroadcastReceiver {
 
 
         notifiBuilder.setAutoCancel(true);
-        notificationManager.notify(0,notifiBuilder.build());
+        notificationManager.notify(NOTIFICATION_ID,notifiBuilder.build());
 
 
     }
@@ -97,7 +97,21 @@ public class ReceiverAlarm extends BroadcastReceiver {
                     .setPriority(Notification.PRIORITY_DEFAULT)
                     .setVibrate(new long[]{TIME_VIBRATE, TIME_VIBRATE, TIME_VIBRATE, TIME_VIBRATE})
                     .setContentIntent(mainPendingIntent);
+            notifiBuilder.setDeleteIntent(createOnDismissedIntent(context,NOTIFICATION_ID));
 
         }
+    }
+    public static void removeNotification(){
+        notifiBuilder = null;
+    }
+    private static PendingIntent createOnDismissedIntent(Context context, int notificationId) {
+        Intent intent = new Intent(context, ReceiverDismissNotification.class);
+
+        intent.putExtra(KEY_BUNDLE,notifiBuilder.getExtras());
+
+        PendingIntent pendingIntent =
+                PendingIntent.getBroadcast(context.getApplicationContext(),
+                        notificationId, intent, 0);
+        return pendingIntent;
     }
 }

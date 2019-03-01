@@ -65,6 +65,8 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.Holder> im
     class Holder extends RecyclerView.ViewHolder {
         @BindView(R.id.txtvTask)
         TextView txtvTask;
+        @BindView(R.id.txtvTimeRemain)
+        TextView txtvTimeRemain;
 
         public Holder(@NonNull View itemView) {
             super(itemView);
@@ -83,6 +85,8 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.Holder> im
         public void bindTitle() {
             int position = getAdapterPosition();
             txtvTask.setText(mTasksSearch.get(position).title);
+            String timeRemain = CommonFuntion.getTimeRemaining(mTasksSearch.get(position).dateAlarm);
+            txtvTimeRemain.setText(timeRemain);
         }
     }
 
@@ -97,8 +101,6 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.Holder> im
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
 
-            Showlog.d("searching: " + constraint.toString().trim().equals(""));
-
             if (constraint.toString().trim().equals("")) {
                 return null;
             }
@@ -108,16 +110,13 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.Holder> im
             mTasksSearch.clear();
 
             for (int i = 0; i < mTasks.size(); i++) {
-                Showlog.d("finding: "+constraint.toString() + i+"_"+mTasks.size());
 
                 if (CommonFuntion.isMatch(mTasks.get(i).title, constraint.toString())) {
                     nlist.add(mTasks.get(i));
                     mappingId.put(mTasks.get(i).id,i);
 
-                    Showlog.d("match: " + mTasks.get(i).title);
                 }
             }
-            Showlog.d("size result: " + nlist.size());
             results.values = nlist;
             results.count = nlist.size();
             Showlog.d("result return: " + results);
@@ -129,7 +128,6 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.Holder> im
             if (results == null) {
                 mTasksSearch.clear();
             } else {
-                Showlog.d("publish result: "+ results.values);
                 if(results.values!=null) {
                     mTasksSearch = (ArrayList<Task>) results.values;
                 }
