@@ -8,6 +8,7 @@
     <string name="date">Date</string>
     <string name="btn_name_add">Add</string>
     <string name="btn_name_update">Update</string>
+    <string name="hinhInputTask">Title</string>
 
     <string name="title_confirm_dialog">Are you sure?</string>
     <string name="content_confirm_remove_dialog">Delete this task</string>

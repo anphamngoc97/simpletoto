@@ -12,6 +12,7 @@
         android:layout_height="0dp"
         app:layout_constraintVertical_weight="1"
 
+        android:background="@color/colorTitle"
 
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/groupContent"
@@ -36,6 +37,7 @@
         <TextView
             android:id="@+id/txtvTitle"
             android:text="@string/title"
+            android:textColor="@color/colorTextTitle"
             android:textStyle="bold"
             android:textSize="@dimen/textSizeTitle"
             android:textAlignment="center"
@@ -74,7 +76,7 @@
         android:layout_height="0dp"
         app:layout_constraintVertical_weight="9"
 
-        android:layout_marginTop="40dp"
+        android:background="@color/greyBackground"
 
         app:layout_constraintTop_toBottomOf="@id/groupTitle"
         app:layout_constraintBottom_toBottomOf="parent"

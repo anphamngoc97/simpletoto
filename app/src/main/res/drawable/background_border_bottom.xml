@@ -5,7 +5,8 @@
         android:top="@dimen/borderTitleNegative">
         <shape android:shape="rectangle">
             <stroke android:width="@dimen/borderTitlePositive"
-                android:color="#000000"/>
+                android:color="#FFFFFF"/>
+            <solid android:color="@color/colorTitle"/>
         </shape>
     </item>
 

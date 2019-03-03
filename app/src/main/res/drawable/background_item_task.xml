@@ -5,9 +5,8 @@
         android:top="@dimen/smallStroke">
 
     <shape android:shape="rectangle">
-        <stroke android:width="@dimen/bigStroke"
-            android:color="#524B4B"/>
         <corners android:radius="6dp"/>
+        <solid android:color="@color/itemBackground"/>
     </shape>
 
     </item>

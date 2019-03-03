@@ -16,6 +16,7 @@
             android:layout_height="0dp"
             app:layout_constraintVertical_weight="1"
 
+            android:background="@drawable/background_border_bottom"
 
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@id/groupContent"
@@ -39,6 +40,7 @@
             <TextView
                 android:id="@+id/txtvTitle"
                 android:text="@string/title_edit"
+                android:textColor="@color/colorTextTitle"
                 android:textStyle="bold"
                 android:textSize="@dimen/textSizeTitle"
                 android:textAlignment="center"
@@ -101,6 +103,7 @@
                 app:layout_constraintRight_toRightOf="parent">
                 <android.support.design.widget.TextInputEditText
                     android:id="@+id/editTitle"
+                    android:hint="@string/hinhInputTask"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:maxLines="1"
@@ -115,6 +118,8 @@
             android:layout_height="0dp"
             app:layout_constraintVertical_weight="1"
 
+            android:background="@drawable/background_reminder"
+
             app:layout_constraintTop_toBottomOf="@id/groupContent"
             app:layout_constraintBottom_toTopOf="@id/groupTime"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -123,19 +128,6 @@
 
             android:paddingStart="20dp"
             android:paddingEnd="20dp">
-            <ImageView
-                android:id="@+id/imgClock"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-
-                android:src="@drawable/ic_clock"
-                android:background="@null"
-
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toLeftOf="@id/txtvReminder"
-                />
             <TextView
                 android:id="@+id/txtvReminder"
                 android:layout_width="0dp"
@@ -147,7 +139,7 @@
 
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toRightOf="@id/imgClock"
+                app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toLeftOf="@id/switchReminder"/>
             <Switch
                 android:id="@+id/switchReminder"
