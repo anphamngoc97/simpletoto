@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.Snackbar;
@@ -12,6 +13,7 @@ import android.support.design.widget.TextInputLayout;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
@@ -29,6 +31,7 @@ import com.example.todolistmvp.roomdagger.AppModule;
 import com.example.todolistmvp.roomdagger.DaggerRoomComponent;
 import com.example.todolistmvp.roomdagger.RoomComponent;
 import com.example.todolistmvp.util.Constant;
+import com.example.todolistmvp.util.Showlog;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -141,15 +144,16 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
                 return false;
             }
         });
+
         btnBack.setOnClickListener(v -> {
-            if(isKeyboardShowing){
+            if (isKeyboardShowing) {
                 hideSoftKeyboard();
-            }else {
+            } else {
                 finish();
             }
         });
         btnAdd.setOnClickListener(v -> onClickBtnAdd());
-        btnAddShowKeyBoard.setOnClickListener(v->onClickBtnAdd());
+        btnAddShowKeyBoard.setOnClickListener(v -> onClickBtnAdd());
 
         switchReminder.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
@@ -170,7 +174,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         });
     }
 
-    private void onClickBtnAdd(){
+    private void onClickBtnAdd() {
         {
 
             String title = editTitle.getText().toString().trim();
@@ -202,6 +206,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
             }
         }
     }
+
     @Override
     public void insertComplete() {
 
@@ -251,6 +256,24 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         timePickerDialog.show();
     }
 
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
+            View v = getCurrentFocus();
+            if (editTitle.isFocused()) {
+                Rect outRect = new Rect();
+                editTitle.getGlobalVisibleRect(outRect);
+                if (!outRect.contains((int) ev.getRawX(), (int) ev.getRawY())) {
+                    editTitle.setFocusableInTouchMode(false);
+                    editTitle.clearFocus();
+                    editTitle.setFocusableInTouchMode(true);
+                    hideSoftKeyboard();
+                }
+            }
+        }
+        return super.dispatchTouchEvent(ev);
+    }
 
     @Override
     public void onShowKeyBoard(int keyboardHeight) {

@@ -6,6 +6,7 @@ import android.app.DatePickerDialog;
 import android.app.Service;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.Snackbar;
@@ -14,6 +15,7 @@ import android.support.design.widget.TextInputLayout;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
@@ -331,6 +333,25 @@ public class EditTaskActivity extends BaseActivity implements EditTaskContract.V
         setResult(Activity.RESULT_OK,intent);
         finish();
 
+    }
+
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
+            View v = getCurrentFocus();
+            if (editTitle.isFocused()) {
+                Rect outRect = new Rect();
+                editTitle.getGlobalVisibleRect(outRect);
+                if (!outRect.contains((int) ev.getRawX(), (int) ev.getRawY())) {
+                    editTitle.setFocusableInTouchMode(false);
+                    editTitle.clearFocus();
+                    editTitle.setFocusableInTouchMode(true);
+                    hideSoftKeyboard();
+                }
+            }
+        }
+        return super.dispatchTouchEvent(ev);
     }
 
     @Override

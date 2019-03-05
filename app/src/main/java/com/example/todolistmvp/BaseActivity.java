@@ -67,6 +67,7 @@ public class BaseActivity extends AppCompatActivity {
                 getSystemService(Service.INPUT_METHOD_SERVICE);
 
         inputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY,0);
+//        inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),0);
     }
     public void onShowKeyBoard(int keyboardHeight){
 
