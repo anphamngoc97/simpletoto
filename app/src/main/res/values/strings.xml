@@ -17,6 +17,13 @@
 
     <string name="content_search">Search to find particular task</string>
     <string name="content_main_task">Click + to add task</string>
+    <string name="contentRemainPast">Past</string>
+    <string name="contentRemainNotSet">Not Set</string>
+    <string name="contentRemainNow">Now</string>
+
+    <string name="contentNotSetTime">Time have to set</string>
+    <string name="errorEmptyTitle">Input is empty</string>
 
     <string name="title_notification">You have task today:</string>
+    
 </resources>

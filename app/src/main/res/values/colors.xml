@@ -9,6 +9,7 @@
 
     <color name="colorTitle">#52BFD9</color>
     <color name="colorTextTitle">#FFFF</color>
+    <color name="colorTextRemain">#E63D3D</color>
 
     <color name="greyBackground">#BFBFBF</color>
     <color name="itemBackground">#FFFF</color>

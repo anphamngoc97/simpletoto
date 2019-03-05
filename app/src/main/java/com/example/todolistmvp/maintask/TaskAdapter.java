@@ -73,7 +73,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.Holder> implem
                 Collections.swap(tasks, i, i - 1);
             }
         }
-        notifyItemMoved(from,to);
+        notifyItemMoved(from, to);
 
         return true;
     }
@@ -101,7 +101,8 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.Holder> implem
         public void bindTitle() {
             int position = getAdapterPosition();
             txtvTask.setText(tasks.get(position).title);
-            String timeRemain = CommonFuntion.getTimeRemaining(tasks.get(position).dateAlarm);
+            String timeRemain = CommonFuntion.getTimeRemaining(recyclerView.getContext(),
+                    tasks.get(position).dateAlarm);
             txtvTimeRemain.setText(timeRemain);
         }
     }

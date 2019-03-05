@@ -85,7 +85,8 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.Holder> im
         public void bindTitle() {
             int position = getAdapterPosition();
             txtvTask.setText(mTasksSearch.get(position).title);
-            String timeRemain = CommonFuntion.getTimeRemaining(mTasksSearch.get(position).dateAlarm);
+            String timeRemain = CommonFuntion.getTimeRemaining(mRecyclerView.getContext(),
+                    mTasksSearch.get(position).dateAlarm);
             txtvTimeRemain.setText(timeRemain);
         }
     }

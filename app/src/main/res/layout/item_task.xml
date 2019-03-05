@@ -34,6 +34,7 @@
         android:layout_width="match_parent"
         android:text="ssssssssssssssss"
         android:textSize="@dimen/textSizeSmallItem"
+        android:textColor="@color/colorTextRemain"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/txtvTask"
         app:layout_constraintBottom_toBottomOf="parent"

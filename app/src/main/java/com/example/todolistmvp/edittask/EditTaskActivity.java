@@ -134,7 +134,7 @@ public class EditTaskActivity extends BaseActivity implements EditTaskContract.V
         switchReminder.setChecked(mTask.isAlarm);
         Calendar calendar = CommonFuntion.getDateFromString(mTask.dateAlarm);
 
-        if(calendar!=null && mTask.isAlarm) {
+        if(calendar!=null) {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
             btnDate.setText(simpleDateFormat.format(calendar.getTime()));
 
@@ -229,7 +229,7 @@ public class EditTaskActivity extends BaseActivity implements EditTaskContract.V
             String title = editTitle.getText().toString().trim();
             if (title.length() == 0) {
                 layoutTitle.setBoxStrokeColor(BACKGROUND_INPUT_INVALID);
-                editTitle.setError("Input is empty");
+                editTitle.setError(getResources().getString(R.string.errorEmptyTitle));
 
             }else{
 
@@ -253,7 +253,8 @@ public class EditTaskActivity extends BaseActivity implements EditTaskContract.V
 
 
                 }else{
-                    Snackbar.make(parentLayout,"Timehavenotset",Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(parentLayout,getResources().getString(R.string.contentNotSetTime),
+                            Snackbar.LENGTH_SHORT).show();
                 }
 
             }

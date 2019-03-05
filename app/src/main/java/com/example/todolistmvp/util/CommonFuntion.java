@@ -1,5 +1,9 @@
 package com.example.todolistmvp.util;
 
+import android.content.Context;
+
+import com.example.todolistmvp.R;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -27,19 +31,19 @@ public class CommonFuntion {
         return date;
     }
 
-    public static String getTimeRemaining(String dateAlarm) {
+    public static String getTimeRemaining(Context context, String dateAlarm) {
         Calendar calendarAlarm = getDateFromString(dateAlarm);
         Calendar current = Calendar.getInstance();
 
         if (calendarAlarm == null) {
-            return "Remain: Not set";
+            return "Remain: " + context.getResources().getString(R.string.contentRemainNotSet);
         }
 
         if (current.after(calendarAlarm) ) {
-            return "Remain: Past";
+            return "Remain: "  + context.getResources().getString(R.string.contentRemainPast);
         }
         if(current.equals(calendarAlarm)){
-            return "Remain: now";
+            return "Remain: "+ context.getResources().getString(R.string.contentRemainNow);
         }
         long remainInMillis = calendarAlarm.getTimeInMillis() - current.getTimeInMillis();
         Calendar calendarRemain = Calendar.getInstance();

@@ -180,7 +180,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
             String title = editTitle.getText().toString().trim();
             if (title.length() == 0) {
                 layoutTitle.setBoxStrokeColor(BACKGROUND_INPUT_INVALID);
-                editTitle.setError("Input is empty");
+                editTitle.setError(getResources().getString(R.string.errorEmptyTitle));
 
             } else {
 
@@ -200,7 +200,8 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
                             .createTask(title);
                     presenter.insertData(mTask);
                 } else {
-                    Snackbar.make(parentLayout, "Timehavetoset", Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(parentLayout, getResources().getString(R.string.contentNotSetTime),
+                            Snackbar.LENGTH_SHORT).show();
                 }
 
             }
