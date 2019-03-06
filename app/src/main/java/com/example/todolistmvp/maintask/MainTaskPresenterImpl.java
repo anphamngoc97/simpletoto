@@ -34,6 +34,11 @@ public class MainTaskPresenterImpl implements MainTaskContract.Presenter,
     }
 
     @Override
+    public void updateData(Task object) {
+        iterator.updateData(object,this);
+    }
+
+    @Override
     public void onGetSuccess(List<Task> res) {
         //remove past alrm and write to db
         Calendar calendarCurrent = Calendar.getInstance();
@@ -45,6 +50,11 @@ public class MainTaskPresenterImpl implements MainTaskContract.Presenter,
 
         }
         view.refreshData(res);
+    }
+
+    @Override
+    public void onUpdateSuccess() {
+
     }
 
     @Override

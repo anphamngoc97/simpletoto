@@ -30,10 +30,6 @@ public class ReceiverAlarm extends BroadcastReceiver {
 
         createBuilder(context);
 
-        Calendar calendar = Calendar.getInstance();
-//        Showlog.d("receive: " + calendar.get(Calendar.YEAR)+"/"+calendar.get(Calendar.MONTH)
-//                +calendar.get(Calendar.DATE)+"  "+calendar.get(Calendar.HOUR_OF_DAY)+":"+calendar.get(Calendar.MINUTE));
-
 
         final String titleTask = intent
                 .getStringExtra(Constant.ChildConstantString.KEY_BROADCAST_TASK_TITLE.getValue());
@@ -45,8 +41,6 @@ public class ReceiverAlarm extends BroadcastReceiver {
         mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
 
 
-        PendingIntent mainPendingIntent = PendingIntent.getActivities(context,
-                1,new Intent[]{mainIntent},0);
 
         NotificationManager notificationManager = (NotificationManager) context
                 .getSystemService(Context.NOTIFICATION_SERVICE);
@@ -61,7 +55,7 @@ public class ReceiverAlarm extends BroadcastReceiver {
 
         bigTextStyle.setBigContentTitle("You have "+(amount+1) +" task");
         if(amount==0){
-            contentNotify = ">"+titleTask;
+            contentNotify = "> "+titleTask;
         }else {
             contentNotify = curContent + "\n> " + titleTask;
         }
@@ -73,6 +67,7 @@ public class ReceiverAlarm extends BroadcastReceiver {
         bundle.putInt(KEY_BUNDLE_AMOUNT_CONTENT,amount+1);
 
 
+        Showlog.d("content notify: "+amount + contentNotify);
         notifiBuilder.setAutoCancel(true);
         notificationManager.notify(NOTIFICATION_ID,notifiBuilder.build());
 

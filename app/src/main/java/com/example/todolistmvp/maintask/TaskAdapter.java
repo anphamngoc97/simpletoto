@@ -1,5 +1,6 @@
 package com.example.todolistmvp.maintask;
 
+import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -7,6 +8,8 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.example.todolistmvp.R;
@@ -14,6 +17,7 @@ import com.example.todolistmvp.adapter.helper.ITouchHelperAdapter;
 import com.example.todolistmvp.adapter.helper.SimplerTouchHelperCallback;
 import com.example.todolistmvp.room.model.Task;
 import com.example.todolistmvp.util.CommonFuntion;
+import com.example.todolistmvp.util.Showlog;
 
 import java.util.Collections;
 import java.util.List;
@@ -83,11 +87,16 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.Holder> implem
         TextView txtvTask;
         @BindView(R.id.txtvTimeRemain)
         TextView txtvTimeRemain;
+        @BindView(R.id.checkboxTask)
+        CheckBox checkboxTask;
+
+        Drawable defaultBackground;
 
         public Holder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
 
+            defaultBackground = itemView.getBackground();
             onClick();
         }
 
@@ -95,6 +104,22 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.Holder> implem
             itemView.setOnClickListener(v -> {
                 int position = getAdapterPosition();
                 presenter.onClickItem(position);
+            });
+            checkboxTask.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    int position = getAdapterPosition();
+                    tasks.get(position).isComplete = isChecked;
+                    presenter.updateData(tasks.get(position));
+
+                    if(isChecked){
+                        itemView.setBackgroundColor(recyclerView.getContext().getResources()
+                        .getColor(R.color.colorCompleteTask));
+                    }else{
+                        itemView.setBackground(defaultBackground);
+                    }
+
+                }
             });
         }
 
@@ -104,6 +129,11 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.Holder> implem
             String timeRemain = CommonFuntion.getTimeRemaining(recyclerView.getContext(),
                     tasks.get(position).dateAlarm);
             txtvTimeRemain.setText(timeRemain);
+
+            if(tasks.get(position).isComplete){
+                checkboxTask.setChecked(true);
+            }
+            Showlog.d(""+tasks.get(position).isComplete);
         }
     }
 }

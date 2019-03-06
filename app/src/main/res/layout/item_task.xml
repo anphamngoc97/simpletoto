@@ -15,29 +15,48 @@
     android:layout_marginRight="@dimen/marginItemHorizontal"
     android:layout_marginBottom="@dimen/marginItemVertical">
 
-    <TextView
-
-        android:id="@+id/txtvTask"
-        android:text="fff"
-        android:textSize="@dimen/textSizeItem"
-        android:padding="10dp"
-
-        android:layout_width="match_parent"
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/groupContent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        app:layout_constraintHorizontal_weight="9"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/txtvTimeRemain"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/checkboxTask"
+        app:layout_constraintRight_toRightOf="parent">
+        <TextView
+            android:id="@+id/txtvTask"
+            android:text="fff"
+            android:textSize="@dimen/textSizeItem"
+            android:padding="10dp"
 
-    <TextView
-        android:id="@+id/txtvTimeRemain"
-        android:layout_width="match_parent"
-        android:text="ssssssssssssssss"
-        android:textSize="@dimen/textSizeSmallItem"
-        android:textColor="@color/colorTextRemain"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/txtvTask"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/txtvTimeRemain"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"/>
+
+        <TextView
+            android:id="@+id/txtvTimeRemain"
+            android:layout_width="match_parent"
+            android:text="ssssssssssssssss"
+            android:textSize="@dimen/textSizeSmallItem"
+            android:textColor="@color/colorTextRemain"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/txtvTask"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"/>
+    </android.support.constraint.ConstraintLayout>
+
+    <CheckBox
+        android:id="@+id/checkboxTask"
+        android:layout_width="0dp"
+        android:layout_height="70dp"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
+        app:layout_constraintRight_toLeftOf="@id/groupContent"/>
 </android.support.constraint.ConstraintLayout>

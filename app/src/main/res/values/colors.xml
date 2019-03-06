@@ -7,6 +7,8 @@
     <color name="inputValid">#5D635B</color>
     <color name="inputInvalid">#F53D25</color>
 
+    <color name="colorCompleteTask">#A09494</color>
+    <color name="colorUnCompleteTask">#A09494</color>
     <color name="colorTitle">#52BFD9</color>
     <color name="colorTextTitle">#FFFF</color>
     <color name="colorTextRemain">#E63D3D</color>

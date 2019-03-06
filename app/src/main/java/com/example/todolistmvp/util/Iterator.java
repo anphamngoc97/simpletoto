@@ -8,16 +8,20 @@ import com.example.todolistmvp.room.ResponsitoryTask;
 import com.example.todolistmvp.room.model.Task;
 import com.example.todolistmvp.search.SearchContract;
 
+import org.reactivestreams.Subscription;
+
 import java.util.List;
 
 import io.reactivex.Completable;
 import io.reactivex.CompletableObserver;
+import io.reactivex.FlowableSubscriber;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
+import io.reactivex.subscribers.DisposableSubscriber;
 
 public class Iterator {
     private static CompositeDisposable compositeDisposable = new CompositeDisposable();
@@ -26,25 +30,32 @@ public class Iterator {
                                   MainTaskContract.Iterator.OnFinishListener onFinishListener){
 
 
-        Disposable disposable = responsitoryTask.getAllTask()
+         responsitoryTask.getAllTask()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(new Consumer<List<Task>>() {
-                    @Override
-                    public void accept(List<Task> tasks) throws Exception {
-                        onFinishListener.onGetSuccess(tasks);
+                 .subscribeWith(new DisposableSubscriber<List<Task>>() {
+                     @Override
+                     public void onNext(List<Task> tasks) {
+                         onFinishListener.onGetSuccess(tasks);
+                         dispose();
 
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        onFinishListener.onFailture(throwable );
-                    }
-                });
+                     }
 
-        compositeDisposable.add(disposable);
+                     @Override
+                     public void onError(Throwable t) {
+                         onFinishListener.onFailture(t);
+                         dispose();
 
-    }public static void getAllTaskBySearch(ResponsitoryTask responsitoryTask,
+                     }
+
+                     @Override
+                     public void onComplete() {
+                         Showlog.d("dispose");
+                         dispose();
+                     }
+                 });
+    }
+    public static void getAllTaskBySearch(ResponsitoryTask responsitoryTask,
                                   SearchContract.Iterator.OnFinishListener onFinishListener){
 
 
@@ -97,6 +108,7 @@ public class Iterator {
     }
     public static void updateTask(Task task, ResponsitoryTask responsitoryTask,
                                   EditTaskContract.Iterator.OnFinishListener onFinishListener){
+
         Completable.fromAction(new Action() {
             @Override
             public void run() throws Exception {
