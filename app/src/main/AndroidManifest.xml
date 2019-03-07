@@ -3,7 +3,7 @@
     package="com.example.todolistmvp">
 
     <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
         android:allowBackup="true"
@@ -12,13 +12,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Design.Light.NoActionBar">
-        <activity android:name=".search.SearchActivity"
-            android:windowSoftInputMode="adjustPan"/>
-        <activity android:name=".maintask.MainTaskActivity"
-            android:launchMode="singleTask"/>
+        <activity android:name=".detailtask.DetailTaskActivity"></activity>
+        <activity
+            android:name=".search.SearchActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".maintask.MainTaskActivity"
+            android:launchMode="singleTask" />
         <activity android:name=".edittask.EditTaskActivity" />
-        <activity android:name=".addtask.AddTaskActivity"
-            android:windowSoftInputMode="adjustPan"/>
+        <activity
+            android:name=".addtask.AddTaskActivity"
+            android:windowSoftInputMode="adjustPan" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,8 +31,8 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".alarm.ReceiverAlarm" />
-        <receiver android:name=".alarm.ReceiverDismissNotification"/>
+        <receiver android:name=".util.alarm.ReceiverAlarm" />
+        <receiver android:name=".util.alarm.ReceiverDismissNotification" />
     </application>
 
 </manifest>

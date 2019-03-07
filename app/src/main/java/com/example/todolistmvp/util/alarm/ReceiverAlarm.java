@@ -1,4 +1,4 @@
-package com.example.todolistmvp.alarm;
+package com.example.todolistmvp.util.alarm;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -13,8 +13,6 @@ import com.example.todolistmvp.R;
 import com.example.todolistmvp.maintask.MainTaskActivity;
 import com.example.todolistmvp.util.Constant;
 import com.example.todolistmvp.util.Showlog;
-
-import java.util.Calendar;
 
 public class ReceiverAlarm extends BroadcastReceiver {
     private  static Notification.Builder notifiBuilder= null;

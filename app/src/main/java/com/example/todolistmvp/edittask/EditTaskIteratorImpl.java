@@ -1,7 +1,7 @@
 package com.example.todolistmvp.edittask;
 
-import com.example.todolistmvp.room.ResponsitoryTask;
-import com.example.todolistmvp.room.model.Task;
+import com.example.todolistmvp.util.room.ResponsitoryTask;
+import com.example.todolistmvp.util.room.model.Task;
 
 import io.reactivex.Completable;
 import io.reactivex.CompletableObserver;

@@ -1,4 +1,4 @@
-package com.example.todolistmvp.roomdagger;
+package com.example.todolistmvp.util.roomdagger;
 
 import android.app.Application;
 

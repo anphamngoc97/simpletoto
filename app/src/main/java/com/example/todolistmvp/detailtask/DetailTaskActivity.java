@@ -1,0 +1,14 @@
+package com.example.todolistmvp.detailtask;
+
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import com.example.todolistmvp.R;
+
+public class DetailTaskActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_detail_task);
+    }
+}

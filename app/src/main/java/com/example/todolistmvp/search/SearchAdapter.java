@@ -11,7 +11,7 @@ import android.widget.Filterable;
 import android.widget.TextView;
 
 import com.example.todolistmvp.R;
-import com.example.todolistmvp.room.model.Task;
+import com.example.todolistmvp.util.room.model.Task;
 import com.example.todolistmvp.util.CommonFuntion;
 import com.example.todolistmvp.util.Showlog;
 

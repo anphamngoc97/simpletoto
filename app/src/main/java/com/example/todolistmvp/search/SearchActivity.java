@@ -13,11 +13,11 @@ import android.widget.TextView;
 
 import com.example.todolistmvp.R;
 import com.example.todolistmvp.edittask.EditTaskActivity;
-import com.example.todolistmvp.room.ResponsitoryTask;
-import com.example.todolistmvp.room.model.Task;
-import com.example.todolistmvp.roomdagger.AppModule;
-import com.example.todolistmvp.roomdagger.DaggerRoomComponent;
-import com.example.todolistmvp.roomdagger.RoomComponent;
+import com.example.todolistmvp.util.room.ResponsitoryTask;
+import com.example.todolistmvp.util.room.model.Task;
+import com.example.todolistmvp.util.roomdagger.AppModule;
+import com.example.todolistmvp.util.roomdagger.DaggerRoomComponent;
+import com.example.todolistmvp.util.roomdagger.RoomComponent;
 import com.example.todolistmvp.util.Constant;
 
 import java.util.ArrayList;

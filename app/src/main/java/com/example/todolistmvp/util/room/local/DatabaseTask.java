@@ -1,11 +1,11 @@
-package com.example.todolistmvp.room.local;
+package com.example.todolistmvp.util.room.local;
 
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 
-import com.example.todolistmvp.room.model.Task;
+import com.example.todolistmvp.util.room.model.Task;
 
 @Database(entities = {Task.class},version = 1)
 public abstract class DatabaseTask extends RoomDatabase{

@@ -1,4 +1,4 @@
-package com.example.todolistmvp.alarm;
+package com.example.todolistmvp.util.alarm;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -6,7 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 
-import com.example.todolistmvp.room.model.Task;
+import com.example.todolistmvp.util.room.model.Task;
 import com.example.todolistmvp.util.CommonFuntion;
 import com.example.todolistmvp.util.Constant;
 

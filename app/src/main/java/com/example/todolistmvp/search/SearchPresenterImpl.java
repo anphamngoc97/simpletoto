@@ -1,6 +1,6 @@
 package com.example.todolistmvp.search;
 
-import com.example.todolistmvp.room.model.Task;
+import com.example.todolistmvp.util.room.model.Task;
 import com.example.todolistmvp.util.Showlog;
 
 import java.util.List;

@@ -13,9 +13,9 @@ import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.example.todolistmvp.R;
-import com.example.todolistmvp.adapter.helper.ITouchHelperAdapter;
-import com.example.todolistmvp.adapter.helper.SimplerTouchHelperCallback;
-import com.example.todolistmvp.room.model.Task;
+import com.example.todolistmvp.util.helper.ITouchHelperAdapter;
+import com.example.todolistmvp.util.helper.SimplerTouchHelperCallback;
+import com.example.todolistmvp.util.room.model.Task;
 import com.example.todolistmvp.util.CommonFuntion;
 import com.example.todolistmvp.util.Showlog;
 

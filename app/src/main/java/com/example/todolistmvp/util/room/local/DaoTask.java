@@ -1,11 +1,11 @@
-package com.example.todolistmvp.room.local;
+package com.example.todolistmvp.util.room.local;
 
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 
-import com.example.todolistmvp.room.model.Task;
+import com.example.todolistmvp.util.room.model.Task;
 
 import java.util.List;
 

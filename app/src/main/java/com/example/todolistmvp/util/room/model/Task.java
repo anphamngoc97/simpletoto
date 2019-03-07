@@ -1,4 +1,4 @@
-package com.example.todolistmvp.room.model;
+package com.example.todolistmvp.util.room.model;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;

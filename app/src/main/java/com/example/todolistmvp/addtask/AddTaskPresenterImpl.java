@@ -1,8 +1,6 @@
 package com.example.todolistmvp.addtask;
 
-import com.example.todolistmvp.room.model.Task;
-
-import java.util.ArrayList;
+import com.example.todolistmvp.util.room.model.Task;
 
 public class AddTaskPresenterImpl implements AddTaskContract.Presenter,
         AddTaskContract.Iterator.OnFinishListener{

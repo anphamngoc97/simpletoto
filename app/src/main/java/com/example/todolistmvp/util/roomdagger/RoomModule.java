@@ -1,12 +1,12 @@
-package com.example.todolistmvp.roomdagger;
+package com.example.todolistmvp.util.roomdagger;
 
 import android.app.Application;
 import android.arch.persistence.room.Room;
 
-import com.example.todolistmvp.room.ResponsitoryTask;
-import com.example.todolistmvp.room.local.DaoTask;
-import com.example.todolistmvp.room.local.DatabaseTask;
-import com.example.todolistmvp.room.local.LocalDataSourceTask;
+import com.example.todolistmvp.util.room.ResponsitoryTask;
+import com.example.todolistmvp.util.room.local.DaoTask;
+import com.example.todolistmvp.util.room.local.DatabaseTask;
+import com.example.todolistmvp.util.room.local.LocalDataSourceTask;
 
 import javax.inject.Singleton;
 

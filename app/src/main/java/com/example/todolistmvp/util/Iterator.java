@@ -4,17 +4,14 @@ package com.example.todolistmvp.util;
 import com.example.todolistmvp.addtask.AddTaskContract;
 import com.example.todolistmvp.edittask.EditTaskContract;
 import com.example.todolistmvp.maintask.MainTaskContract;
-import com.example.todolistmvp.room.ResponsitoryTask;
-import com.example.todolistmvp.room.model.Task;
+import com.example.todolistmvp.util.room.ResponsitoryTask;
+import com.example.todolistmvp.util.room.model.Task;
 import com.example.todolistmvp.search.SearchContract;
-
-import org.reactivestreams.Subscription;
 
 import java.util.List;
 
 import io.reactivex.Completable;
 import io.reactivex.CompletableObserver;
-import io.reactivex.FlowableSubscriber;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;

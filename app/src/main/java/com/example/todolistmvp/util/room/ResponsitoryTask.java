@@ -1,7 +1,7 @@
-package com.example.todolistmvp.room;
+package com.example.todolistmvp.util.room;
 
 
-import com.example.todolistmvp.room.model.Task;
+import com.example.todolistmvp.util.room.model.Task;
 
 import java.util.List;
 

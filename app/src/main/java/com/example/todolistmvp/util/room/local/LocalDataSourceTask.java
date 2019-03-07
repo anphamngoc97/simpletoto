@@ -1,8 +1,8 @@
-package com.example.todolistmvp.room.local;
+package com.example.todolistmvp.util.room.local;
 
 
-import com.example.todolistmvp.room.DataSourceTask;
-import com.example.todolistmvp.room.model.Task;
+import com.example.todolistmvp.util.room.DataSourceTask;
+import com.example.todolistmvp.util.room.model.Task;
 
 import java.util.List;
 

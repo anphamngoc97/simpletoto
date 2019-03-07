@@ -3,7 +3,7 @@ package com.example.todolistmvp.edittask;
 import com.example.todolistmvp.BaseIterator;
 import com.example.todolistmvp.BasePresenter;
 import com.example.todolistmvp.BaseView;
-import com.example.todolistmvp.room.model.Task;
+import com.example.todolistmvp.util.room.model.Task;
 
 public interface EditTaskContract {
     interface View extends BaseView{

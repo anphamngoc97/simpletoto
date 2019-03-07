@@ -1,4 +1,4 @@
-package com.example.todolistmvp.alarm;
+package com.example.todolistmvp.util.alarm;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

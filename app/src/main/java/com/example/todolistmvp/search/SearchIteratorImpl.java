@@ -1,6 +1,6 @@
 package com.example.todolistmvp.search;
 
-import com.example.todolistmvp.room.ResponsitoryTask;
+import com.example.todolistmvp.util.room.ResponsitoryTask;
 import com.example.todolistmvp.util.Iterator;
 
 public class SearchIteratorImpl implements SearchContract.Iterator{
