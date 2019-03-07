@@ -146,9 +146,9 @@ public class SearchActivity extends AppCompatActivity implements SearchContract.
         editSearch.setText("");
 
         Intent intent = new Intent(this, EditTaskActivity.class);
-        intent.putExtra(Constant.ChildConstantString.KEY_SEND_EXTRA_EDIT_TASK_OBJECT.getValue(),
+        intent.putExtra(Constant.ChildConstantString.KEY_EXTRA_EDIT_TASK_OBJECT.getValue(),
                 mTasks.get(position));
-        intent.putExtra(Constant.ChildConstantString.KEY_SEND_EXTRA_EDIT_TASK_POSITION.getValue(),
+        intent.putExtra(Constant.ChildConstantString.KEY_EXTRA_EDIT_TASK_POSITION.getValue(),
                 position);
 
         startActivityForResult(intent, Constant.ChildConstantNumber.REQUEST_CODE_EDIT_TASK.getValue());
@@ -168,7 +168,7 @@ public class SearchActivity extends AppCompatActivity implements SearchContract.
 
                 int position = data
                         .getIntExtra(Constant.ChildConstantString
-                                        .KEY_SEND_EXTRA_EDIT_TASK_POSITION.getValue(),
+                                        .KEY_EXTRA_EDIT_TASK_POSITION.getValue(),
                                 0);
 
 
@@ -179,7 +179,7 @@ public class SearchActivity extends AppCompatActivity implements SearchContract.
 
                 } else {
                     Task task = (Task) data.getSerializableExtra(
-                            Constant.ChildConstantString.KEY_SEND_EXTRA_EDIT_TASK_OBJECT.getValue());
+                            Constant.ChildConstantString.KEY_EXTRA_EDIT_TASK_OBJECT.getValue());
                     mTasks.set(position, task);
                     mTaskAdapter.notifyItemChanged(position);
                 }

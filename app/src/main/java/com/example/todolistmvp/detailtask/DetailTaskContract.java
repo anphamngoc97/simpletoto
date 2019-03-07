@@ -1,4 +1,13 @@
 package com.example.todolistmvp.detailtask;
 
-public class DetailTaskContract {
+import com.example.todolistmvp.BasePresenter;
+import com.example.todolistmvp.BaseView;
+
+public interface DetailTaskContract {
+    interface View extends BaseView{
+
+    }
+    interface Presenter extends BasePresenter<View>{
+
+    }
 }

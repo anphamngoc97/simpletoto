@@ -8,6 +8,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_constraintVertical_chainStyle="packed"
+
+    android:background="@drawable/background_activity"
     tools:context=".addtask.AddTaskActivity">
 
     <android.support.constraint.ConstraintLayout

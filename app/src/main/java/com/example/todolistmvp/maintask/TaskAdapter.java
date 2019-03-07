@@ -8,10 +8,10 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
+import com.bigmercu.cBox.CheckBox;
 import com.example.todolistmvp.R;
 import com.example.todolistmvp.util.helper.ITouchHelperAdapter;
 import com.example.todolistmvp.util.helper.SimplerTouchHelperCallback;
@@ -105,6 +105,26 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.Holder> implem
                 int position = getAdapterPosition();
                 presenter.onClickItem(position);
             });
+
+            checkboxTask.setOnCheckedChangeListener(new CheckBox.OnCheckedChangeListener() {
+                @Override
+                public void onChange(boolean checked) {
+
+                        int position = getAdapterPosition();
+                        tasks.get(position).isComplete = checked;
+                        presenter.updateData(tasks.get(position));
+
+                        if(checked){
+                            itemView.setBackgroundColor(recyclerView.getContext().getResources()
+                                    .getColor(R.color.colorCompleteTask));
+                        }else{
+                            itemView.setBackground(defaultBackground);
+                        }
+
+
+                }
+            });
+            /*
             checkboxTask.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -121,6 +141,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.Holder> implem
 
                 }
             });
+            */
         }
 
         public void bindTitle() {

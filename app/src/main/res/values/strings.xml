@@ -8,7 +8,10 @@
     <string name="date">Date</string>
     <string name="btn_name_add">Add</string>
     <string name="btn_name_update">Update</string>
-    <string name="hinhInputTask">Title</string>
+    <string name="hintInputTask">Title</string>
+    <string name="category">Category</string>
+    <string name="priority">Priority</string>
+
 
     <string name="title_confirm_dialog">Are you sure?</string>
     <string name="content_confirm_remove_dialog">Delete this task</string>
@@ -25,5 +28,12 @@
     <string name="errorEmptyTitle">Input is empty</string>
 
     <string name="title_notification">You have task today:</string>
+
+    <string name="HIGH">High</string>
+    <string name="MEDIUM">Medium</string>
+    <string name="LOW">Low</string>
+    <string name="NONE">None</string>
+    <string name="categoryBusiness">Business</string>
+    <string name="categoryPersonal">Personal</string>
 
 </resources>

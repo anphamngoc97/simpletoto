@@ -103,9 +103,9 @@ public class EditTaskActivity extends BaseActivity implements EditTaskContract.V
     private void getData(){
         Intent intent = getIntent();
         mTask = (Task) intent
-                .getSerializableExtra(Constant.ChildConstantString.KEY_SEND_EXTRA_EDIT_TASK_OBJECT.getValue());
+                .getSerializableExtra(Constant.ChildConstantString.KEY_EXTRA_EDIT_TASK_OBJECT.getValue());
         mPosition = intent
-                .getIntExtra(Constant.ChildConstantString.KEY_SEND_EXTRA_EDIT_TASK_POSITION.getValue(),0);
+                .getIntExtra(Constant.ChildConstantString.KEY_EXTRA_EDIT_TASK_POSITION.getValue(),0);
         Calendar calendar = CommonFuntion.getDateFromString(mTask.dateAlarm);
         if(calendar!=null){
             mYear = calendar.get(Calendar.YEAR);
@@ -315,7 +315,7 @@ public class EditTaskActivity extends BaseActivity implements EditTaskContract.V
 
         Intent intent = new Intent(this, MainTaskActivity.class);
         intent.putExtra(Constant.ChildConstantString.KEY_EXTRA_IS_REMOVE.getValue(),Constant.REMOVE);
-        intent.putExtra(Constant.ChildConstantString.KEY_SEND_EXTRA_EDIT_TASK_POSITION.getValue(),mPosition);
+        intent.putExtra(Constant.ChildConstantString.KEY_EXTRA_EDIT_TASK_POSITION.getValue(),mPosition);
 
         setResult(Activity.RESULT_OK,intent);
         finish();
@@ -328,8 +328,8 @@ public class EditTaskActivity extends BaseActivity implements EditTaskContract.V
 
         Intent intent = new Intent(this,MainTaskActivity.class);
         intent.putExtra(Constant.ChildConstantString.KEY_EXTRA_IS_REMOVE.getValue(),Constant.EDIT);
-        intent.putExtra(Constant.ChildConstantString.KEY_SEND_EXTRA_EDIT_TASK_POSITION.getValue(),mPosition);
-        intent.putExtra(Constant.ChildConstantString.KEY_SEND_EXTRA_EDIT_TASK_OBJECT.getValue(),mTask);
+        intent.putExtra(Constant.ChildConstantString.KEY_EXTRA_EDIT_TASK_POSITION.getValue(),mPosition);
+        intent.putExtra(Constant.ChildConstantString.KEY_EXTRA_EDIT_TASK_OBJECT.getValue(),mTask);
 
         setResult(Activity.RESULT_OK,intent);
         finish();

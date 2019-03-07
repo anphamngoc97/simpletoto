@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
@@ -24,6 +25,7 @@ import android.widget.TextView;
 
 import com.example.todolistmvp.BaseActivity;
 import com.example.todolistmvp.R;
+import com.example.todolistmvp.detailtask.DetailTaskActivity;
 import com.example.todolistmvp.util.alarm.AlarmUtil;
 import com.example.todolistmvp.util.room.ResponsitoryTask;
 import com.example.todolistmvp.util.room.model.Task;
@@ -64,6 +66,8 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
     Button btnTime;
     @BindView(R.id.parentLayout)
     ViewGroup parentLayout;
+    @BindView(R.id.btnAddDetail)
+    ImageButton btnAddDetail;
 
     int BACKGROUND_INPUT_INVALID;
     int BACKGROUND_INPUT_VALID;
@@ -76,6 +80,7 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
 
     String mDate = "";
     String mTime = "";
+    String detail,priority,category;
     int mYear = -1, mMonth = -1, mDay = -1, mMinute = -1, mHour = -1;
 
     boolean isKeyboardShowing = false;
@@ -160,6 +165,10 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
             } else {
                 groupTime.setVisibility(View.INVISIBLE);
             }
+        });
+        btnAddDetail.setOnClickListener(v->{
+            startActivityForResult(new Intent(this, DetailTaskActivity.class),
+                    Constant.ChildConstantNumber.REQUEST_CODE_ADD_DETAIL_TASK.getValue());
         });
 
         groupSwitchReminder.setOnClickListener(v -> {
@@ -289,5 +298,24 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         btnAddShowKeyBoard.setVisibility(View.INVISIBLE);
         btnAdd.setVisibility(View.VISIBLE);
         isKeyboardShowing = false;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(resultCode == Activity.RESULT_OK){
+            if(requestCode == Constant.ChildConstantNumber.REQUEST_CODE_ADD_DETAIL_TASK.getValue()){
+                if(data!=null) {
+                    detail = data.getStringExtra(
+                            Constant.ChildConstantString.KEY_EXTRA_TASK_DETAIL.getValue());
+                    category = data.getStringExtra(
+                            Constant.ChildConstantString.KEY_EXTRA_TASK_CATEGORY.getValue());
+                    priority = data.getStringExtra(
+                            Constant.ChildConstantString.KEY_EXTRA_TASK_PRIORITY.getValue());
+                }
+
+            }
+        }
     }
 }

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    android:background="@drawable/background_item_task"
+
+    android:paddingTop="@dimen/paddingItemVertical"
+    android:paddingBottom="@dimen/paddingItemVertical"
+    android:paddingLeft="@dimen/paddingItemHorizontal"
+    android:paddingRight="@dimen/paddingItemHorizontal"
+
+    android:layout_marginLeft="@dimen/marginItemHorizontal"
+    android:layout_marginRight="@dimen/marginItemHorizontal"
+    android:layout_marginBottom="@dimen/marginItemVertical">
+     <TextView
+            android:id="@+id/txtvTask"
+            android:text="fff"
+            android:textSize="@dimen/textSizeItem"
+            android:padding="5dp"
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/txtvTimeRemain"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"/>
+
+        <TextView
+            android:id="@+id/txtvTimeRemain"
+            android:layout_width="match_parent"
+            android:text="ssssssssssssssss"
+            android:textSize="@dimen/textSizeSmallItem"
+            android:textColor="@color/colorTextRemain"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/txtvTask"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"/>
+</android.support.constraint.ConstraintLayout>

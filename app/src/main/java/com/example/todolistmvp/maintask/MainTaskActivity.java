@@ -113,9 +113,9 @@ public class MainTaskActivity extends AppCompatActivity implements MainTaskContr
     public void navigateEditTask(int position) {
 
         Intent intent = new Intent(this, EditTaskActivity.class);
-        intent.putExtra(Constant.ChildConstantString.KEY_SEND_EXTRA_EDIT_TASK_OBJECT.getValue(),
+        intent.putExtra(Constant.ChildConstantString.KEY_EXTRA_EDIT_TASK_OBJECT.getValue(),
                 mTasks.get(position));
-        intent.putExtra(Constant.ChildConstantString.KEY_SEND_EXTRA_EDIT_TASK_POSITION.getValue(),
+        intent.putExtra(Constant.ChildConstantString.KEY_EXTRA_EDIT_TASK_POSITION.getValue(),
                 position);
 
 
@@ -146,7 +146,7 @@ public class MainTaskActivity extends AppCompatActivity implements MainTaskContr
 
                 int position = data
                         .getIntExtra(Constant.ChildConstantString
-                                        .KEY_SEND_EXTRA_EDIT_TASK_POSITION.getValue(),
+                                        .KEY_EXTRA_EDIT_TASK_POSITION.getValue(),
                                 0);
 
 
@@ -158,7 +158,7 @@ public class MainTaskActivity extends AppCompatActivity implements MainTaskContr
 
                 } else {
                     Task task = (Task) data.getSerializableExtra(
-                            Constant.ChildConstantString.KEY_SEND_EXTRA_EDIT_TASK_OBJECT.getValue());
+                            Constant.ChildConstantString.KEY_EXTRA_EDIT_TASK_OBJECT.getValue());
                     mTasks.set(position, task);
                     mTaskAdapter.notifyItemChanged(position);
                 }
