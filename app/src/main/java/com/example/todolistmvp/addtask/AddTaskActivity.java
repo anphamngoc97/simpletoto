@@ -97,8 +97,8 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
     }
 
     private void init() {
-        BACKGROUND_INPUT_INVALID = getResources().getColor(R.color.inputInvalid);
-        BACKGROUND_INPUT_VALID = getResources().getColor(R.color.inputValid);
+        BACKGROUND_INPUT_INVALID = getResources().getColor(R.color.colorInputInvalid);
+        BACKGROUND_INPUT_VALID = getResources().getColor(R.color.colorInputValid);
 
         RoomComponent roomComponent = DaggerRoomComponent.builder()
                 .appModule(new AppModule(getApplication()))

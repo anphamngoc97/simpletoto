@@ -29,33 +29,37 @@ public class DetailTaskActivity extends AppCompatActivity implements DetailTaskC
         ButterKnife.bind(this);
 
         init();
+        //onClick();
     }
 
     private void init(){
         presenter=new DetailTaskPresenterImpl(this);
+        registerForContextMenu(btnCategory);
     }
     private void onClick(){
         btnCategory.setOnClickListener(v->{
-
+            registerForContextMenu(btnCategory);
+        });
+        btnPriority.setOnClickListener(v->{
+            registerForContextMenu(btnPriority);
         });
     }
 
-    private void showCategory(){
-
-    }
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
-        switch (v.getId()){
-            case R.id.btnCategory:{
-                getMenuInflater().inflate(R.menu.menu_category,menu);
-                break;
-            }
-            case R.id.btnPriority:{
-                getMenuInflater().inflate(R.menu.menu_priority,menu);
-                break;
-            }
-        }
+        getMenuInflater().inflate(R.menu.menu_category,menu);
+//
+//        switch (v.getId()){
+//            case R.id.btnCategory:{
+//                getMenuInflater().inflate(R.menu.menu_category,menu);
+//                break;
+//            }
+//            case R.id.btnPriority:{
+//                getMenuInflater().inflate(R.menu.menu_priority,menu);
+//                break;
+//            }
+//        }
     }
 }

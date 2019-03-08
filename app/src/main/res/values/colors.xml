@@ -3,9 +3,9 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
-
-    <color name="inputValid">#5D635B</color>
-    <color name="inputInvalid">#F53D25</color>
+    <color name="colorInputValid">#5D635B</color>
+    <color name="colorInputInvalid">#F53D25</color>
+    <color name="colorBackgroundEditText">#82AC70</color>
 
     <color name="colorCompleteTask">#A39977</color>
     <color name="colorTitle">#74AD87</color>
@@ -13,8 +13,8 @@
     <color name="colorTextRemain">#2079B6</color>
 
     <color name="colorAfterCheckBox">#585353</color>
-    <color name="colorBeforeCheckBox">#86D31B</color>
+    <color name="colorBeforeCheckBox">#4A4E45</color>
 
-    <color name="greyBackground">#BFBFBF</color>
-    <color name="itemBackground">#BED1BE</color>
+    <color name="colorGreyBackground">#BFBFBF</color>
+    <color name="colorItemBackground">#BED1BE</color>
 </resources>

@@ -82,6 +82,7 @@
                 app:errorTextAppearance="@id/editTitle"
                 style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
 
+                android:background="@drawable/background_edittext"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
 
