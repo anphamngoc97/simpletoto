@@ -29,11 +29,12 @@
 
     <string name="title_notification">You have task today:</string>
 
-    <string name="HIGH">High</string>
-    <string name="MEDIUM">Medium</string>
-    <string name="LOW">Low</string>
-    <string name="NONE">None</string>
+    <string name="priorityHigh">High</string>
+    <string name="priorityMedium">Medium</string>
+    <string name="priorityLow">Low</string>
+    <string name="priorityNone">None</string>
     <string name="categoryBusiness">Business</string>
     <string name="categoryPersonal">Personal</string>
+    <string name="categoryNone">None</string>
 
 </resources>

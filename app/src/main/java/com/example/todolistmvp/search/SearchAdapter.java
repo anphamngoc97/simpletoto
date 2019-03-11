@@ -1,5 +1,6 @@
 package com.example.todolistmvp.search;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -24,23 +25,20 @@ import butterknife.ButterKnife;
 
 public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.Holder> implements Filterable {
 
-    List<Task> mTasks;
+    List<Task> mTasks = new ArrayList<>();
     List<Task> mTasksSearch = new ArrayList<>();
-    SearchContract.Presenter mPresenter;
-    RecyclerView mRecyclerView;
+    Context context;
 
-    HashMap<Integer,Integer> mappingId = new HashMap<>();
+    HashMap<Integer, Integer> mappingId = new HashMap<>();
+    OnRecyclerViewItemClick onRecyclerViewItemClick;
 
-    public SearchAdapter(List<Task> tasks, SearchContract.Presenter presenter,
-                       RecyclerView recyclerView) {
-        this.mTasks = tasks;
-        this.mPresenter = presenter;
-        this.mRecyclerView = recyclerView;
-        mTasksSearch.addAll(tasks);
 
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(recyclerView.getContext());
-        recyclerView.setLayoutManager(layoutManager);
+    public interface OnRecyclerViewItemClick {
+        void onItemClick(int position, Task task);
+    }
 
+    public SearchAdapter(Context context) {
+        this.context = context;
     }
 
     @NonNull
@@ -61,6 +59,25 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.Holder> im
         return mTasksSearch.size();
     }
 
+    public void addData(List<Task> taskList) {
+        mTasks.addAll(taskList);
+        notifyDataSetChanged();
+    }
+
+    public void changeData(Task task) {
+        int positionInTask = mappingId.get(task.id);
+        mTasks.set(positionInTask, task);
+    }
+
+    public void remove(int position) {
+        mTasks.remove(position);
+        notifyItemRemoved(position);
+    }
+
+    public void setOnItemClick(OnRecyclerViewItemClick onItemClick) {
+        this.onRecyclerViewItemClick = onItemClick;
+    }
+
 
     class Holder extends RecyclerView.ViewHolder {
         @BindView(R.id.txtvTask)
@@ -78,14 +95,18 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.Holder> im
         private void onClick() {
             itemView.setOnClickListener(v -> {
                 int position = getAdapterPosition();
-                mPresenter.onClickItem(mappingId.get(mTasksSearch.get(position).id));
+                if (onRecyclerViewItemClick != null) {
+                    onRecyclerViewItemClick.onItemClick(mappingId.get(mTasksSearch.get(position).id),
+                            mTasksSearch.get(position));
+                }
+                //mPresenter.onClickItem(mappingId.get(mTasksSearch.get(position).id));
             });
         }
 
         public void bindTitle() {
             int position = getAdapterPosition();
             txtvTask.setText(mTasksSearch.get(position).title);
-            String timeRemain = CommonFuntion.getTimeRemaining(mRecyclerView.getContext(),
+            String timeRemain = CommonFuntion.getTimeRemaining(context,
                     mTasksSearch.get(position).dateAlarm);
             txtvTimeRemain.setText(timeRemain);
         }
@@ -97,7 +118,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.Holder> im
         return new ItemFilter();
     }
 
-    class ItemFilter extends Filter{
+    class ItemFilter extends Filter {
 
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
@@ -114,7 +135,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.Holder> im
 
                 if (CommonFuntion.isMatch(mTasks.get(i).title, constraint.toString())) {
                     nlist.add(mTasks.get(i));
-                    mappingId.put(mTasks.get(i).id,i);
+                    mappingId.put(mTasks.get(i).id, i);
 
                 }
             }
@@ -129,7 +150,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.Holder> im
             if (results == null) {
                 mTasksSearch.clear();
             } else {
-                if(results.values!=null) {
+                if (results.values != null) {
                     mTasksSearch = (ArrayList<Task>) results.values;
                 }
             }

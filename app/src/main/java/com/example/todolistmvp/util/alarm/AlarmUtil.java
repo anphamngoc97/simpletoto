@@ -59,7 +59,7 @@ public class AlarmUtil {
 //                    PendingIntent.getService(context, INDEX, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 //            INDEX++;
 //            Calendar calendar = Calendar.getInstance();
-//            calendar.add(Calendar.MINUTE, INDEX);
+//            calendar.insert(Calendar.MINUTE, INDEX);
 //            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
 //                alarmManager
 //                        .setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);

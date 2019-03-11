@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
@@ -27,6 +28,8 @@ import android.widget.TextView;
 
 import com.example.todolistmvp.BaseActivity;
 import com.example.todolistmvp.R;
+import com.example.todolistmvp.detailtask.DetailTaskActivity;
+import com.example.todolistmvp.util.Showlog;
 import com.example.todolistmvp.util.alarm.AlarmUtil;
 import com.example.todolistmvp.maintask.MainTaskActivity;
 import com.example.todolistmvp.util.room.ResponsitoryTask;
@@ -45,7 +48,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class EditTaskActivity extends BaseActivity implements EditTaskContract.View{
+public class EditTaskActivity extends BaseActivity implements EditTaskContract.View {
 
     @BindView(R.id.btnBack)
     ImageButton btnBack;
@@ -71,6 +74,9 @@ public class EditTaskActivity extends BaseActivity implements EditTaskContract.V
     Button btnTime;
     @BindView(R.id.parentLayout)
     ViewGroup parentLayout;
+    @BindView(R.id.btnAddDetail)
+    ImageButton btnAddDetail;
+
 
     int BACKGROUND_INPUT_INVALID;
     int BACKGROUND_INPUT_VALID;
@@ -78,13 +84,6 @@ public class EditTaskActivity extends BaseActivity implements EditTaskContract.V
     @Inject
     ResponsitoryTask responsitoryTask;
     EditTaskContract.Presenter presenter;
-
-    Task mTask;
-    int mPosition;
-
-    String mDate ="";
-    String mTime ="";
-    int mYear=-1,mMonth=-1,mDay=-1,mMinute=-1,mHour=-1;
 
     boolean isKeyboardShowing = false;
 
@@ -94,28 +93,11 @@ public class EditTaskActivity extends BaseActivity implements EditTaskContract.V
         setContentView(R.layout.activity_edit_task);
         ButterKnife.bind(this);
 
-        getData();
         init();
         setupView();
-        updateView();
     }
 
-    private void getData(){
-        Intent intent = getIntent();
-        mTask = (Task) intent
-                .getSerializableExtra(Constant.ChildConstantString.KEY_EXTRA_EDIT_TASK_OBJECT.getValue());
-        mPosition = intent
-                .getIntExtra(Constant.ChildConstantString.KEY_EXTRA_EDIT_TASK_POSITION.getValue(),0);
-        Calendar calendar = CommonFuntion.getDateFromString(mTask.dateAlarm);
-        if(calendar!=null){
-            mYear = calendar.get(Calendar.YEAR);
-            mMonth = calendar.get(Calendar.MONTH);
-            mDay = calendar.get(Calendar.DATE);
-            mHour = calendar.get(Calendar.HOUR);
-            mMinute = calendar.get(Calendar.MINUTE);
-        }
 
-    }
     private void init() {
         BACKGROUND_INPUT_INVALID = getResources().getColor(R.color.colorInputInvalid);
         BACKGROUND_INPUT_VALID = getResources().getColor(R.color.colorInputValid);
@@ -125,26 +107,28 @@ public class EditTaskActivity extends BaseActivity implements EditTaskContract.V
                 .build();
 
         roomComponent.inject(this);
-        presenter = new EditTaskPresenterImpl(this,new EditTaskIteratorImpl(responsitoryTask));
+        presenter = new EditTaskPresenterImpl(getApplicationContext(),getIntent(),
+                this, new EditTaskIteratorImpl(responsitoryTask));
 
     }
-    private void updateView(){
 
-        editTitle.setText(mTask.title);
-        switchReminder.setChecked(mTask.isAlarm);
-        Calendar calendar = CommonFuntion.getDateFromString(mTask.dateAlarm);
+    @Override
+    public void initView(String title,boolean isAlarm,String date,String time) {
 
-        if(calendar!=null) {
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
-            btnDate.setText(simpleDateFormat.format(calendar.getTime()));
-
-            simpleDateFormat.applyPattern("hh:mm");
-            btnTime.setText(simpleDateFormat.format(calendar.getTime()));
-
+        editTitle.setText(title);
+        switchReminder.setChecked(isAlarm);
+        if(date!=null && date.length()>0){
+            btnDate.setText(date);
         }
-
+        if(time!=null && time.length()>0){
+            btnTime.setText(time);
+        }
     }
+
     private void setupView() {
+        btnAddDetail.setOnClickListener(v->{
+            presenter.detailTaskClick();
+        });
         layoutTitle.setBoxStrokeColor(BACKGROUND_INPUT_VALID);
 
         new Handler().post(() -> {
@@ -152,7 +136,7 @@ public class EditTaskActivity extends BaseActivity implements EditTaskContract.V
             InputMethodManager inputMethodManager = (InputMethodManager)
                     getSystemService(Service.INPUT_METHOD_SERVICE);
 
-            inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
+            inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
         });
 
         editTitle.addTextChangedListener(new TextWatcher() {
@@ -178,11 +162,11 @@ public class EditTaskActivity extends BaseActivity implements EditTaskContract.V
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 
-                if(actionId == EditorInfo.IME_ACTION_DONE){
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
                     InputMethodManager inputMethodManager = (InputMethodManager)
                             getSystemService(Service.INPUT_METHOD_SERVICE);
 
-                    inputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY,0);
+                    inputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
                     return true;
                 }
 
@@ -191,18 +175,18 @@ public class EditTaskActivity extends BaseActivity implements EditTaskContract.V
         });
 
         btnBack.setOnClickListener(v -> {
-            if(isKeyboardShowing){
+            if (isKeyboardShowing) {
                 hideSoftKeyboard();
-            }else {
+            } else {
                 finish();
             }
         });
-        btnRemove.setOnClickListener(v->{
-            confirmRemove();
+        btnRemove.setOnClickListener(v -> {
+            presenter.removeClick();
         });
 
         btnUpdate.setOnClickListener(v -> onClickBtnUpdate());
-        btnUpdateShowKeyBoard.setOnClickListener(v->onClickBtnUpdate());
+        btnUpdateShowKeyBoard.setOnClickListener(v -> onClickBtnUpdate());
 
         switchReminder.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
@@ -212,65 +196,104 @@ public class EditTaskActivity extends BaseActivity implements EditTaskContract.V
             }
         });
 
-        groupSwitchReminder.setOnClickListener(v->{
+        groupSwitchReminder.setOnClickListener(v -> {
             switchReminder.setChecked(!switchReminder.isChecked());
         });
         btnDate.setOnClickListener(v -> {
-            showDatePicker();
+            presenter.dateClick();
         });
         btnTime.setOnClickListener(v -> {
-            showTimePicker();
+            presenter.timeClick();
         });
     }
 
-    private void onClickBtnUpdate(){
-        {
+    @Override
+    public void navigateDetailTask() {
 
-            String title = editTitle.getText().toString().trim();
-            if (title.length() == 0) {
-                layoutTitle.setBoxStrokeColor(BACKGROUND_INPUT_INVALID);
-                editTitle.setError(getResources().getString(R.string.errorEmptyTitle));
+        Intent intent = new Intent(this, DetailTaskActivity.class);
 
-            }else{
+        intent.putExtra(Constant.ChildConstantString.KEY_EXTRA_PREVIOUS_CLASS.getValue(),
+                this.getClass());
 
-                String timeString =null;
-                if (!switchReminder.isChecked() || (switchReminder.isChecked() && mYear * mMonth * mDay * mDay * mMinute >=0)) {
-                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Constant.DATE_FORMAT);
-                    Calendar calendar = Calendar.getInstance();
-                    calendar.set(mYear, mMonth, mDay, mHour, mMinute);
-
-
-                    timeString = simpleDateFormat.format(calendar.getTime());
-
-                    if(!switchReminder.isChecked()){
-                        timeString = null;
-                    }
-
-                    mTask.isAlarm = switchReminder.isChecked();
-                    mTask.dateAlarm = timeString;
-                    mTask.title = title;
-                    presenter.updateData(mTask);
-
-
-                }else{
-                    Snackbar.make(parentLayout,getResources().getString(R.string.contentNotSetTime),
-                            Snackbar.LENGTH_SHORT).show();
-                }
-
-            }
-        }
+        startActivityForResult(intent,
+                Constant.ChildConstantNumber.REQUEST_CODE_ADD_DETAIL_TASK.getValue());
     }
+
+    private void onClickBtnUpdate() {
+        String title = editTitle.getText().toString().trim();
+        boolean isCheck = switchReminder.isChecked();
+        presenter.addTaskClick(title,isCheck);;
+    }
+
+    @Override
+    public void showDateDialog() {
+        showDatePicker();
+    }
+
+    @Override
+    public void showTimeDialog() {
+        showTimePicker();
+    }
+
+    @Override
+    public void onUpdateTaskClick(Task task) {
+        presenter.updateData(task);
+    }
+
+    @Override
+    public void onRemoveClick() {
+        showConfirmRemove();
+    }
+
+    @Override
+    public void onUpdateSuccess(int position,Task task) {
+
+        Intent intent = new Intent(this, MainTaskActivity.class);
+        intent.putExtra(Constant.ChildConstantString.KEY_EXTRA_IS_REMOVE.getValue(), Constant.EDIT);
+        intent.putExtra(Constant.ChildConstantString.KEY_EXTRA_EDIT_TASK_POSITION.getValue(), position);
+        intent.putExtra(Constant.ChildConstantString.KEY_EXTRA_EDIT_TASK_OBJECT.getValue(), task);
+
+        setResult(Activity.RESULT_OK, intent);
+        finish();
+
+    }
+
+    @Override
+    public void onRemoveSuccess(int position) {
+
+        Intent intent = new Intent(this, MainTaskActivity.class);
+        intent.putExtra(Constant.ChildConstantString.KEY_EXTRA_IS_REMOVE.getValue(), Constant.REMOVE);
+        intent.putExtra(Constant.ChildConstantString.KEY_EXTRA_EDIT_TASK_POSITION.getValue(), position);
+
+        setResult(Activity.RESULT_OK, intent);
+        finish();
+    }
+
+    @Override
+    public void showErrorInput() {
+        layoutTitle.setBoxStrokeColor(BACKGROUND_INPUT_INVALID);
+        editTitle.setError(getResources().getString(R.string.errorEmptyTitle));
+    }
+
+    @Override
+    public void showErrorReminder() {
+        Snackbar.make(parentLayout, getResources().getString(R.string.contentNotSetTime),
+                Snackbar.LENGTH_SHORT).show();
+    }
+
     private void showDatePicker() {
         Calendar calendar = Calendar.getInstance();
 
         DatePickerDialog datePickerDialog = new DatePickerDialog(this,
                 (view, year, month, dayOfMonth) ->
                 {
-                    mDate = dayOfMonth + "/" + (month+1) + "/" + year;
+                    String mDate = dayOfMonth + "/" + (month + 1) + "/" + year;
                     btnDate.setText(mDate);
-                    mYear = year;
-                    mMonth = month;
-                    mDay = dayOfMonth;
+//                    mYear = year;
+//                    mMonth = month;
+//                    mDay = dayOfMonth;
+
+                    presenter.onCompletePickDate(mDate,year,month,dayOfMonth);
 
                 },
                 calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE));
@@ -285,18 +308,20 @@ public class EditTaskActivity extends BaseActivity implements EditTaskContract.V
 
         TimePickerDialog timePickerDialog = new TimePickerDialog(this,
                 (view, hourOfDay, minute) -> {
-                    mTime = hourOfDay + ":" + minute;
+                    String mTime = hourOfDay + ":" + minute;
                     btnTime.setText(mTime);
 
-                    mHour = hourOfDay;
-                    mMinute = minute;
+                    //mHour = hourOfDay;
+                    //mMinute = minute;
+
+                    presenter.onCompletePickTime(mTime,hourOfDay,minute);
                 },
                 calendar.get(Calendar.HOUR), calendar.get(Calendar.MINUTE), true);
 
         timePickerDialog.show();
     }
 
-    private void confirmRemove(){
+    private void showConfirmRemove() {
 
         AlertDialog.Builder alertDBuilder = new AlertDialog.Builder(this);
         alertDBuilder.setTitle(getString(R.string.title_confirm_dialog));
@@ -305,35 +330,9 @@ public class EditTaskActivity extends BaseActivity implements EditTaskContract.V
 
         });
         alertDBuilder.setPositiveButton(getString(R.string.confirm_yes), (dialog, which) -> {
-            presenter.removeData(mTask);
+            presenter.removeData();
         });
         alertDBuilder.create().show();
-    }
-    @Override
-    public void onRemoveSuccess() {
-        AlarmUtil.cancelAlarm(getApplicationContext(),mTask);
-
-        Intent intent = new Intent(this, MainTaskActivity.class);
-        intent.putExtra(Constant.ChildConstantString.KEY_EXTRA_IS_REMOVE.getValue(),Constant.REMOVE);
-        intent.putExtra(Constant.ChildConstantString.KEY_EXTRA_EDIT_TASK_POSITION.getValue(),mPosition);
-
-        setResult(Activity.RESULT_OK,intent);
-        finish();
-    }
-
-    @Override
-    public void onUpdateSuccess() {
-        AlarmUtil.cancelAlarm(getApplicationContext(),mTask);
-        AlarmUtil.addAlarm(getApplicationContext(),mTask);
-
-        Intent intent = new Intent(this,MainTaskActivity.class);
-        intent.putExtra(Constant.ChildConstantString.KEY_EXTRA_IS_REMOVE.getValue(),Constant.EDIT);
-        intent.putExtra(Constant.ChildConstantString.KEY_EXTRA_EDIT_TASK_POSITION.getValue(),mPosition);
-        intent.putExtra(Constant.ChildConstantString.KEY_EXTRA_EDIT_TASK_OBJECT.getValue(),mTask);
-
-        setResult(Activity.RESULT_OK,intent);
-        finish();
-
     }
 
 
@@ -369,5 +368,16 @@ public class EditTaskActivity extends BaseActivity implements EditTaskContract.V
         btnUpdateShowKeyBoard.setVisibility(View.INVISIBLE);
         btnUpdate.setVisibility(View.VISIBLE);
         isKeyboardShowing = false;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == Constant.ChildConstantNumber.REQUEST_CODE_ADD_DETAIL_TASK.getValue()) {
+                presenter.onReceiveResult(data);
+            }
+        }
     }
 }

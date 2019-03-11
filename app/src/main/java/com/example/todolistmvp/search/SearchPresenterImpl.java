@@ -28,8 +28,37 @@ public class SearchPresenterImpl implements SearchContract.Presenter,
     }
 
     @Override
-    public void onClickItem(int position) {
-        view.navigateEditTask(position);
+    public void backClick() {
+        view.onBack();
+    }
+
+    @Override
+    public void clearClick() {
+        view.onClear();
+    }
+
+    @Override
+    public void search(String s) {
+        if(s.trim().length()>0){
+            view.onFilter(s);
+        }else{
+            view.onNonFilter();
+        }
+    }
+
+    @Override
+    public void onClickItem(int position,Task task) {
+        view.navigateEditTask(position, task);
+    }
+
+    @Override
+    public void editTask(Task task) {
+        view.notifyEditTask(task);
+    }
+
+    @Override
+    public void removeTask(int position) {
+        view.notifyRemoveTask(position);
     }
 
     @Override

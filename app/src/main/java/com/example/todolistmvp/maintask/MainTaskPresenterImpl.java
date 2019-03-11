@@ -29,13 +29,39 @@ public class MainTaskPresenterImpl implements MainTaskContract.Presenter,
     }
 
     @Override
-    public void onClickItem(int position) {
-        view.navigateEditTask(position);
+    public void searchClick() {
+        view.navigateSearch();
     }
 
     @Override
-    public void updateData(Task object) {
-        iterator.updateData(object,this);
+    public void floatBtnAddClick() {
+        view.navigateAddTask();
+    }
+
+    @Override
+    public void onClickItem(int position,Task task) {
+        view.navigateEditTask(position,task);
+    }
+
+    @Override
+    public void updateCompleteData(int position, Task object, boolean checked) {
+        object.isComplete = checked;
+        iterator.updateData(position,object,this);
+    }
+
+    @Override
+    public void updateData(int position,Task object) {
+        iterator.updateData(position,object,this);
+    }
+
+    @Override
+    public void onInsertData(Task object) {
+        view.onInsertSuccess(object);
+    }
+
+    @Override
+    public void onRemoveData(int position) {
+        view.onRemoveSuccess(position);
     }
 
     @Override
@@ -53,8 +79,8 @@ public class MainTaskPresenterImpl implements MainTaskContract.Presenter,
     }
 
     @Override
-    public void onUpdateSuccess() {
-
+    public void onUpdateSuccess(int position,Task task) {
+        view.onUpdateSuccess(position,task);
     }
 
     @Override

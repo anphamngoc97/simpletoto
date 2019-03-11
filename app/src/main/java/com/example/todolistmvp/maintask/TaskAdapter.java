@@ -1,51 +1,44 @@
 package com.example.todolistmvp.maintask;
 
+import android.content.Context;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.os.Handler;
 import android.support.annotation.NonNull;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.bigmercu.cBox.CheckBox;
 import com.example.todolistmvp.R;
 import com.example.todolistmvp.util.helper.ITouchHelperAdapter;
-import com.example.todolistmvp.util.helper.SimplerTouchHelperCallback;
 import com.example.todolistmvp.util.room.model.Task;
 import com.example.todolistmvp.util.CommonFuntion;
 import com.example.todolistmvp.util.Showlog;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.Holder> implements ITouchHelperAdapter {
+public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.Holder> implements ITouchHelperAdapter{
 
-    List<Task> tasks;
-    MainTaskContract.Presenter presenter;
-    RecyclerView recyclerView;
+    List<Task> taskList;
+    OnRecyclerViewItemClick onItemClick;
+    Context context;
 
-    public TaskAdapter(List<Task> tasks, MainTaskContract.Presenter presenter,
-                       RecyclerView recyclerView) {
-        this.tasks = tasks;
-        this.presenter = presenter;
-        this.recyclerView = recyclerView;
+    public interface OnRecyclerViewItemClick {
+        void onItemClick(int position, Task task);
+        void onCheckBoxChange(int position,Task task,boolean isChecked);
+    }
 
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(recyclerView.getContext());
-        recyclerView.setLayoutManager(layoutManager);
-
-
-        SimplerTouchHelperCallback simplerTouchHelperCallback =
-                new SimplerTouchHelperCallback(this);
-
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simplerTouchHelperCallback);
-        itemTouchHelper.attachToRecyclerView(recyclerView);
+    public TaskAdapter(Context context) {
+        this.taskList = new ArrayList<>();
+        this.context = context;
     }
 
     @NonNull
@@ -63,23 +56,45 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.Holder> implem
 
     @Override
     public int getItemCount() {
-        return tasks.size();
+        return taskList.size();
     }
 
     @Override
     public boolean onItemMove(int from, int to) {
         if (from < to) {
             for (int i = from; i < to; i++) {
-                Collections.swap(tasks, i, i + 1);
+                Collections.swap(taskList, i, i + 1);
             }
         } else if (from > to) {
             for (int i = from; i > to; i--) {
-                Collections.swap(tasks, i, i - 1);
+                Collections.swap(taskList, i, i - 1);
             }
         }
         notifyItemMoved(from, to);
 
         return true;
+    }
+
+    public void setOnItemClick(OnRecyclerViewItemClick onItemClick) {
+        this.onItemClick = onItemClick;
+    }
+    public void update(int position, Task task){
+        taskList.set(position,task);
+        notifyItemChanged(position);
+        //notifyDataSetChanged();
+    }
+    public void remove(int position){
+        taskList.remove(position);
+        notifyItemRemoved(position);
+    }
+    public void insert(Task task){
+        taskList.add(task);
+        notifyItemInserted(taskList.size());
+
+    }
+    public void insert(List<Task> tasks){
+        taskList.addAll(tasks);
+        notifyDataSetChanged();
     }
 
     class Holder extends RecyclerView.ViewHolder {
@@ -90,71 +105,84 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.Holder> implem
         @BindView(R.id.checkboxTask)
         CheckBox checkboxTask;
 
-        Drawable defaultBackground;
+        final Drawable defaultBackground;
 
         public Holder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
 
             defaultBackground = itemView.getBackground();
+            Showlog.d("init holder: " + defaultBackground);
             onClick();
         }
 
         private void onClick() {
             itemView.setOnClickListener(v -> {
                 int position = getAdapterPosition();
-                presenter.onClickItem(position);
+                //presenter.onClickItem(position,taskList.get(position));
+
+                //todo complete presenter
+                if (onItemClick != null) {
+                    onItemClick.onItemClick(position,taskList.get(position));
+                }
             });
 
+            checkboxTask.setOnClickListener(v->{
+                int position = getAdapterPosition();
+
+                if (onItemClick != null) {
+                    onItemClick.onCheckBoxChange(position,taskList.get(position),
+                            !checkboxTask.isChecked());
+                }
+            });
             checkboxTask.setOnCheckedChangeListener(new CheckBox.OnCheckedChangeListener() {
                 @Override
                 public void onChange(boolean checked) {
+                    int position = getAdapterPosition();
 
-                        int position = getAdapterPosition();
-                        tasks.get(position).isComplete = checked;
-                        presenter.updateData(tasks.get(position));
+                    /*
+                        taskList.get(position).isComplete = checked;
+                        presenter.updateData(taskList.get(position));
 
                         if(checked){
                             itemView.setBackgroundColor(recyclerView.getContext().getResources()
                                     .getColor(R.color.colorCompleteTask));
                         }else{
                             itemView.setBackground(defaultBackground);
-                        }
-
-
-                }
-            });
-            /*
-            checkboxTask.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    int position = getAdapterPosition();
-                    tasks.get(position).isComplete = isChecked;
-                    presenter.updateData(tasks.get(position));
-
-                    if(isChecked){
-                        itemView.setBackgroundColor(recyclerView.getContext().getResources()
-                        .getColor(R.color.colorCompleteTask));
-                    }else{
-                        itemView.setBackground(defaultBackground);
+                         }
+                                                    */
+                    //todo complete presenter
+                    if (onItemClick != null) {
+                        //onItemClick.onCheckBoxChange(position,taskList.get(position),checked);
                     }
 
                 }
             });
-            */
         }
 
         public void bindTitle() {
             int position = getAdapterPosition();
-            txtvTask.setText(tasks.get(position).title);
-            String timeRemain = CommonFuntion.getTimeRemaining(recyclerView.getContext(),
-                    tasks.get(position).dateAlarm);
+            txtvTask.setText(taskList.get(position).title);
+            String timeRemain = CommonFuntion.getTimeRemaining(context,
+                    taskList.get(position).dateAlarm);
             txtvTimeRemain.setText(timeRemain);
 
-            if(tasks.get(position).isComplete){
-                checkboxTask.setChecked(true);
+            if (taskList.get(position).isComplete != checkboxTask.isChecked()) {
+                checkboxTask.setChecked(taskList.get(position).isComplete);
+
+                Showlog.d("binding: " + checkboxTask.isChecked());
+
+
+                if(checkboxTask.isChecked()){
+                    Showlog.d("complete");
+                    itemView.setBackgroundColor(context.getResources()
+                            .getColor(R.color.colorCompleteTask));
+                }else{
+                    Showlog.d("default bg after: " + defaultBackground);
+                    itemView.setBackground(defaultBackground);
+                }
+
             }
-            Showlog.d(""+tasks.get(position).isComplete);
         }
     }
 }

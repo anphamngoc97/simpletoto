@@ -27,7 +27,7 @@ public class Constant {
         KEY_EXTRA_EDIT_TASK_POSITION,
         KEY_EXTRA_ADD_TASK,
         KEY_EXTRA_IS_REMOVE,
-        KEY_BROADCAST_NOTIFICATION_DISMISS,
+        KEY_EXTRA_PREVIOUS_CLASS,
         KEY_EXTRA_TASK_DETAIL,
         KEY_EXTRA_TASK_PRIORITY,
         KEY_EXTRA_TASK_CATEGORY;
@@ -43,31 +43,38 @@ public class Constant {
         LOW,
         NONE;
 
-        String getValue(Context context){
+        public String getValue(){
+            return this.name();
+        }
+        public String getValueAsLanguage(Context context){
             switch (this){
                 case LOW:{
-                    return context.getResources().getString(R.string.LOW);
+                    return context.getResources().getString(R.string.priorityLow);
                 }
                 case MEDIUM:{
-                    return context.getResources().getString(R.string.MEDIUM);
+                    return context.getResources().getString(R.string.priorityMedium);
                 }
                 case HIGH:{
-                    return context.getResources().getString(R.string.HIGH);
+                    return context.getResources().getString(R.string.priorityHigh);
                 }
                 case NONE:{
-                    return context.getResources().getString(R.string.NONE);
+                    return context.getResources().getString(R.string.priorityNone);
                 }
                 default:{
-                    return context.getResources().getString(R.string.NONE);
+                    return context.getResources().getString(R.string.priorityNone);
                 }
             }
         }
     }
     public enum ChildConstantDetailTaskcategory{
+        NONE,
         PERSONAL,
         BUSINESS;
 
-        String getValue(Context context){
+        public String getValue(){
+            return this.name();
+        }
+        public String getValueAsLanguage(Context context){
             switch (this){
                 case BUSINESS:{
                     return context.getResources().getString(R.string.categoryBusiness);
@@ -76,7 +83,7 @@ public class Constant {
                     return context.getResources().getString(R.string.categoryPersonal);
                 }
                 default:{
-                    return context.getResources().getString(R.string.NONE);
+                    return context.getResources().getString(R.string.priorityNone);
                 }
             }
         }

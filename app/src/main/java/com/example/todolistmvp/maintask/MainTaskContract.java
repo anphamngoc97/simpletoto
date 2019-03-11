@@ -11,15 +11,35 @@ public interface MainTaskContract {
     interface View extends BaseView {
         void refreshData(List<Task> tasks);
 
-        void navigateEditTask(int position);
+        void onUpdateSuccess(int position,Task task);
+
+        void onInsertSuccess(Task task);
+
+        void onRemoveSuccess(int position);
+
+        void navigateEditTask(int position,Task task);
+
+        void navigateAddTask();
+
+        void navigateSearch();
     }
 
     interface Presenter extends BasePresenter<View> {
         void loadData();
 
-        void onClickItem(int position);
+        void onClickItem(int position,Task object);
 
-        void updateData(Task object);
+        void updateCompleteData(int position,Task object,boolean checked);
+
+        void updateData(int position,Task object);
+
+        void onInsertData(Task object);
+
+        void onRemoveData(int position);
+
+        void searchClick();
+
+        void floatBtnAddClick();
 
     }
 
@@ -27,11 +47,11 @@ public interface MainTaskContract {
         interface OnFinishListener extends BaseIterator.OnFinishListener {
             void onGetSuccess(List<Task> res);
 
-            void onUpdateSuccess();
+            void onUpdateSuccess(int position,Task task);
 
         }
 
-        void updateData(Task object, OnFinishListener onFinishListener);
+        void updateData(int position,Task object, OnFinishListener onFinishListener);
 
         void getData(OnFinishListener onFinishListener);
     }

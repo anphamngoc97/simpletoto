@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <item android:id="@+id/categoryBusiness"
-        android:title="@string/categoryBusiness"/>
-    <item android:id="@+id/categoryPersonal"
-        android:title="@string/categoryPersonal"/>
+    <item
+        android:id="@+id/menuCategoryBusiness"
+        android:title="@string/categoryBusiness" />
+    <item
+        android:id="@+id/menuCategoryPersonal"
+        android:title="@string/categoryPersonal" />
+    <item android:id="@+id/menuCategoryNone"
+        android:title="@string/categoryNone"/>
 </menu>

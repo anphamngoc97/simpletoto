@@ -6,7 +6,9 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -14,6 +16,7 @@ import android.widget.TextView;
 import com.example.todolistmvp.R;
 import com.example.todolistmvp.addtask.AddTaskActivity;
 import com.example.todolistmvp.edittask.EditTaskActivity;
+import com.example.todolistmvp.util.helper.SimplerTouchHelperCallback;
 import com.example.todolistmvp.util.room.ResponsitoryTask;
 import com.example.todolistmvp.util.room.model.Task;
 import com.example.todolistmvp.util.roomdagger.AppModule;
@@ -23,7 +26,6 @@ import com.example.todolistmvp.search.SearchActivity;
 import com.example.todolistmvp.util.Constant;
 import com.example.todolistmvp.util.Showlog;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -42,7 +44,7 @@ public class MainTaskActivity extends AppCompatActivity implements MainTaskContr
     @BindView(R.id.txtvContentMain)
     TextView txtvContentMain;
 
-    List<Task> mTasks = new ArrayList<>();
+//    List<Task> mTasks = new ArrayList<>();
     TaskAdapter mTaskAdapter;
 
     @Inject
@@ -57,6 +59,7 @@ public class MainTaskActivity extends AppCompatActivity implements MainTaskContr
         ButterKnife.bind(this);
 
         init();
+        setUpRecyclerView();
         onClick();
 
         loadData();
@@ -68,9 +71,33 @@ public class MainTaskActivity extends AppCompatActivity implements MainTaskContr
         component.inject(this);
         mPresenter = new MainTaskPresenterImpl(this, new MainTaskIteratorImpl(mResponsitoryTask));
 
-        mTaskAdapter = new TaskAdapter(mTasks, mPresenter, recycleTask);
+
+    }
+
+    private void setUpRecyclerView(){
+        mTaskAdapter = new TaskAdapter(getApplicationContext());
         recycleTask.setAdapter(mTaskAdapter);
 
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(recycleTask.getContext());
+        recycleTask.setLayoutManager(layoutManager);
+
+        SimplerTouchHelperCallback simplerTouchHelperCallback =
+                new SimplerTouchHelperCallback(mTaskAdapter);
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simplerTouchHelperCallback);
+        itemTouchHelper.attachToRecyclerView(recycleTask);
+
+        mTaskAdapter.setOnItemClick(new TaskAdapter.OnRecyclerViewItemClick() {
+            @Override
+            public void onItemClick(int position,Task task) {
+                mPresenter.onClickItem(position,task);
+            }
+
+            @Override
+            public void onCheckBoxChange(int position,Task task,boolean checked) {
+                mPresenter.updateCompleteData(position,task,checked);
+            }
+        });
     }
 
     private void loadData() {
@@ -79,25 +106,52 @@ public class MainTaskActivity extends AppCompatActivity implements MainTaskContr
 
     private void onClick() {
         floatBtnAdd.setOnClickListener(v -> {
-            startActivityForResult(new Intent(this, AddTaskActivity.class),
-                    Constant.ChildConstantNumber.REQUEST_CODE_ADD_TASK.getValue());
-
-            overridePendingTransition(R.anim.anim_float_button, R.anim.anim_out);
+            mPresenter.floatBtnAddClick();
         });
         btnSearch.setOnClickListener(v -> {
-            startActivityForResult(new Intent(this, SearchActivity.class),
-                    Constant.ChildConstantNumber.REQUEST_CODE_SEARCH.getValue());
+            mPresenter.searchClick();
         });
     }
 
     @Override
+    public void navigateAddTask() {
+        startActivityForResult(new Intent(this, AddTaskActivity.class),
+                Constant.ChildConstantNumber.REQUEST_CODE_ADD_TASK.getValue());
+
+        overridePendingTransition(R.anim.anim_float_button, R.anim.anim_out);
+
+    }
+
+    @Override
+    public void navigateSearch() {
+        startActivityForResult(new Intent(this, SearchActivity.class),
+                Constant.ChildConstantNumber.REQUEST_CODE_SEARCH.getValue());
+
+    }
+
+    @Override
     public void refreshData(List<Task> tasks) {
-        this.mTasks.clear();
-        this.mTasks.addAll(tasks);
+        mTaskAdapter.insert(tasks);
         mTaskAdapter.notifyDataSetChanged();
 
         Showlog.d("refresh data: " + tasks.size());
         showMainContent(tasks.size());
+    }
+
+    @Override
+    public void onUpdateSuccess(int position,Task task) {
+        mTaskAdapter.update(position,task);
+    }
+
+    @Override
+    public void onInsertSuccess(Task task) {
+        mTaskAdapter.insert(task);
+    }
+
+    @Override
+    public void onRemoveSuccess(int position) {
+        mTaskAdapter.remove(position);
+        showMainContent(mTaskAdapter.getItemCount());
     }
 
     private void showMainContent(int sizeOfList) {
@@ -110,11 +164,11 @@ public class MainTaskActivity extends AppCompatActivity implements MainTaskContr
     }
 
     @Override
-    public void navigateEditTask(int position) {
+    public void navigateEditTask(int position,Task task) {
 
         Intent intent = new Intent(this, EditTaskActivity.class);
         intent.putExtra(Constant.ChildConstantString.KEY_EXTRA_EDIT_TASK_OBJECT.getValue(),
-                mTasks.get(position));
+                task);
         intent.putExtra(Constant.ChildConstantString.KEY_EXTRA_EDIT_TASK_POSITION.getValue(),
                 position);
 
@@ -123,6 +177,7 @@ public class MainTaskActivity extends AppCompatActivity implements MainTaskContr
 
     }
 
+    //todo fix mvc->mvp
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -132,10 +187,12 @@ public class MainTaskActivity extends AppCompatActivity implements MainTaskContr
                 Task task = (Task) data
                         .getSerializableExtra(Constant.ChildConstantString.KEY_EXTRA_ADD_TASK.getValue());
                 if (task != null) {
-                    this.mTasks.add(task);
-                    mTaskAdapter.notifyDataSetChanged();
 
-                    showMainContent(this.mTasks.size());
+                    mPresenter.onInsertData(task);
+//                    this.mTasks.add(task);
+//                    mTaskAdapter.notifyDataSetChanged();
+//
+//                    showMainContent(this.mTasks.size());
                 }
             }
             if (requestCode == Constant.ChildConstantNumber.REQUEST_CODE_EDIT_TASK.getValue()) {
@@ -151,16 +208,19 @@ public class MainTaskActivity extends AppCompatActivity implements MainTaskContr
 
 
                 if (isRemove) {
-                    mTasks.remove(position);
-                    mTaskAdapter.notifyItemRemoved(position);
-
-                    showMainContent(mTasks.size());
+                    mPresenter.onRemoveData(position);
+//                    mTasks.remove(position);
+//                    mTaskAdapter.notifyItemRemoved(position);
+//
+//                    showMainContent(mTasks.size());
 
                 } else {
                     Task task = (Task) data.getSerializableExtra(
                             Constant.ChildConstantString.KEY_EXTRA_EDIT_TASK_OBJECT.getValue());
-                    mTasks.set(position, task);
-                    mTaskAdapter.notifyItemChanged(position);
+                    mPresenter.updateData(position,task);
+
+//                    mTasks.set(position, task);
+//                    mTaskAdapter.notifyItemChanged(position);
                 }
             }
             if (requestCode == Constant.ChildConstantNumber.REQUEST_CODE_SEARCH.getValue()) {

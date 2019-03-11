@@ -19,7 +19,7 @@ public class MainTaskIteratorImpl implements MainTaskContract.Iterator {
     }
 
     @Override
-    public void updateData(Task object, OnFinishListener onFinishListener) {
+    public void updateData(int position,Task object, OnFinishListener onFinishListener) {
 
             Completable.fromAction(new Action() {
                 @Override
@@ -38,7 +38,7 @@ public class MainTaskIteratorImpl implements MainTaskContract.Iterator {
 
                         @Override
                         public void onComplete() {
-                            onFinishListener.onUpdateSuccess();
+                            onFinishListener.onUpdateSuccess(position,object);
                         }
 
                         @Override

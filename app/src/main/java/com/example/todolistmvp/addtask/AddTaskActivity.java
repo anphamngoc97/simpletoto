@@ -26,6 +26,7 @@ import android.widget.TextView;
 import com.example.todolistmvp.BaseActivity;
 import com.example.todolistmvp.R;
 import com.example.todolistmvp.detailtask.DetailTaskActivity;
+import com.example.todolistmvp.util.Showlog;
 import com.example.todolistmvp.util.alarm.AlarmUtil;
 import com.example.todolistmvp.util.room.ResponsitoryTask;
 import com.example.todolistmvp.util.room.model.Task;
@@ -76,12 +77,6 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
     ResponsitoryTask responsitoryTask;
     AddTaskContract.Presenter presenter;
 
-    Task mTask;
-
-    String mDate = "";
-    String mTime = "";
-    String detail,priority,category;
-    int mYear = -1, mMonth = -1, mDay = -1, mMinute = -1, mHour = -1;
 
     boolean isKeyboardShowing = false;
 
@@ -105,7 +100,8 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
                 .build();
 
         roomComponent.inject(this);
-        presenter = new AddTaskPresenterImpl(this, new AddTaskIteratorImpl(responsitoryTask));
+        presenter = new AddTaskPresenterImpl(getApplicationContext(),
+                this, new AddTaskIteratorImpl(responsitoryTask));
 
     }
 
@@ -115,6 +111,10 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         new Handler().post(() -> {
             editTitle.requestFocus();
             showSoftKeyboard();
+        });
+
+        btnAddDetail.setOnClickListener(v -> {
+            presenter.detailTaskClick();
         });
 
         editTitle.addTextChangedListener(new TextWatcher() {
@@ -166,64 +166,68 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
                 groupTime.setVisibility(View.INVISIBLE);
             }
         });
-        btnAddDetail.setOnClickListener(v->{
-            startActivityForResult(new Intent(this, DetailTaskActivity.class),
-                    Constant.ChildConstantNumber.REQUEST_CODE_ADD_DETAIL_TASK.getValue());
-        });
+
 
         groupSwitchReminder.setOnClickListener(v -> {
             switchReminder.setChecked(!switchReminder.isChecked());
         });
         btnDate.setOnClickListener(v -> {
-            showDatePicker();
+            presenter.dateClick();
         });
         btnTime.setOnClickListener(v -> {
-            showTimePicker();
+            presenter.timeClick();
         });
     }
 
     private void onClickBtnAdd() {
-        {
-
-            String title = editTitle.getText().toString().trim();
-            if (title.length() == 0) {
-                layoutTitle.setBoxStrokeColor(BACKGROUND_INPUT_INVALID);
-                editTitle.setError(getResources().getString(R.string.errorEmptyTitle));
-
-            } else {
-
-                String timeString = null;
-                if (!switchReminder.isChecked() || (switchReminder.isChecked() && mYear * mMonth * mDay * mDay * mMinute >= 0)) {
-                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Constant.DATE_FORMAT);
-                    Calendar calendar = Calendar.getInstance();
-                    calendar.set(mYear, mMonth, mDay, mHour, mMinute);
-                    timeString = simpleDateFormat.format(calendar.getTime());
-
-                    if (!switchReminder.isChecked()) {
-                        timeString = null;
-                    }
-
-                    mTask = new Task.Builder().setIsAlarm(switchReminder.isChecked())
-                            .setDateAlarm(timeString)
-                            .createTask(title);
-                    presenter.insertData(mTask);
-                } else {
-                    Snackbar.make(parentLayout, getResources().getString(R.string.contentNotSetTime),
-                            Snackbar.LENGTH_SHORT).show();
-                }
-
-            }
-        }
+        String title = editTitle.getText().toString().trim();
+        boolean isChecked = switchReminder.isChecked();
+        presenter.addTaskClick(title, isChecked);
     }
 
     @Override
-    public void insertComplete() {
+    public void showDateDialog() {
+        showDatePicker();
+    }
 
-        AlarmUtil.addAlarm(getApplicationContext(), mTask);
+    @Override
+    public void showTimeDialog() {
+        showTimePicker();
+    }
 
+    @Override
+    public void onAddTaskClick(Task task) {
+        presenter.insertData(task);
+    }
 
+    @Override
+    public void navigateDetailTask() {
+        Intent intent = new Intent(this, DetailTaskActivity.class);
+
+        intent.putExtra(Constant.ChildConstantString.KEY_EXTRA_PREVIOUS_CLASS.getValue(),
+                this.getClass());
+
+        startActivityForResult(intent,
+                Constant.ChildConstantNumber.REQUEST_CODE_ADD_DETAIL_TASK.getValue());
+
+    }
+
+    @Override
+    public void showErrorInput() {
+        layoutTitle.setBoxStrokeColor(BACKGROUND_INPUT_INVALID);
+        editTitle.setError(getResources().getString(R.string.errorEmptyTitle));
+    }
+
+    @Override
+    public void showErrorReminder() {
+        Snackbar.make(parentLayout, getResources().getString(R.string.contentNotSetTime),
+                Snackbar.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void insertComplete(Task task) {
         Intent intent = new Intent();
-        intent.putExtra(Constant.ChildConstantString.KEY_EXTRA_ADD_TASK.getValue(), mTask);
+        intent.putExtra(Constant.ChildConstantString.KEY_EXTRA_ADD_TASK.getValue(), task);
         setResult(Activity.RESULT_OK, intent);
 
         finish();
@@ -235,11 +239,10 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
         DatePickerDialog datePickerDialog = new DatePickerDialog(this,
                 (view, year, month, dayOfMonth) ->
                 {
-                    mDate = dayOfMonth + "/" + (month + 1) + "/" + year;
+                    String mDate = dayOfMonth + "/" + (month + 1) + "/" + year;
                     btnDate.setText(mDate);
-                    mYear = year;
-                    mMonth = month;
-                    mDay = dayOfMonth;
+
+                    presenter.onCompletePickDate(mDate, year, month, dayOfMonth);
 
                 },
                 calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE));
@@ -254,11 +257,10 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
 
         TimePickerDialog timePickerDialog = new TimePickerDialog(this,
                 (view, hourOfDay, minute) -> {
-                    mTime = hourOfDay + ":" + minute;
+                    String mTime = hourOfDay + ":" + minute;
                     btnTime.setText(mTime);
 
-                    mHour = hourOfDay;
-                    mMinute = minute;
+                    presenter.onCompletePickTime(mTime, hourOfDay, minute);
                 },
                 calendar.get(Calendar.HOUR), calendar.get(Calendar.MINUTE), true);
 
@@ -304,15 +306,10 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(resultCode == Activity.RESULT_OK){
-            if(requestCode == Constant.ChildConstantNumber.REQUEST_CODE_ADD_DETAIL_TASK.getValue()){
-                if(data!=null) {
-                    detail = data.getStringExtra(
-                            Constant.ChildConstantString.KEY_EXTRA_TASK_DETAIL.getValue());
-                    category = data.getStringExtra(
-                            Constant.ChildConstantString.KEY_EXTRA_TASK_CATEGORY.getValue());
-                    priority = data.getStringExtra(
-                            Constant.ChildConstantString.KEY_EXTRA_TASK_PRIORITY.getValue());
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == Constant.ChildConstantNumber.REQUEST_CODE_ADD_DETAIL_TASK.getValue()) {
+                if (data != null) {
+                    presenter.onReceiveResult(data);
                 }
 
             }

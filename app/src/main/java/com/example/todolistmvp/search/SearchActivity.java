@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.EditText;
@@ -20,7 +21,6 @@ import com.example.todolistmvp.util.roomdagger.DaggerRoomComponent;
 import com.example.todolistmvp.util.roomdagger.RoomComponent;
 import com.example.todolistmvp.util.Constant;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -49,7 +49,7 @@ public class SearchActivity extends AppCompatActivity implements SearchContract.
     @BindView(R.id.txtvContentSearch)
     TextView txtvTitleSearch;
 
-    List<Task> mTasks = new ArrayList<>();
+    //List<Task> mTasks = new ArrayList<>();
     SearchAdapter mTaskAdapter;
 
     @Inject
@@ -66,6 +66,8 @@ public class SearchActivity extends AppCompatActivity implements SearchContract.
         ButterKnife.bind(this);
 
         init();
+        setUpRecyclerView();
+        onClick();
         loadData();
         setUpSearch();
 
@@ -77,21 +79,51 @@ public class SearchActivity extends AppCompatActivity implements SearchContract.
         component.inject(this);
         mPresenter = new SearchPresenterImpl(this, new SearchIteratorImpl(mResponsitoryTask));
 
-        mTaskAdapter = new SearchAdapter(mTasks, mPresenter, recycleTask);
-        recycleTask.setAdapter(mTaskAdapter);
-
-        onClick();
     }
 
+    public void setUpRecyclerView(){
+        mTaskAdapter = new SearchAdapter(this);
+        mTaskAdapter.setOnItemClick((position, task) -> mPresenter.onClickItem(position,task));
+
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(recycleTask.getContext());
+        recycleTask.setLayoutManager(layoutManager);
+        recycleTask.setAdapter(mTaskAdapter);
+    }
     private void onClick() {
         btnBack.setOnClickListener(v->{
-            setResult(Activity.RESULT_OK);
-            finish();
+            mPresenter.backClick();
         });
         btnClear.setOnClickListener(v->{
-            editSearch.setText("");
+            mPresenter.clearClick();
         });
     }
+
+    @Override
+    public void onBack() {
+        setResult(Activity.RESULT_OK);
+        finish();
+    }
+
+    @Override
+    public void onClear() {
+        editSearch.setText("");
+    }
+
+    @Override
+    public void onFilter(String s) {
+        if(txtvTitleSearch.getVisibility() == View.VISIBLE){
+            txtvTitleSearch.setVisibility(View.INVISIBLE);
+        }
+        mTaskAdapter.getFilter().filter(s);
+    }
+
+    @Override
+    public void onNonFilter() {
+        if(txtvTitleSearch.getVisibility() == View.VISIBLE){
+            txtvTitleSearch.setVisibility(View.INVISIBLE);
+        }
+    }
+
     private void setUpSearch(){
 
         RxSearch.from(editSearch)
@@ -108,12 +140,16 @@ public class SearchActivity extends AppCompatActivity implements SearchContract.
 
                     @Override
                     public void onNext(Object o) {
+                        mPresenter.search(o.toString());
+
+                        /*
                         mTaskAdapter.getFilter().filter(o.toString());
                         if(o.toString().trim().length()==0){
                             txtvTitleSearch.setVisibility(View.VISIBLE);
                         }else if(txtvTitleSearch.getVisibility() == View.VISIBLE){
                             txtvTitleSearch.setVisibility(View.INVISIBLE);
                         }
+                        */
                     }
 
                     @Override
@@ -135,19 +171,26 @@ public class SearchActivity extends AppCompatActivity implements SearchContract.
 
     @Override
     public void refreshData(List<Task> tasks) {
-        mTasks.clear();
-        mTasks.addAll(tasks);
-        mTaskAdapter.notifyDataSetChanged();
-
+        mTaskAdapter.addData(tasks);
     }
 
     @Override
-    public void navigateEditTask(int position) {
+    public void notifyEditTask(Task task) {
+        mTaskAdapter.changeData(task);
+    }
+
+    @Override
+    public void notifyRemoveTask(int position) {
+        mTaskAdapter.remove(position);
+    }
+
+    @Override
+    public void navigateEditTask(int position,Task task) {
         editSearch.setText("");
 
         Intent intent = new Intent(this, EditTaskActivity.class);
         intent.putExtra(Constant.ChildConstantString.KEY_EXTRA_EDIT_TASK_OBJECT.getValue(),
-                mTasks.get(position));
+                task);
         intent.putExtra(Constant.ChildConstantString.KEY_EXTRA_EDIT_TASK_POSITION.getValue(),
                 position);
 
@@ -174,14 +217,17 @@ public class SearchActivity extends AppCompatActivity implements SearchContract.
 
                 //todo update and remove list
                 if (isRemove) {
-                    mTasks.remove(position);
-                    mTaskAdapter.notifyItemRemoved(position);
+                    //mTasks.remove(position);
+                    //mTaskAdapter.notifyItemRemoved(position);
+                    mPresenter.removeTask(position);
 
                 } else {
                     Task task = (Task) data.getSerializableExtra(
                             Constant.ChildConstantString.KEY_EXTRA_EDIT_TASK_OBJECT.getValue());
-                    mTasks.set(position, task);
-                    mTaskAdapter.notifyItemChanged(position);
+                    //mTasks.set(position, task);
+                    //mTaskAdapter.notifyItemChanged(position);
+
+                    mPresenter.editTask(task);
                 }
             }
         }
