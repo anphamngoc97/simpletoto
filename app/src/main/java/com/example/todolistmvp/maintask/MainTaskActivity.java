@@ -2,29 +2,32 @@ package com.example.todolistmvp.maintask;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.example.todolistmvp.BaseActivity;
 import com.example.todolistmvp.R;
 import com.example.todolistmvp.addtask.AddTaskActivity;
 import com.example.todolistmvp.edittask.EditTaskActivity;
+import com.example.todolistmvp.search.SearchActivity;
+import com.example.todolistmvp.util.Constant;
+import com.example.todolistmvp.util.Showlog;
 import com.example.todolistmvp.util.helper.SimplerTouchHelperCallback;
 import com.example.todolistmvp.util.room.ResponsitoryTask;
 import com.example.todolistmvp.util.room.model.Task;
 import com.example.todolistmvp.util.roomdagger.AppModule;
 import com.example.todolistmvp.util.roomdagger.DaggerRoomComponent;
 import com.example.todolistmvp.util.roomdagger.RoomComponent;
-import com.example.todolistmvp.search.SearchActivity;
-import com.example.todolistmvp.util.Constant;
-import com.example.todolistmvp.util.Showlog;
 
 import java.util.List;
 
@@ -33,7 +36,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainTaskActivity extends AppCompatActivity implements MainTaskContract.View {
+public class MainTaskActivity extends BaseActivity implements MainTaskContract.View {
 
     @BindView(R.id.recycleTask)
     RecyclerView recycleTask;
@@ -43,8 +46,12 @@ public class MainTaskActivity extends AppCompatActivity implements MainTaskContr
     ImageButton btnSearch;
     @BindView(R.id.txtvContentMain)
     TextView txtvContentMain;
+    @BindView(R.id.editTitle)
+    EditText editTitle;
+    @BindView(R.id.btnAdd)
+    ImageButton btnAdd;
 
-//    List<Task> mTasks = new ArrayList<>();
+    //    List<Task> mTasks = new ArrayList<>();
     TaskAdapter mTaskAdapter;
 
     @Inject
@@ -71,14 +78,23 @@ public class MainTaskActivity extends AppCompatActivity implements MainTaskContr
         component.inject(this);
         mPresenter = new MainTaskPresenterImpl(this, new MainTaskIteratorImpl(mResponsitoryTask));
 
-
     }
 
-    private void setUpRecyclerView(){
+    private void unfocusEditText() {
+        editTitle.setFocusableInTouchMode(false);
+        editTitle.clearFocus();
+        editTitle.setFocusableInTouchMode(true);
+        hideSoftKeyboard();
+    }
+
+    private void setUpRecyclerView() {
         mTaskAdapter = new TaskAdapter(getApplicationContext());
         recycleTask.setAdapter(mTaskAdapter);
 
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(recycleTask.getContext());
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        layoutManager.setReverseLayout(true);
+        layoutManager.setStackFromEnd(true);
+
         recycleTask.setLayoutManager(layoutManager);
 
         SimplerTouchHelperCallback simplerTouchHelperCallback =
@@ -89,13 +105,13 @@ public class MainTaskActivity extends AppCompatActivity implements MainTaskContr
 
         mTaskAdapter.setOnItemClick(new TaskAdapter.OnRecyclerViewItemClick() {
             @Override
-            public void onItemClick(int position,Task task) {
-                mPresenter.onClickItem(position,task);
+            public void onItemClick(int position, Task task) {
+                mPresenter.onClickItem(position, task);
             }
 
             @Override
-            public void onCheckBoxChange(int position,Task task,boolean checked) {
-                mPresenter.updateCompleteData(position,task,checked);
+            public void onCheckBoxChange(int position, Task task, boolean checked) {
+                mPresenter.updateCompleteData(position, task, checked);
             }
         });
     }
@@ -111,6 +127,15 @@ public class MainTaskActivity extends AppCompatActivity implements MainTaskContr
         btnSearch.setOnClickListener(v -> {
             mPresenter.searchClick();
         });
+        btnAdd.setOnClickListener(v -> {
+            mPresenter.onClickAdd(editTitle.getText().toString());
+        });
+    }
+
+    @Override
+    public void refreshEditText() {
+        editTitle.setText("");
+        unfocusEditText();
     }
 
     @Override
@@ -139,13 +164,14 @@ public class MainTaskActivity extends AppCompatActivity implements MainTaskContr
     }
 
     @Override
-    public void onUpdateSuccess(int position,Task task) {
-        mTaskAdapter.update(position,task);
+    public void onUpdateSuccess(int position, Task task) {
+        mTaskAdapter.update(position, task);
     }
 
     @Override
     public void onInsertSuccess(Task task) {
         mTaskAdapter.insert(task);
+        recycleTask.smoothScrollToPosition(mTaskAdapter.getItemCount()-1);
     }
 
     @Override
@@ -164,7 +190,7 @@ public class MainTaskActivity extends AppCompatActivity implements MainTaskContr
     }
 
     @Override
-    public void navigateEditTask(int position,Task task) {
+    public void navigateEditTask(int position, Task task) {
 
         Intent intent = new Intent(this, EditTaskActivity.class);
         intent.putExtra(Constant.ChildConstantString.KEY_EXTRA_EDIT_TASK_OBJECT.getValue(),
@@ -217,7 +243,7 @@ public class MainTaskActivity extends AppCompatActivity implements MainTaskContr
                 } else {
                     Task task = (Task) data.getSerializableExtra(
                             Constant.ChildConstantString.KEY_EXTRA_EDIT_TASK_OBJECT.getValue());
-                    mPresenter.updateData(position,task);
+                    mPresenter.updateData(position, task);
 
 //                    mTasks.set(position, task);
 //                    mTaskAdapter.notifyItemChanged(position);
@@ -227,5 +253,24 @@ public class MainTaskActivity extends AppCompatActivity implements MainTaskContr
                 mPresenter.loadData();
             }
         }
+    }
+
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
+            View v = getCurrentFocus();
+            if (editTitle.isFocused()) {
+                Rect outRect = new Rect();
+                editTitle.getGlobalVisibleRect(outRect);
+                if (!outRect.contains((int) ev.getRawX(), (int) ev.getRawY())) {
+                    editTitle.setFocusableInTouchMode(false);
+                    editTitle.clearFocus();
+                    editTitle.setFocusableInTouchMode(true);
+                    hideSoftKeyboard();
+                }
+            }
+        }
+        return super.dispatchTouchEvent(ev);
     }
 }

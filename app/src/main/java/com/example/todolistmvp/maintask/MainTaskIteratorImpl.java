@@ -12,10 +12,10 @@ import io.reactivex.functions.Action;
 import io.reactivex.schedulers.Schedulers;
 
 public class MainTaskIteratorImpl implements MainTaskContract.Iterator {
-    ResponsitoryTask responsitoryTask;
+    ResponsitoryTask mResponsitoryTask;
 
     public MainTaskIteratorImpl(ResponsitoryTask responsitoryTask) {
-        this.responsitoryTask = responsitoryTask;
+        this.mResponsitoryTask = responsitoryTask;
     }
 
     @Override
@@ -24,7 +24,7 @@ public class MainTaskIteratorImpl implements MainTaskContract.Iterator {
             Completable.fromAction(new Action() {
                 @Override
                 public void run() throws Exception {
-                    responsitoryTask.editTask(object.id,object.title,object.dateAlarm,
+                    mResponsitoryTask.editTask(object.id,object.title,object.dateAlarm,
                             object.isComplete,object.isAlarm);
                 }
             })
@@ -51,7 +51,36 @@ public class MainTaskIteratorImpl implements MainTaskContract.Iterator {
     }
 
     @Override
+    public void insertData(Task object, OnFinishListener onFinishListener) {
+        Completable.fromAction(new Action() {
+            @Override
+            public void run() throws Exception {
+                mResponsitoryTask.insertTask(object);
+            }
+        })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new CompletableObserver() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        onFinishListener.onInsertSuccess(object);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        onFinishListener.onFailture(e);
+
+                    }
+                });
+    }
+
+    @Override
     public void getData(OnFinishListener onFinishListener) {
-        Iterator.getAllTask(responsitoryTask,onFinishListener);
+        Iterator.getAllTask(mResponsitoryTask,onFinishListener);
     }
 }

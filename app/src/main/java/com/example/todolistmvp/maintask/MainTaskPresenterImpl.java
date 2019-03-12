@@ -39,6 +39,14 @@ public class MainTaskPresenterImpl implements MainTaskContract.Presenter,
     }
 
     @Override
+    public void onClickAdd(String title) {
+        if(title.trim().length()>0){
+            Task task = new Task.Builder().createTask(title);
+            iterator.insertData(task,this);
+        }
+    }
+
+    @Override
     public void onClickItem(int position,Task task) {
         view.navigateEditTask(position,task);
     }
@@ -62,6 +70,12 @@ public class MainTaskPresenterImpl implements MainTaskContract.Presenter,
     @Override
     public void onRemoveData(int position) {
         view.onRemoveSuccess(position);
+    }
+
+    @Override
+    public void onInsertSuccess(Task object) {
+        view.refreshEditText();
+        view.onInsertSuccess(object);
     }
 
     @Override

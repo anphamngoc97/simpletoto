@@ -9,6 +9,7 @@
     <string name="btn_name_add">Add</string>
     <string name="btn_name_update">Update</string>
     <string name="hintInputTask">Title</string>
+    <string name="hintAddTitle">Add a task</string>
     <string name="category">Category</string>
     <string name="priority">Priority</string>
 

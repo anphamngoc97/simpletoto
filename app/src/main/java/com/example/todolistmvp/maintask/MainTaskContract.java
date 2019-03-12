@@ -11,6 +11,8 @@ public interface MainTaskContract {
     interface View extends BaseView {
         void refreshData(List<Task> tasks);
 
+        void refreshEditText();
+
         void onUpdateSuccess(int position,Task task);
 
         void onInsertSuccess(Task task);
@@ -28,6 +30,8 @@ public interface MainTaskContract {
         void loadData();
 
         void onClickItem(int position,Task object);
+
+        void onClickAdd(String title);
 
         void updateCompleteData(int position,Task object,boolean checked);
 
@@ -49,7 +53,11 @@ public interface MainTaskContract {
 
             void onUpdateSuccess(int position,Task task);
 
+            void onInsertSuccess(Task object);
         }
+
+        void insertData(Task object, OnFinishListener onFinishListener);
+
 
         void updateData(int position,Task object, OnFinishListener onFinishListener);
 

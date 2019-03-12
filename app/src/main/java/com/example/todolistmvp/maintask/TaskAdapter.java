@@ -1,9 +1,7 @@
 package com.example.todolistmvp.maintask;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,10 +11,9 @@ import android.widget.TextView;
 
 import com.bigmercu.cBox.CheckBox;
 import com.example.todolistmvp.R;
+import com.example.todolistmvp.util.CommonFuntion;
 import com.example.todolistmvp.util.helper.ITouchHelperAdapter;
 import com.example.todolistmvp.util.room.model.Task;
-import com.example.todolistmvp.util.CommonFuntion;
-import com.example.todolistmvp.util.Showlog;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -90,7 +87,6 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.Holder> implem
     public void insert(Task task){
         taskList.add(task);
         notifyItemInserted(taskList.size());
-
     }
     public void insert(List<Task> tasks){
         taskList.addAll(tasks);
@@ -112,7 +108,6 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.Holder> implem
             ButterKnife.bind(this, itemView);
 
             defaultBackground = itemView.getBackground();
-            Showlog.d("init holder: " + defaultBackground);
             onClick();
         }
 
@@ -170,15 +165,10 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.Holder> implem
             if (taskList.get(position).isComplete != checkboxTask.isChecked()) {
                 checkboxTask.setChecked(taskList.get(position).isComplete);
 
-                Showlog.d("binding: " + checkboxTask.isChecked());
-
-
                 if(checkboxTask.isChecked()){
-                    Showlog.d("complete");
                     itemView.setBackgroundColor(context.getResources()
                             .getColor(R.color.colorCompleteTask));
                 }else{
-                    Showlog.d("default bg after: " + defaultBackground);
                     itemView.setBackground(defaultBackground);
                 }
 
