@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.bigmercu.cBox.CheckBox;
 import com.example.todolistmvp.R;
 import com.example.todolistmvp.util.CommonFuntion;
+import com.example.todolistmvp.util.Showlog;
 import com.example.todolistmvp.util.helper.ITouchHelperAdapter;
 import com.example.todolistmvp.util.room.model.Task;
 
@@ -171,8 +172,10 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.Holder> implem
                 }else{
                     itemView.setBackground(defaultBackground);
                 }
-
             }
+
+            Showlog.d("adapter main: " + taskList.get(position).title+"_"+
+                    taskList.get(position).typeList);
         }
     }
 }
