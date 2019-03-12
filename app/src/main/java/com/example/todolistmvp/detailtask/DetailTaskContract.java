@@ -7,6 +7,9 @@ import com.example.todolistmvp.BaseView;
 
 public interface DetailTaskContract {
     interface View extends BaseView{
+        void updateDetail(String detail);
+        void updateCategory(String category);
+        void updatePriority(String priority);
         void showCateory();
         void showPriority();
         void onSave(String category,String priority);

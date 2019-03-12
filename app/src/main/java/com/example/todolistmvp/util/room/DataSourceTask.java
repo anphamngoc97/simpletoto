@@ -13,7 +13,8 @@ public interface DataSourceTask {
 
     void insertTask(Task... task);
 
-    void editTask(int id, String title, String dateAlarm,boolean isComplete, boolean isAlarm);
+    void editTask(int id, String title, String dateAlarm,boolean isComplete, boolean isAlarm,
+                  String detail,String category,String priority);
 
     void removeTask(Task... tasks);
 

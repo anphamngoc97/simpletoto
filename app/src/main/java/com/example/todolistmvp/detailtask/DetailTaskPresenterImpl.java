@@ -2,6 +2,7 @@ package com.example.todolistmvp.detailtask;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 
 import com.example.todolistmvp.R;
 import com.example.todolistmvp.util.Constant;
@@ -12,11 +13,12 @@ public class DetailTaskPresenterImpl implements DetailTaskContract.Presenter {
 
     String categorySelected = "";
     String prioritySelected = "";
-    Class prevIntent;
+    Context context;
+    //Class prevIntent;
 
-
-    public DetailTaskPresenterImpl(Intent data,DetailTaskContract.View view) {
+    public DetailTaskPresenterImpl(Context context, Intent data, DetailTaskContract.View view) {
         setView(view);
+        this.context = context;
         getData(data);
     }
 
@@ -27,9 +29,39 @@ public class DetailTaskPresenterImpl implements DetailTaskContract.Presenter {
 
     private void getData(Intent data) {
 
-        prevIntent = (Class) data
-                .getSerializableExtra(Constant.ChildConstantString.KEY_EXTRA_PREVIOUS_CLASS.getValue());
-        Showlog.d(prevIntent.getCanonicalName());
+//        prevIntent = (Class) data
+//                .getSerializableExtra(Constant.ChildConstantString.KEY_EXTRA_PREVIOUS_CLASS.getValue());
+        Bundle bundle = data.getBundleExtra(
+                Constant.ChildConstantString.KEY_EXTRA_BUNDLE_DETAIL_TASK.getValue());
+
+        if (bundle != null) {
+            prioritySelected = bundle.getString(
+                    Constant.ChildConstantString.KEY_EXTRA_TASK_PRIORITY.getValue());
+            categorySelected = bundle.getString(
+                    Constant.ChildConstantString.KEY_EXTRA_TASK_CATEGORY.getValue());
+            String detail = bundle.getString(
+                    Constant.ChildConstantString.KEY_EXTRA_TASK_DETAIL.getValue());
+
+            Showlog.d("detail receive: " + prioritySelected+"_"+categorySelected);
+            view.updateDetail(detail);
+            try {
+                String valueCategory = Constant
+                        .ChildConstantDetailTaskCategory.valueOf(categorySelected)
+                        .getValueAsLanguage(context);
+                view.updateCategory(valueCategory);
+            }catch (IllegalArgumentException e){
+                Showlog.d("exception category: " + categorySelected);
+            }
+            try {
+                String valuePriority = Constant
+                        .ChildConstantDetailTaskPriority.valueOf(prioritySelected)
+                        .getValueAsLanguage(context);
+                view.updatePriority(valuePriority);
+            }catch (IllegalArgumentException e){
+                Showlog.d("exception priority: " + prioritySelected);
+            }
+
+        }
 
     }
 
@@ -53,17 +85,17 @@ public class DetailTaskPresenterImpl implements DetailTaskContract.Presenter {
         switch (id) {
             case R.id.menuCategoryBusiness: {
                 view.onSelectCategory(context.getResources().getString(R.string.categoryBusiness));
-                categorySelected = Constant.ChildConstantDetailTaskcategory.BUSINESS.getValue();
+                categorySelected = Constant.ChildConstantDetailTaskCategory.BUSINESS.getValue();
                 break;
             }
             case R.id.menuCategoryPersonal: {
                 view.onSelectCategory(context.getResources().getString(R.string.categoryPersonal));
-                categorySelected = Constant.ChildConstantDetailTaskcategory.PERSONAL.getValue();
+                categorySelected = Constant.ChildConstantDetailTaskCategory.PERSONAL.getValue();
                 break;
             }
             case R.id.menuCategoryNone: {
                 view.onSelectCategory(context.getResources().getString(R.string.categoryNone));
-                categorySelected = Constant.ChildConstantDetailTaskcategory.NONE.getValue();
+                categorySelected = Constant.ChildConstantDetailTaskCategory.NONE.getValue();
                 break;
             }
             case R.id.menuPriorityHigh: {

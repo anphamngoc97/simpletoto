@@ -38,8 +38,9 @@ public class LocalDataSourceTask implements DataSourceTask {
     }
 
     @Override
-    public void editTask(int id, String title, String dateAlarm,boolean isComplete, boolean isAlarm) {
-        daoTask.editTask(id,title,dateAlarm,isComplete,isAlarm);
+    public void editTask(int id, String title, String dateAlarm,boolean isComplete, boolean isAlarm,
+                         String detail,String category,String priority) {
+        daoTask.editTask(id,title,dateAlarm,isComplete,isAlarm,detail,category,priority);
     }
 
     @Override

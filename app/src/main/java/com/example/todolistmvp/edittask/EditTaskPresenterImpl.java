@@ -2,14 +2,13 @@ package com.example.todolistmvp.edittask;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.design.widget.Snackbar;
+import android.os.Bundle;
 
-import com.example.todolistmvp.R;
 import com.example.todolistmvp.util.CommonFuntion;
 import com.example.todolistmvp.util.Constant;
+import com.example.todolistmvp.util.Showlog;
 import com.example.todolistmvp.util.alarm.AlarmUtil;
 import com.example.todolistmvp.util.room.model.Task;
-import com.example.todolistmvp.util.Showlog;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -78,7 +77,17 @@ public class EditTaskPresenterImpl implements EditTaskContract.Presenter,
 
     @Override
     public void detailTaskClick() {
-        view.navigateDetailTask();
+
+        Bundle  bundle = new Bundle();
+        bundle.putString(Constant.ChildConstantString.KEY_EXTRA_TASK_DETAIL.getValue(),
+                mTask.subTask);
+        bundle.putString(Constant.ChildConstantString.KEY_EXTRA_TASK_CATEGORY.getValue(),
+                mTask.typeList);
+        bundle.putString(Constant.ChildConstantString.KEY_EXTRA_TASK_PRIORITY.getValue(),
+                mTask.tag);
+
+        Showlog.d("before navigate detail task: " + mTask.typeList+"_"+mTask.tag);
+        view.navigateDetailTask(bundle);
     }
 
     @Override
@@ -89,7 +98,6 @@ public class EditTaskPresenterImpl implements EditTaskContract.Presenter,
     @Override
     public void removeData() {
         iterator.removeData(mTask, this);
-
     }
 
 
@@ -135,8 +143,6 @@ public class EditTaskPresenterImpl implements EditTaskContract.Presenter,
                 mTask.title = title;
 
                 view.onUpdateTaskClick(mTask);
-
-
             } else {
                 view.showErrorReminder();
             }

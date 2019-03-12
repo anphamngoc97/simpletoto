@@ -1,6 +1,7 @@
 package com.example.todolistmvp.edittask;
 
 import android.content.Intent;
+import android.os.Bundle;
 
 import com.example.todolistmvp.BaseIterator;
 import com.example.todolistmvp.BasePresenter;
@@ -20,7 +21,7 @@ public interface EditTaskContract {
         void onRemoveClick();
         void showErrorInput();
         void showErrorReminder();
-        void navigateDetailTask();
+        void navigateDetailTask(Bundle bundle);
 
 
     }

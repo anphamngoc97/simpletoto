@@ -22,7 +22,9 @@ public class EditTaskIteratorImpl implements EditTaskContract.Iterator {
         Completable.fromAction(new Action() {
             @Override
             public void run() throws Exception {
-                responsitoryTask.editTask(object.id,object.title,object.dateAlarm,object.isComplete,object.isAlarm);
+                responsitoryTask.editTask(
+                        object.id,object.title,object.dateAlarm,object.isComplete,object.isAlarm,
+                        object.subTask,object.typeList, object.tag);
             }
         })
                 .observeOn(AndroidSchedulers.mainThread())

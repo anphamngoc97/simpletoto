@@ -35,8 +35,9 @@ public class ResponsitoryTask implements DataSourceTask {
     }
 
     @Override
-    public void editTask(int id, String title, String dateAlarm, boolean isComplete, boolean isAlarm) {
-        dataSourceTask.editTask(id, title, dateAlarm, isComplete, isAlarm);
+    public void editTask(int id, String title, String dateAlarm, boolean isComplete, boolean isAlarm,
+                         String detail,String category,String priority) {
+        dataSourceTask.editTask(id, title, dateAlarm, isComplete, isAlarm,detail,category,priority);
     }
 
     @Override

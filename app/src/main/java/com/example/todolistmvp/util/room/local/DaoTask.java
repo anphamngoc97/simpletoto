@@ -22,8 +22,10 @@ public interface DaoTask {
     void insertTask(Task... task);
 
     @Query("UPDATE Task SET title=:title,dateAlarm=:dateAlarm," +
-            "isComplete=:isComplete, isAlarm=:isAlarm WHERE id=:id")
-    void editTask(int id, String title, String dateAlarm,boolean isComplete, boolean isAlarm);
+            "isComplete=:isComplete, isAlarm=:isAlarm,subTask=:detail,typeList=:category, " +
+            "tag=:priority WHERE id=:id")
+    void editTask(int id, String title, String dateAlarm,boolean isComplete, boolean isAlarm,
+                  String detail,String category,String priority);
 
     @Delete
     void removeTask(Task... tasks);

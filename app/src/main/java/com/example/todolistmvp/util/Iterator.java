@@ -109,7 +109,9 @@ public class Iterator {
         Completable.fromAction(new Action() {
             @Override
             public void run() throws Exception {
-                responsitoryTask.editTask(task.id,task.title,task.dateAlarm,task.isComplete,task.isAlarm);
+                responsitoryTask.editTask(
+                        task.id,task.title,task.dateAlarm,task.isComplete,task.isAlarm,
+                        task.subTask,task.typeList,task.tag);
             }
         })
                 .observeOn(AndroidSchedulers.mainThread())

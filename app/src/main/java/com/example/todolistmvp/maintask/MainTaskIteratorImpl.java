@@ -25,7 +25,7 @@ public class MainTaskIteratorImpl implements MainTaskContract.Iterator {
                 @Override
                 public void run() throws Exception {
                     mResponsitoryTask.editTask(object.id,object.title,object.dateAlarm,
-                            object.isComplete,object.isAlarm);
+                            object.isComplete,object.isAlarm, object.subTask,object.typeList,object.tag);
                 }
             })
                     .observeOn(AndroidSchedulers.mainThread())

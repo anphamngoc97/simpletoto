@@ -39,7 +39,22 @@ public class DetailTaskActivity extends AppCompatActivity implements DetailTaskC
     }
 
     private void init() {
-        presenter = new DetailTaskPresenterImpl(getIntent(),this);
+        presenter = new DetailTaskPresenterImpl(this,getIntent(),this);
+    }
+
+    @Override
+    public void updateDetail(String detail) {
+        editDetaiTask.setText(detail);
+    }
+
+    @Override
+    public void updateCategory(String category) {
+        btnCategory.setText(category);
+    }
+
+    @Override
+    public void updatePriority(String priority) {
+        btnPriority.setText(priority);
     }
 
     private void onClick() {

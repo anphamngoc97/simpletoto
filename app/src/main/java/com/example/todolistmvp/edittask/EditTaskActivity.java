@@ -29,18 +29,15 @@ import android.widget.TextView;
 import com.example.todolistmvp.BaseActivity;
 import com.example.todolistmvp.R;
 import com.example.todolistmvp.detailtask.DetailTaskActivity;
-import com.example.todolistmvp.util.Showlog;
-import com.example.todolistmvp.util.alarm.AlarmUtil;
 import com.example.todolistmvp.maintask.MainTaskActivity;
+import com.example.todolistmvp.util.Constant;
+import com.example.todolistmvp.util.Showlog;
 import com.example.todolistmvp.util.room.ResponsitoryTask;
 import com.example.todolistmvp.util.room.model.Task;
 import com.example.todolistmvp.util.roomdagger.AppModule;
 import com.example.todolistmvp.util.roomdagger.DaggerRoomComponent;
 import com.example.todolistmvp.util.roomdagger.RoomComponent;
-import com.example.todolistmvp.util.CommonFuntion;
-import com.example.todolistmvp.util.Constant;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import javax.inject.Inject;
@@ -208,12 +205,13 @@ public class EditTaskActivity extends BaseActivity implements EditTaskContract.V
     }
 
     @Override
-    public void navigateDetailTask() {
+    public void navigateDetailTask(Bundle bundle) {
 
         Intent intent = new Intent(this, DetailTaskActivity.class);
 
         intent.putExtra(Constant.ChildConstantString.KEY_EXTRA_PREVIOUS_CLASS.getValue(),
                 this.getClass());
+        intent.putExtra(Constant.ChildConstantString.KEY_EXTRA_BUNDLE_DETAIL_TASK.getValue(),bundle);
 
         startActivityForResult(intent,
                 Constant.ChildConstantNumber.REQUEST_CODE_ADD_DETAIL_TASK.getValue());
@@ -222,7 +220,7 @@ public class EditTaskActivity extends BaseActivity implements EditTaskContract.V
     private void onClickBtnUpdate() {
         String title = editTitle.getText().toString().trim();
         boolean isCheck = switchReminder.isChecked();
-        presenter.addTaskClick(title,isCheck);;
+        presenter.addTaskClick(title,isCheck);
     }
 
     @Override
@@ -238,6 +236,7 @@ public class EditTaskActivity extends BaseActivity implements EditTaskContract.V
     @Override
     public void onUpdateTaskClick(Task task) {
         presenter.updateData(task);
+        Showlog.d("edit update: " + task.tag+"_"+task.typeList);
     }
 
     @Override

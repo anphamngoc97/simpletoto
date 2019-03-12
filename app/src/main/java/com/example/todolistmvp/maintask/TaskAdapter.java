@@ -175,7 +175,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.Holder> implem
             }
 
             Showlog.d("adapter main: " + taskList.get(position).title+"_"+
-                    taskList.get(position).typeList);
+                    taskList.get(position).typeList+"_"+taskList.get(position).tag);
         }
     }
 }

@@ -28,6 +28,7 @@ public class Constant {
         KEY_EXTRA_ADD_TASK,
         KEY_EXTRA_IS_REMOVE,
         KEY_EXTRA_PREVIOUS_CLASS,
+        KEY_EXTRA_BUNDLE_DETAIL_TASK,
         KEY_EXTRA_TASK_DETAIL,
         KEY_EXTRA_TASK_PRIORITY,
         KEY_EXTRA_TASK_CATEGORY;
@@ -66,7 +67,7 @@ public class Constant {
             }
         }
     }
-    public enum ChildConstantDetailTaskcategory{
+    public enum ChildConstantDetailTaskCategory {
         NONE,
         PERSONAL,
         BUSINESS;
