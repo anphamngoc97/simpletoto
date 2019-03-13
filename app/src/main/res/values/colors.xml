@@ -17,4 +17,9 @@
 
     <color name="colorGreyBackground">#BFBFBF</color>
     <color name="colorItemBackground">#BED1BE</color>
+
+    <color name="colorHighPriority">#FF00</color>
+    <color name="colorMediumPriority">#D1B423</color>
+    <color name="colorLowPriority">#2ADD2D</color>
+    <color name="colorNonePriority">#484D48</color>
 </resources>

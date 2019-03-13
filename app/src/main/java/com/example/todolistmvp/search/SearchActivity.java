@@ -214,8 +214,6 @@ public class SearchActivity extends AppCompatActivity implements SearchContract.
                                         .KEY_EXTRA_EDIT_TASK_POSITION.getValue(),
                                 0);
 
-
-                //todo update and remove list
                 if (isRemove) {
                     //mTasks.remove(position);
                     //mTaskAdapter.notifyItemRemoved(position);

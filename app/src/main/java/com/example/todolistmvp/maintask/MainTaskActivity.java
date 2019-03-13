@@ -80,7 +80,7 @@ public class MainTaskActivity extends BaseActivity implements MainTaskContract.V
 
     }
 
-    private void unfocusEditText() {
+    private void unfocusedEditText() {
         editTitle.setFocusableInTouchMode(false);
         editTitle.clearFocus();
         editTitle.setFocusableInTouchMode(true);
@@ -114,6 +114,7 @@ public class MainTaskActivity extends BaseActivity implements MainTaskContract.V
                 mPresenter.updateCompleteData(position, task, checked);
             }
         });
+
     }
 
     private void loadData() {
@@ -135,7 +136,7 @@ public class MainTaskActivity extends BaseActivity implements MainTaskContract.V
     @Override
     public void refreshEditText() {
         editTitle.setText("");
-        unfocusEditText();
+        unfocusedEditText();
     }
 
     @Override
@@ -203,7 +204,6 @@ public class MainTaskActivity extends BaseActivity implements MainTaskContract.V
 
     }
 
-    //todo fix mvc->mvp
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

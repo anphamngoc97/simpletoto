@@ -7,7 +7,6 @@ import com.example.todolistmvp.R;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.concurrent.TimeUnit;
 
 public class CommonFuntion {
     public static Calendar getDateFromString(String s) {
@@ -72,6 +71,32 @@ public class CommonFuntion {
 
         return "Remain: " + dayString + " " + hourString + " " + minString;
     }
+
+    public static Constant.ChildConstantDetailTaskPriority getPriority(String priority) {
+        Showlog.d("getPriority: " + priority);
+        try {
+            Constant.ChildConstantDetailTaskPriority valuePriority = Constant
+                    .ChildConstantDetailTaskPriority.valueOf(priority);
+
+            return valuePriority;
+        } catch (IllegalArgumentException e) {
+            Showlog.d("error commonfunction get priority holder:" +priority+"_"+ e.getMessage());
+            return null;
+        }
+    }
+    public static Constant.ChildConstantDetailTaskCategory getCategory(String category) {
+        try {
+            Constant.ChildConstantDetailTaskCategory valueCategory = Constant
+                    .ChildConstantDetailTaskCategory.valueOf(category);
+
+            return valueCategory;
+        } catch (IllegalArgumentException e) {
+            Showlog.d(" error commonfunction get category holder: " +category+"_"+ e.getMessage());
+            return null;
+        }
+    }
+
+
 
     //kmp algorithm
     private static int[] kMap(String s) {
