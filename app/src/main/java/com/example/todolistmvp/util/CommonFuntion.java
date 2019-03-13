@@ -73,14 +73,13 @@ public class CommonFuntion {
     }
 
     public static Constant.ChildConstantDetailTaskPriority getPriority(String priority) {
-        Showlog.d("getPriority: " + priority);
         try {
             Constant.ChildConstantDetailTaskPriority valuePriority = Constant
                     .ChildConstantDetailTaskPriority.valueOf(priority);
 
             return valuePriority;
         } catch (IllegalArgumentException e) {
-            Showlog.d("error commonfunction get priority holder:" +priority+"_"+ e.getMessage());
+            //Showlog.d("error commonfunction get priority holder:" +priority+"_"+ e.getMessage());
             return null;
         }
     }
@@ -91,7 +90,7 @@ public class CommonFuntion {
 
             return valueCategory;
         } catch (IllegalArgumentException e) {
-            Showlog.d(" error commonfunction get category holder: " +category+"_"+ e.getMessage());
+            //Showlog.d(" error commonfunction get category holder: " +category+"_"+ e.getMessage());
             return null;
         }
     }

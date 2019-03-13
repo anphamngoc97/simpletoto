@@ -9,8 +9,10 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -66,6 +68,7 @@ public class MainTaskActivity extends BaseActivity implements MainTaskContract.V
         ButterKnife.bind(this);
 
         init();
+        setUpView();
         setUpRecyclerView();
         onClick();
 
@@ -79,12 +82,26 @@ public class MainTaskActivity extends BaseActivity implements MainTaskContract.V
         mPresenter = new MainTaskPresenterImpl(this, new MainTaskIteratorImpl(mResponsitoryTask));
 
     }
+    private void setUpView(){
+        unfocusedEditText();
+        editTitle.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    mPresenter.onClickAdd(editTitle.getText().toString());
+                    hideSoftKeyboard();
+                    return true;
+                }
+                return false;
+            }
+        });
+    }
 
     private void unfocusedEditText() {
         editTitle.setFocusableInTouchMode(false);
         editTitle.clearFocus();
         editTitle.setFocusableInTouchMode(true);
-        hideSoftKeyboard();
+//        hideSoftKeyboard();
     }
 
     private void setUpRecyclerView() {
@@ -258,6 +275,7 @@ public class MainTaskActivity extends BaseActivity implements MainTaskContract.V
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
+        super.dispatchTouchEvent(ev);
         if (ev.getAction() == MotionEvent.ACTION_DOWN) {
             View v = getCurrentFocus();
             if (editTitle.isFocused()) {
@@ -268,9 +286,12 @@ public class MainTaskActivity extends BaseActivity implements MainTaskContract.V
                     editTitle.clearFocus();
                     editTitle.setFocusableInTouchMode(true);
                     hideSoftKeyboard();
+
+                    Showlog.d("hiding keyboard");
+
                 }
             }
         }
-        return super.dispatchTouchEvent(ev);
+        return true;
     }
 }

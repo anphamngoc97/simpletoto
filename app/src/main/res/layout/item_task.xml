@@ -57,6 +57,7 @@
             android:layout_height="0dp"
 
             app:layout_constraintHeight_percent="0.3"
+            android:layout_marginTop="@dimen/marginItemVertical"
 
             app:layout_constraintTop_toBottomOf="@id/txtvTimeRemain"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -83,6 +84,7 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
 
+                android:gravity="bottom"
                 app:layout_constraintHorizontal_weight="4"
 
                 app:layout_constraintTop_toTopOf="parent"

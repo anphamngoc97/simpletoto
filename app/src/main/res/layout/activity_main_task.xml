@@ -101,6 +101,8 @@
             style="@style/Base.Widget.AppCompat.EditText"
             android:paddingLeft="10dp"
             android:maxLines="1"
+            android:singleLine="true"
+            android:imeOptions="actionDone"
 
             app:layout_constraintHorizontal_weight="4"
             app:layout_constraintTop_toTopOf="parent"
