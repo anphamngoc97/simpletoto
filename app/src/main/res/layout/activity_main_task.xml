@@ -78,6 +78,8 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
 
+        android:focusableInTouchMode="true"
+
         app:layout_constraintVertical_weight="1"
         android:background="@drawable/background_edit_title"
         android:layout_marginLeft="@dimen/marginItemHorizontal"

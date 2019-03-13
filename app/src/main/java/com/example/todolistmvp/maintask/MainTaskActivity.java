@@ -101,7 +101,7 @@ public class MainTaskActivity extends BaseActivity implements MainTaskContract.V
         editTitle.setFocusableInTouchMode(false);
         editTitle.clearFocus();
         editTitle.setFocusableInTouchMode(true);
-//        hideSoftKeyboard();
+        //hideSoftKeyboard();
     }
 
     private void setUpRecyclerView() {

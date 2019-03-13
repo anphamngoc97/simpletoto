@@ -9,9 +9,12 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
 
+import com.example.todolistmvp.util.Showlog;
+
 public class BaseActivity extends AppCompatActivity {
 
     ViewGroup parentLayout;
+    boolean isKeyboardShowing = false;
 
     private ViewTreeObserver.OnGlobalLayoutListener onGlobalLayoutListener =
             new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -52,22 +55,28 @@ public class BaseActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         parentLayout.getViewTreeObserver().addOnGlobalLayoutListener(onGlobalLayoutListener);
-
+        Showlog.d("start add listener");
     }
 
     public void showSoftKeyboard(){
         InputMethodManager inputMethodManager = (InputMethodManager)
                 getSystemService(Service.INPUT_METHOD_SERVICE);
 
-        inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
-
+        if(!isKeyboardShowing) {
+            inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+        }
+        isKeyboardShowing = true;
     }
     public void hideSoftKeyboard(){
         InputMethodManager inputMethodManager = (InputMethodManager)
                 getSystemService(Service.INPUT_METHOD_SERVICE);
 
-        inputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY,0);
+
+        if(isKeyboardShowing) {
+            inputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+        }
 //        inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),0);
+        isKeyboardShowing = false;
     }
     public void onShowKeyBoard(int keyboardHeight){
 
@@ -81,5 +90,7 @@ public class BaseActivity extends AppCompatActivity {
         super.onPause();
         hideSoftKeyboard();
         parentLayout.getViewTreeObserver().removeOnGlobalLayoutListener(onGlobalLayoutListener);
+        Showlog.d("pause remove listener");
     }
+
 }

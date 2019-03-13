@@ -3,12 +3,10 @@ package com.example.todolistmvp.edittask;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.app.Service;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
@@ -20,7 +18,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Switch;
@@ -128,13 +125,14 @@ public class EditTaskActivity extends BaseActivity implements EditTaskContract.V
         });
         layoutTitle.setBoxStrokeColor(BACKGROUND_INPUT_VALID);
 
-        new Handler().post(() -> {
-            editTitle.requestFocus();
-            InputMethodManager inputMethodManager = (InputMethodManager)
-                    getSystemService(Service.INPUT_METHOD_SERVICE);
-
-            inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-        });
+        editTitle.requestFocus();
+        showSoftKeyboard();
+        Showlog.d("handler show soft keyboard");
+//        new Handler().post(() -> {
+//            editTitle.requestFocus();
+//            showSoftKeyboard();
+//            Showlog.d("handler show soft keyboard");
+//        });
 
         editTitle.addTextChangedListener(new TextWatcher() {
             @Override
@@ -160,10 +158,7 @@ public class EditTaskActivity extends BaseActivity implements EditTaskContract.V
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    InputMethodManager inputMethodManager = (InputMethodManager)
-                            getSystemService(Service.INPUT_METHOD_SERVICE);
-
-                    inputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+                    hideSoftKeyboard();
                     return true;
                 }
 
@@ -359,6 +354,7 @@ public class EditTaskActivity extends BaseActivity implements EditTaskContract.V
         btnUpdateShowKeyBoard.setVisibility(View.VISIBLE);
         btnUpdate.setVisibility(View.INVISIBLE);
         isKeyboardShowing = true;
+        Showlog.d("onshowwkeyboard");
     }
 
     @Override
@@ -367,6 +363,8 @@ public class EditTaskActivity extends BaseActivity implements EditTaskContract.V
         btnUpdateShowKeyBoard.setVisibility(View.INVISIBLE);
         btnUpdate.setVisibility(View.VISIBLE);
         isKeyboardShowing = false;
+        Showlog.d("onhide");
+
     }
 
     @Override
