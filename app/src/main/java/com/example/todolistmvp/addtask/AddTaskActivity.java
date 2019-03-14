@@ -138,6 +138,9 @@ public class AddTaskActivity extends BaseActivity implements AddTaskContract.Vie
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    editTitle.setFocusableInTouchMode(false);
+                    editTitle.clearFocus();
+                    editTitle.setFocusableInTouchMode(true);
                     hideSoftKeyboard();
                     return true;
                 }

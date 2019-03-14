@@ -100,6 +100,8 @@
                 android:id="@+id/btnUpdateShowKeyBoard"
                 android:background="@drawable/background_finish_button"
 
+                android:visibility="invisible"
+
                 android:text="@string/btn_name_update"
                 android:textColor="#FFFF"
                 android:textAlignment="center"

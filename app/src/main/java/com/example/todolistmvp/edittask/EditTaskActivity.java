@@ -17,6 +17,8 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationSet;
+import android.view.animation.TranslateAnimation;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -80,6 +82,7 @@ public class EditTaskActivity extends BaseActivity implements EditTaskContract.V
     EditTaskContract.Presenter presenter;
 
     boolean isKeyboardShowing = false;
+    int heighKeyboard;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -158,6 +161,9 @@ public class EditTaskActivity extends BaseActivity implements EditTaskContract.V
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    editTitle.setFocusableInTouchMode(false);
+                    editTitle.clearFocus();
+                    editTitle.setFocusableInTouchMode(true);
                     hideSoftKeyboard();
                     return true;
                 }
@@ -351,18 +357,27 @@ public class EditTaskActivity extends BaseActivity implements EditTaskContract.V
     @Override
     public void onShowKeyBoard(int keyboardHeight) {
         super.onShowKeyBoard(keyboardHeight);
-        btnUpdateShowKeyBoard.setVisibility(View.VISIBLE);
-        btnUpdate.setVisibility(View.INVISIBLE);
-        isKeyboardShowing = true;
+
+        this.heighKeyboard = keyboardHeight;
+
+
+        //todo test
+//        btnUpdateShowKeyBoard.setVisibility(View.VISIBLE);
+//        btnUpdate.setVisibility(View.INVISIBLE);
+//        isKeyboardShowing = true;
+        animateMoveUpButton(this.heighKeyboard);
         Showlog.d("onshowwkeyboard");
     }
 
     @Override
     public void onHideKeyboard() {
         super.onHideKeyboard();
-        btnUpdateShowKeyBoard.setVisibility(View.INVISIBLE);
-        btnUpdate.setVisibility(View.VISIBLE);
-        isKeyboardShowing = false;
+
+        //todo test
+//        btnUpdateShowKeyBoard.setVisibility(View.INVISIBLE);
+//        btnUpdate.setVisibility(View.VISIBLE);
+//        isKeyboardShowing = false;
+        animateMoveDownButton(this.heighKeyboard);
         Showlog.d("onhide");
 
     }
@@ -376,5 +391,33 @@ public class EditTaskActivity extends BaseActivity implements EditTaskContract.V
                 presenter.onReceiveResult(data);
             }
         }
+    }
+
+
+    private void animateMoveUpButton(int heightKeyboard){
+        AnimationSet animationSet = new AnimationSet(this,null);
+        int centerX,centerY;
+        centerX = btnAddDetail.getBottom()-btnAddDetail.getHeight()/2;
+        centerY = btnAddDetail.getRight()-btnAddDetail.getWidth()/2;
+        TranslateAnimation translateAnimation = new TranslateAnimation(centerX,centerX,
+                centerY,centerY-heightKeyboard);
+
+
+        Showlog.d("before translate: " + btnAddDetail.getBottom()+
+                " keyboard height: " + heightKeyboard);
+//        btnAddDetail.startAnimation(translateAnimation);
+        animationSet.addAnimation(translateAnimation);
+        btnAddDetail.startAnimation(animationSet);
+        Showlog.d("after translate: " + btnAddDetail.getBottom());
+    }
+    private void animateMoveDownButton(int heightKeyboard){
+        AnimationSet animationSet = new AnimationSet(this,null);
+        int centerX,centerY;
+        centerX = btnAddDetail.getBottom()-btnAddDetail.getHeight()/2;
+        centerY = btnAddDetail.getRight()-btnAddDetail.getWidth()/2;
+        TranslateAnimation translateAnimation = new TranslateAnimation(centerX,centerX,
+                centerY,centerY+heightKeyboard);
+
+        btnAddDetail.startAnimation(translateAnimation);
     }
 }
