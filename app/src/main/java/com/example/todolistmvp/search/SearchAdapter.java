@@ -2,7 +2,6 @@ package com.example.todolistmvp.search;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,9 +11,9 @@ import android.widget.Filterable;
 import android.widget.TextView;
 
 import com.example.todolistmvp.R;
-import com.example.todolistmvp.util.room.model.Task;
 import com.example.todolistmvp.util.CommonFuntion;
 import com.example.todolistmvp.util.Showlog;
+import com.example.todolistmvp.util.room.model.Task;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -150,9 +149,8 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.Holder> im
             if (results == null) {
                 mTasksSearch.clear();
             } else {
-                if (results.values != null) {
                     mTasksSearch = (ArrayList<Task>) results.values;
-                }
+                    Showlog.d("publish search: " + mTasksSearch.size());
             }
             notifyDataSetChanged();
         }

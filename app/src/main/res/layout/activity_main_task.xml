@@ -7,7 +7,8 @@
 
     android:background="@drawable/background_activity"
 
-    tools:context=".maintask.MainTaskActivity">
+    tools:context=".maintask.MainTaskActivity"
+    app:layout_constraintHorizontal_chainStyle="packed">
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/groupTitle"
@@ -18,7 +19,7 @@
         android:background="@color/colorTitle"
 
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/groupAddTask"
+        app:layout_constraintBottom_toTopOf="@id/groupBody"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintHorizontal_chainStyle="packed">
@@ -64,7 +65,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintHorizontal_weight="2"
-            app:layout_constraintHeight_percent="0.5"
+            app:layout_constraintHeight_percent="0.7"
 
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -74,109 +75,125 @@
     </android.support.constraint.ConstraintLayout>
 
     <android.support.constraint.ConstraintLayout
-        android:id="@+id/groupAddTask"
-        android:layout_width="match_parent"
+        android:id="@+id/groupBody"
+        android:layout_width="0dp"
         android:layout_height="0dp"
 
-        android:focusableInTouchMode="true"
-
-        app:layout_constraintVertical_weight="1"
-        android:background="@drawable/background_edit_title"
-        android:layout_marginLeft="@dimen/marginItemHorizontal"
-        android:layout_marginRight="@dimen/marginItemHorizontal"
-        android:layout_marginTop="@dimen/marginItemHorizontal"
-        android:layout_marginBottom="@dimen/marginItemHorizontal"
-
-        app:layout_constraintTop_toBottomOf="@id/groupTitle"
-        app:layout_constraintBottom_toTopOf="@id/groupContent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintHorizontal_chainStyle="packed">
-        <EditText
-            android:id="@+id/editTitle"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:focusedByDefault="false"
-            android:hint="@string/hintAddTitle"
-
-            android:background="@null"
-            style="@style/Base.Widget.AppCompat.EditText"
-            android:maxLines="1"
-            android:singleLine="true"
-            android:imeOptions="actionDone"
-
-            app:layout_constraintHorizontal_weight="6"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintLeft_toRightOf="@id/btnAdd"/>
-        <ImageButton
-            android:id="@+id/btnAdd"
-            android:src="@drawable/ic_plus_add"
-            android:background="@null"
-
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:scaleX="0.5"
-            android:scaleY="0.5"
-            android:layout_gravity="left"
-            app:layout_constraintHorizontal_weight="1"
-
-            app:layout_constraintTop_toTopOf="@id/editTitle"
-            app:layout_constraintBottom_toBottomOf="@id/editTitle"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toLeftOf="@id/editTitle"/>
-    </android.support.constraint.ConstraintLayout>
-
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/groupContent"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
         app:layout_constraintVertical_weight="11"
 
-        app:layout_constraintTop_toBottomOf="@id/groupAddTask"
+        app:layout_constraintTop_toBottomOf="@id/groupTitle"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycleTask"
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/groupAddTask"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
+
+            android:focusableInTouchMode="true"
+
+            app:layout_constraintVertical_weight="1"
+            android:background="@drawable/background_edit_title"
+            android:layout_marginLeft="@dimen/marginItemHorizontal"
+            android:layout_marginRight="@dimen/marginItemHorizontal"
+            android:layout_marginTop="@dimen/marginItemHorizontal"
+            android:layout_marginBottom="@dimen/marginItemHorizontal"
 
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/groupContent"
+            app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"/>
-        <TextView
-            android:id="@+id/txtvContentMain"
-            android:text="@string/content_main_task"
-            android:gravity="center"
-            android:textSize="@dimen/textSizeTitle"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            app:layout_constraintHorizontal_chainStyle="packed">
+            <EditText
+                android:id="@+id/editTitle"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:focusedByDefault="false"
+                android:hint="@string/hintAddTitle"
 
+                android:background="@null"
+                style="@style/Base.Widget.AppCompat.EditText"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:imeOptions="actionDone"
+
+                app:layout_constraintHorizontal_weight="6"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintLeft_toRightOf="@id/btnAdd"/>
+            <ImageButton
+                android:id="@+id/btnAdd"
+                android:src="@drawable/ic_plus_add"
+                android:background="@null"
+
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:scaleX="0.5"
+                android:scaleY="0.5"
+                android:layout_gravity="left"
+                app:layout_constraintHorizontal_weight="1"
+
+                app:layout_constraintTop_toTopOf="@id/editTitle"
+                app:layout_constraintBottom_toBottomOf="@id/editTitle"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@id/editTitle"/>
+        </android.support.constraint.ConstraintLayout>
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/groupContent"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintVertical_weight="11"
+
+            app:layout_constraintTop_toBottomOf="@id/groupAddTask"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycleTask"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"/>
+            <TextView
+                android:id="@+id/txtvContentMain"
+                android:text="@string/content_main_task"
+                android:gravity="center"
+                android:textSize="@dimen/textSizeTitle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"/>
+
+        </android.support.constraint.ConstraintLayout>
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/floatBtnAdd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#1337A5"
+            android:src="@drawable/ic_plus"
+            android:visibility="invisible"
+
+            app:layout_constraintHorizontal_bias="0.9"
+            app:layout_constraintVertical_bias="0.9"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"/>
+            app:layout_constraintRight_toRightOf="parent"
+            />
+
 
     </android.support.constraint.ConstraintLayout>
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/floatBtnAdd"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="#1337A5"
-        android:src="@drawable/ic_plus"
-        android:visibility="invisible"
-
-        app:layout_constraintHorizontal_bias="0.9"
-        app:layout_constraintVertical_bias="0.9"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        />
 
 
 </android.support.constraint.ConstraintLayout>

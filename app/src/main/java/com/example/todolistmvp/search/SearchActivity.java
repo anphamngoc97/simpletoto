@@ -119,9 +119,10 @@ public class SearchActivity extends AppCompatActivity implements SearchContract.
 
     @Override
     public void onNonFilter() {
-        if(txtvTitleSearch.getVisibility() == View.VISIBLE){
-            txtvTitleSearch.setVisibility(View.INVISIBLE);
+        if(txtvTitleSearch.getVisibility() == View.INVISIBLE){
+            txtvTitleSearch.setVisibility(View.VISIBLE);
         }
+        mTaskAdapter.getFilter().filter("");
     }
 
     private void setUpSearch(){

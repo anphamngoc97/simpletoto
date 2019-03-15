@@ -3,11 +3,13 @@ package com.example.todolistmvp.maintask;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -15,6 +17,7 @@ import com.bigmercu.cBox.CheckBox;
 import com.example.todolistmvp.R;
 import com.example.todolistmvp.util.CommonFuntion;
 import com.example.todolistmvp.util.Constant;
+import com.example.todolistmvp.util.Showlog;
 import com.example.todolistmvp.util.helper.ITouchHelperAdapter;
 import com.example.todolistmvp.util.room.model.Task;
 
@@ -53,6 +56,21 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.Holder> implem
     @Override
     public void onBindViewHolder(@NonNull Holder holder, int i) {
         holder.bindTitle();
+        final ViewTreeObserver observer = holder.checkboxTask.getViewTreeObserver();
+        observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    holder.checkboxTask.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                } else {
+                    holder.checkboxTask.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                }
+
+                int containerWidth = holder.checkboxTask.getWidth();
+                int containerHeight = holder.checkboxTask.getHeight();
+                holder.updateSizeItem(containerWidth,containerHeight);
+            }
+        });
     }
 
     @Override
@@ -131,13 +149,10 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.Holder> implem
         }
 
 
-
-
         private void onClick() {
             itemView.setOnClickListener(v -> {
                 int position = getAdapterPosition();
                 //presenter.onClickItem(position,taskList.get(position));
-
                 if (onItemClick != null) {
                     onItemClick.onItemClick(position, taskList.get(position));
                 }
@@ -154,8 +169,9 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.Holder> implem
 
         }
 
-        public void bindTitle() {
+        private void bindTitle() {
             int position = getLayoutPosition();
+
             txtvTask.setText(taskList.get(position).title);
             String timeRemain = CommonFuntion.getTimeRemaining(context,
                     taskList.get(position).dateAlarm);
@@ -171,13 +187,17 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.Holder> implem
                     itemView.setBackground(defaultBackground);
                 }
             }
+
+
             setUpPriority(position);
-            setupCategory(position);
+            setUpCategory(position);
 
         }
+        public void updateSizeItem(int width,int height){
+            checkboxTask.setPadding(0,(int)(height*0.3),0,0);
+        }
 
-
-        void setUpPriority(int position) {
+        private void setUpPriority(int position) {
 
             String priorityString = taskList.get(position).tag;
             Constant.ChildConstantDetailTaskPriority priority =
@@ -187,7 +207,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.Holder> implem
                 switch (priority) {
                     case HIGH: {
                         //imgPriority.setBackgroundColor(context.getResources()
-                          //      .getColor(R.color.colorHighPriority));
+                        //      .getColor(R.color.colorHighPriority));
                         imgPriority.setBackgroundResource(R.drawable.background_priorty_hight);
                         txtvPriority.setText(priority.getValueAsLanguage(context));
                         break;
@@ -216,11 +236,12 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.Holder> implem
                                 .getValueAsLanguage(context));
                     }
                 }
-            }else{
+            } else {
                 groupPriority.setVisibility(View.GONE);
             }
         }
-        void setupCategory(int position){
+
+        private void setUpCategory(int position) {
             String categoryString = taskList.get(position).typeList;
             Constant.ChildConstantDetailTaskCategory category =
                     CommonFuntion.getCategory(categoryString);
@@ -241,7 +262,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.Holder> implem
                                 .getValueAsLanguage(context));
                     }
                 }
-            }else{
+            } else {
                 txtvCategory.setText(Constant
                         .ChildConstantDetailTaskCategory
                         .NONE

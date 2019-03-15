@@ -52,7 +52,7 @@
         android:id="@+id/groupContent"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintVertical_weight="4"
+        app:layout_constraintVertical_weight="2"
 
         android:paddingHorizontal="@dimen/paddingItemHorizontal"
 
@@ -67,7 +67,7 @@
             android:id="@+id/groupDetail"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintVertical_weight="2"
+            app:layout_constraintVertical_weight="1"
 
 
             app:layout_constraintTop_toTopOf="parent"
@@ -85,6 +85,8 @@
                 app:layout_constraintHorizontal_bias="0.95"
                 app:layout_constraintVertical_bias="0.95"
 
+                android:visibility="invisible"
+
                 android:scaleType="fitCenter"
                 android:background="@null"
                 app:layout_constraintTop_toTopOf="parent"
@@ -98,13 +100,11 @@
             android:id="@+id/groupEdit"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintHeight_percent="0.5"
 
             app:layout_constraintVertical_weight="6"
             android:paddingLeft="@dimen/paddingItemHorizontal"
             android:paddingRight="@dimen/paddingItemHorizontal"
 
-            app:layout_constraintVertical_bias="0.8"
             app:layout_constraintTop_toBottomOf="@id/groupDetail"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -165,8 +165,9 @@
             android:background="@drawable/background_time_button"
 
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
             app:layout_constraintWidth_percent="0.4"
+            app:layout_constraintHeight_percent="0.7"
 
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -181,8 +182,9 @@
             android:background="@drawable/background_time_button"
 
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
             app:layout_constraintWidth_percent="0.4"
+            app:layout_constraintHeight_percent="0.7"
 
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
