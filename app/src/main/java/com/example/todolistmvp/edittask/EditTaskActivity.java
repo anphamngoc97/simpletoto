@@ -114,8 +114,12 @@ public class EditTaskActivity extends BaseActivity implements EditTaskContract.V
 
         editTitle.setText(title);
         switchReminder.setChecked(isAlarm);
+        if(isAlarm){
+            groupTime.setVisibility(View.VISIBLE);
+        }
         if(date!=null && date.length()>0){
             btnDate.setText(date);
+
         }
         if(time!=null && time.length()>0){
             btnTime.setText(time);
@@ -130,7 +134,6 @@ public class EditTaskActivity extends BaseActivity implements EditTaskContract.V
 
         editTitle.requestFocus();
         showSoftKeyboard();
-        Showlog.d("handler show soft keyboard");
 //        new Handler().post(() -> {
 //            editTitle.requestFocus();
 //            showSoftKeyboard();
@@ -361,24 +364,20 @@ public class EditTaskActivity extends BaseActivity implements EditTaskContract.V
         this.heighKeyboard = keyboardHeight;
 
 
-        //todo test
-//        btnUpdateShowKeyBoard.setVisibility(View.VISIBLE);
-//        btnUpdate.setVisibility(View.INVISIBLE);
-//        isKeyboardShowing = true;
-        animateMoveUpButton(this.heighKeyboard);
-        Showlog.d("onshowwkeyboard");
+        btnUpdateShowKeyBoard.setVisibility(View.VISIBLE);
+        btnUpdate.setVisibility(View.INVISIBLE);
+        isKeyboardShowing = true;
+        //animateMoveUpButton(this.heighKeyboard);
     }
 
     @Override
     public void onHideKeyboard() {
         super.onHideKeyboard();
 
-        //todo test
-//        btnUpdateShowKeyBoard.setVisibility(View.INVISIBLE);
-//        btnUpdate.setVisibility(View.VISIBLE);
-//        isKeyboardShowing = false;
-        animateMoveDownButton(this.heighKeyboard);
-        Showlog.d("onhide");
+        btnUpdateShowKeyBoard.setVisibility(View.INVISIBLE);
+        btnUpdate.setVisibility(View.VISIBLE);
+        isKeyboardShowing = false;
+//        animateMoveDownButton(this.heighKeyboard);
 
     }
 

@@ -12,9 +12,8 @@
     <dimen name="paddingItemHorizontal">7dp</dimen>
     <dimen name="paddingContent">5dp</dimen>
 
-    <dimen name="smallStroke">-0.8dp</dimen>
+    <dimen name="smallStroke">-1.8dp</dimen>
     <dimen name="bigStroke">1.2dp</dimen>
-
     <dimen name="borderTitlePositive">1dp</dimen>
     <dimen name="borderTitleNegative">-2dp</dimen>
 

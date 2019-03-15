@@ -29,17 +29,16 @@ public class BaseActivity extends AppCompatActivity {
                     // if keypad is shown, the r.bottom is smaller than that before.
                     int keypadHeight = screenHeight - r.bottom;
 
-        //            Showlog.d( "keypadHeight = " + keypadHeight);
+                    //            Showlog.d( "keypadHeight = " + keypadHeight);
 
                     if (keypadHeight > screenHeight * 0.15) { // 0.15 ratio is perhaps enough to determine keypad height.
                         // keyboard is opened
-     ///                   Showlog.d("keyboard show");
+                        ///                   Showlog.d("keyboard show");
                         onShowKeyBoard(keypadHeight);
 
-                    }
-                    else {
+                    } else {
                         // keyboard is closed
-          //              Showlog.d("keyboard hide");
+                        //              Showlog.d("keyboard hide");
                         onHideKeyboard();
                     }
                 }
@@ -58,31 +57,34 @@ public class BaseActivity extends AppCompatActivity {
         Showlog.d("start add listener");
     }
 
-    public void showSoftKeyboard(){
+    public void showSoftKeyboard() {
         InputMethodManager inputMethodManager = (InputMethodManager)
                 getSystemService(Service.INPUT_METHOD_SERVICE);
 
-        if(!isKeyboardShowing) {
+        if (!isKeyboardShowing) {
             inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
         }
         isKeyboardShowing = true;
     }
-    public void hideSoftKeyboard(){
+
+    public void hideSoftKeyboard() {
         InputMethodManager inputMethodManager = (InputMethodManager)
                 getSystemService(Service.INPUT_METHOD_SERVICE);
 
 
-        if(isKeyboardShowing) {
+        if (isKeyboardShowing) {
             inputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
         }
 //        inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),0);
         isKeyboardShowing = false;
     }
-    public void onShowKeyBoard(int keyboardHeight){
 
+    public void onShowKeyBoard(int keyboardHeight) {
+        isKeyboardShowing = true;
     }
-    public void onHideKeyboard(){
 
+    public void onHideKeyboard() {
+        isKeyboardShowing = false;
     }
 
     @Override

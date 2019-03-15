@@ -82,7 +82,8 @@ public class MainTaskActivity extends BaseActivity implements MainTaskContract.V
         mPresenter = new MainTaskPresenterImpl(this, new MainTaskIteratorImpl(mResponsitoryTask));
 
     }
-    private void setUpView(){
+
+    private void setUpView() {
         unfocusedEditText();
         editTitle.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -189,7 +190,8 @@ public class MainTaskActivity extends BaseActivity implements MainTaskContract.V
     @Override
     public void onInsertSuccess(Task task) {
         mTaskAdapter.insert(task);
-        recycleTask.smoothScrollToPosition(mTaskAdapter.getItemCount()-1);
+        recycleTask.smoothScrollToPosition(mTaskAdapter.getItemCount() - 1);
+        showMainContent(mTaskAdapter.getItemCount());
     }
 
     @Override

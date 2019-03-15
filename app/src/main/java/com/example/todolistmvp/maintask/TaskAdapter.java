@@ -115,6 +115,8 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.Holder> implem
         TextView txtvPriority;
         @BindView(R.id.txtvCategory)
         TextView txtvCategory;
+        @BindView(R.id.groupPriority)
+        ViewGroup groupPriority;
 
         Color colorPriority;
 
@@ -142,7 +144,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.Holder> implem
             });
 
             checkboxTask.setOnClickListener(v -> {
-                int position = getAdapterPosition();
+                int position = getLayoutPosition();
 
                 if (onItemClick != null) {
                     onItemClick.onCheckBoxChange(position, taskList.get(position),
@@ -153,7 +155,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.Holder> implem
         }
 
         public void bindTitle() {
-            int position = getAdapterPosition();
+            int position = getLayoutPosition();
             txtvTask.setText(taskList.get(position).title);
             String timeRemain = CommonFuntion.getTimeRemaining(context,
                     taskList.get(position).dateAlarm);
@@ -169,17 +171,18 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.Holder> implem
                     itemView.setBackground(defaultBackground);
                 }
             }
-            setUpPriority();
-            setupCategory();
+            setUpPriority(position);
+            setupCategory(position);
 
         }
 
 
-        void setUpPriority() {
-            int position = getAdapterPosition();
+        void setUpPriority(int position) {
+
             String priorityString = taskList.get(position).tag;
             Constant.ChildConstantDetailTaskPriority priority =
                     CommonFuntion.getPriority(priorityString);
+
             if (priority != null) {
                 switch (priority) {
                     case HIGH: {
@@ -213,10 +216,11 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.Holder> implem
                                 .getValueAsLanguage(context));
                     }
                 }
+            }else{
+                groupPriority.setVisibility(View.GONE);
             }
         }
-        void setupCategory(){
-            int position = getAdapterPosition();
+        void setupCategory(int position){
             String categoryString = taskList.get(position).typeList;
             Constant.ChildConstantDetailTaskCategory category =
                     CommonFuntion.getCategory(categoryString);
