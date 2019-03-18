@@ -19,7 +19,6 @@
         app:layout_constraintVertical_weight="1"
         android:background="@drawable/background_border_bottom"
 
-
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/groupContent"
         app:layout_constraintLeft_toLeftOf="parent"
