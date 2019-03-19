@@ -3,13 +3,11 @@ package com.example.todolistmvp.maintask;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -55,21 +53,6 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.Holder> implem
     @Override
     public void onBindViewHolder(@NonNull Holder holder, int i) {
         holder.bindTitle();
-        final ViewTreeObserver observer = holder.checkboxTask.getViewTreeObserver();
-        observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    holder.checkboxTask.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                } else {
-                    holder.checkboxTask.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                }
-
-                int containerWidth = holder.checkboxTask.getWidth();
-                int containerHeight = holder.checkboxTask.getHeight();
-                holder.updateSizeItem(containerWidth,containerHeight);
-            }
-        });
     }
 
     @Override
@@ -124,6 +107,8 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.Holder> implem
         TextView txtvTask;
         @BindView(R.id.txtvTimeRemain)
         TextView txtvTimeRemain;
+        @BindView(R.id.parentCheckbox)
+        ViewGroup parentCheckbox;
         @BindView(R.id.checkboxTask)
         CheckBox checkboxTask;
         @BindView(R.id.imgPriority)
@@ -165,6 +150,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.Holder> implem
                             !checkboxTask.isChecked());
                 }
             });
+            parentCheckbox.setOnClickListener(v->checkboxTask.callOnClick());
 
         }
 
@@ -191,9 +177,6 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.Holder> implem
             setUpPriority(position);
             setUpCategory(position);
 
-        }
-        public void updateSizeItem(int width,int height){
-            checkboxTask.setPadding(0,(int)(height*0.3),0,0);
         }
 
         private void setUpPriority(int position) {
